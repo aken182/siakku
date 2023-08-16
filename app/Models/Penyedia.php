@@ -12,4 +12,9 @@ class Penyedia extends Model
     protected $fillable = ['nama', 'alamat', 'no_tlp', 'created_at', 'updated_at'];
     protected $table = 'penyedia';
     protected $primaryKey = 'id_penyedia';
+
+    public function main_belanja()
+    {
+        return $this->hasMany(Main_belanja::class, 'id_penyedia');
+    }
 }

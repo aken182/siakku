@@ -12,4 +12,14 @@ class Detail_pelunasan_penjualan extends Model
     protected $fillable = ['id_transaksi', 'id_penjualan', 'jumlah_pelunasan', 'created_at', 'updated_at'];
     protected $table = 'detail_pelunasan_penjualan';
     protected $primaryKey = 'id_detail';
+
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class, 'id_transaksi');
+    }
+
+    public function main_penjualan()
+    {
+        return $this->belongsTo(Main_penjualan::class, 'id_penjualan');
+    }
 }

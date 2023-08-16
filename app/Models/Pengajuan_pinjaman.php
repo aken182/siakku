@@ -12,4 +12,14 @@ class Pengajuan_pinjaman extends Model
     protected $fillable = ['kode', 'id_anggota', 'gaji_perbulan', 'potongan_perbulan', 'cicilan_perbulan', 'biaya_perbulan', 'sisa_penghasilan', 'perkiraan', 'kemampuan_bayar', 'jumlah_pinjaman', 'jangka_waktu', 'bunga', 'asuransi', 'kapitalisasi', 'biaya_administrasi', 'angsuran_bunga', 'angsuran_pokok', 'total_angsuran', 'total_pinjaman', 'keterangan', 'status', 'tgl_acc', 'status_pencairan', 'created_at', 'updated_at'];
     protected $table = 'pengajuan_pinjaman';
     protected $primaryKey = 'id_pengajuan';
+
+    public function main_pinjaman()
+    {
+        return $this->hasMany(Main_pinjaman::class, 'id_pengajuan');
+    }
+
+    public function anggota()
+    {
+        return $this->belongsTo(Anggota::class, 'id_anggota');
+    }
 }

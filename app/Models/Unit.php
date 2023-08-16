@@ -18,4 +18,9 @@ class Unit extends Model
     ];
     protected $table = 'unit';
     protected $primaryKey = 'id_unit';
+
+    public function barang()
+    {
+        return $this->hasMany(Barang::class, 'id_unit');
+    }
 }
