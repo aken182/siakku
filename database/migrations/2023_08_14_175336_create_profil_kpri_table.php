@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('tgl_pad')->nullable();
             $table->date('tgl_rat')->nullable();
             $table->text('alamat')->nullable();
-            $table->string('keluran', 50)->nullable();
+            $table->string('kelurahan', 50)->nullable();
             $table->string('kecamatan', 50)->nullable();
             $table->string('kabupaten', 50)->nullable();
             $table->string('provinsi', 50)->nullable();

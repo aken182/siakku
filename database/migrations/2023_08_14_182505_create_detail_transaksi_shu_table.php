@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('id_transaksi')->references('id_transaksi')
                 ->on('transaksi')->onDelete('cascade');
             $table->unsignedBigInteger('id_shu');
-            $table->foreign('id_shu')->references('id')
+            $table->foreign('id_shu')->references('id_shu')
                 ->on('shu')->onDelete('cascade');
             $table->string('jenis_pembagian', 150);
             $table->float('total', 11, 2);

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_anggota')->nullable();
             $table->foreign('id_anggota')->references('id_anggota')
                 ->on('anggota')->onDelete('cascade');
-            $table->string('nama_bukan_pegawai')->nullable();
+            $table->string('nama_bukan_anggota')->nullable();
             $table->enum('jenis_penjualan', ['kredit', 'debet']);
             $table->enum('status_penjualan', ['belum terbayar', 'belum lunas', 'lunas']);
             $table->unsignedBigInteger('jumlah_penjualan');

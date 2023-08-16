@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('detail_belanja_operasionallain', function (Blueprint $table) {
             $table->id('id_detail');
-            $table->unsignedBigInteger('id_transaksi');
-            $table->foreign('id_transaksi')->references('id_transaksi')
-                ->on('transaksi')->onDelete('cascade');
+            $table->unsignedBigInteger('id_belanja');
+            $table->foreign('id_belanja')->references('id_belanja')
+                ->on('main_belanja')->onDelete('cascade');
             $table->unsignedBigInteger('id_satuan');
             $table->foreign('id_satuan')->references('id_satuan')
                 ->on('satuan')->onDelete('cascade');

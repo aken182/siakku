@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Jurnal extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['id_coa', 'id_transaksi', 'posisi_dr_cr', 'nominal', 'created_at', 'updated_at'];
+    protected $table = ['jurnal'];
+    protected $primaryKey = 'id_jurnal';
 }

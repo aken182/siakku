@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('detail_transfer_saldo', function (Blueprint $table) {
+        Schema::create('detail_pelunasan_hutang', function (Blueprint $table) {
             $table->id('id_detail');
+            $table->unsignedBigInteger('id_hutang');
+            $table->foreign('id_hutang')->references('id_hutang')
+                ->on('detail_hutang')->onDelete('cascade');
             $table->unsignedBigInteger('id_transaksi');
             $table->foreign('id_transaksi')->references('id_transaksi')
                 ->on('transaksi')->onDelete('cascade');
-            $table->unsignedBigInteger('id_pengirim');
-            $table->unsignedBigInteger('id_penerima');
-            $table->foreign('id_pengirim')->references('id_coa')->on('coa');
-            $table->foreign('id_penerima')->references('id_coa')->on('coa');
-            $table->unsignedBigInteger('jumlah')->nullable()->default(0);
+            $table->float('jumlah_pelunasan', 11, 2);
             $table->timestamps();
         });
     }
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_transfer_saldo');
+        Schema::dropIfExists('detail_pelunasan_hutang');
     }
 };
