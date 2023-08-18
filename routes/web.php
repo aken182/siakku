@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dashboard\AdminDashboard;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//       return view('layouts.commonMaster');
+// });
+Route::get('/', [AdminDashboard::class, 'index'])->name('admin-dashboard');
