@@ -20,7 +20,7 @@
                             </div>
                             <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    <img src="{{ asset('assets') }}/images/faces/1.jpg">
+                                    <img src="{{ asset('assets/admin') }}/images/faces/1.jpg">
                                 </div>
                             </div>
                         </div>
