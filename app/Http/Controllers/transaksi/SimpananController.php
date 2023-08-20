@@ -27,8 +27,11 @@ class SimpananController extends Controller
     public function index()
     {
         $data = [
-            'transaksi' => $this->transaksiService->getHistoryTransaction()
+            'transaksi' => $this->transaksiService->getHistoryTransaction(),
+            'title' => 'Simpanan'
         ];
+
+        return view('content.simpanan.main', $data);
     }
 
     /**

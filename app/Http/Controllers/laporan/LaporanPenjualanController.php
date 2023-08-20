@@ -17,6 +17,10 @@ class LaporanPenjualanController extends Controller
 
       public function index(Request $request)
       {
-            //
+            $data = [
+                  'title' => 'Laporan Penjualan'
+            ];
+
+            return view('content.pendapatan.main', $data);
       }
 }

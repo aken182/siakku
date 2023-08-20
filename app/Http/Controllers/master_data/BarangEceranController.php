@@ -22,7 +22,9 @@ class BarangEceranController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Barang Eceran'];
+        return view('content.barang-eceran.main', $data);
     }
 
     /**

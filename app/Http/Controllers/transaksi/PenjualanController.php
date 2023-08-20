@@ -27,8 +27,11 @@ class PenjualanController extends Controller
     public function index()
     {
         $data = [
-            'transaksi' => $this->transaksiService->getHistoryTransaction()
+            'transaksi' => $this->transaksiService->getHistoryTransaction(),
+            'title' => 'Penjualan'
         ];
+
+        return view('content.penjualan.main', $data);
     }
 
     /**

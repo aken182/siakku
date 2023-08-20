@@ -22,7 +22,9 @@ class BarangController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Barang'];
+        return view('content.barang.main', $data);
     }
 
     /**

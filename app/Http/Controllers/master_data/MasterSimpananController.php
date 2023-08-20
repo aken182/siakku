@@ -22,7 +22,8 @@ class MasterSimpananController extends Controller
      */
     public function index()
     {
-        //
+        $data = ['title' => 'Master Simpanan'];
+        return view('content.barang-eceran.main', $data);
     }
 
     /**

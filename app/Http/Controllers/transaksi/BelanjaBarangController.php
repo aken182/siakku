@@ -27,8 +27,11 @@ class BelanjaBarangController extends Controller
       public function index()
       {
             $data = [
-                  'transaksi' => $this->transaksiService->getHistoryTransaction()
+                  'transaksi' => $this->transaksiService->getHistoryTransaction(),
+                  'title' => 'Belanja Barang'
             ];
+
+            return view('content.belanja-barang.main', $data);
       }
 
       /**

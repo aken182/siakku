@@ -17,6 +17,10 @@ class LaporanGudangController extends Controller
 
       public function index(Request $request)
       {
-            //
+            $data = [
+                  'title' => 'Gudang'
+            ];
+
+            return view('content.pendapatan.main', $data);
       }
 }

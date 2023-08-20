@@ -22,7 +22,9 @@ class JabatanController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Jabatan'];
+        return view('content.anggota.main', $data);
     }
 
     /**

@@ -23,7 +23,9 @@ class PesanController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Pesan'];
+        return view('content.pesan.main', $data);
     }
 
     /**

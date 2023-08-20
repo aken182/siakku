@@ -22,7 +22,9 @@ class PengajuanPinjamanController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Pengajuan Pinjaman'];
+        return view('content.barang-eceran.main', $data);
     }
 
     /**

@@ -16,6 +16,10 @@ class JurnalController extends Controller
       }
       public function index(Request $request)
       {
-            //
+            $data = [
+                  'title' => 'Jurnal Umum'
+            ];
+
+            return view('content.pendapatan.main', $data);
       }
 }

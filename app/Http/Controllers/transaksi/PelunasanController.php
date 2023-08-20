@@ -26,9 +26,13 @@ class PelunasanController extends Controller
        */
       public function index()
       {
+
             $data = [
-                  'transaksi' => $this->transaksiService->getHistoryTransaction()
+                  'transaksi' => $this->transaksiService->getHistoryTransaction(),
+                  'title' => 'Pelunasan'
             ];
+
+            return view('content.pelunasan.main', $data);
       }
 
       /**

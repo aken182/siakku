@@ -22,7 +22,9 @@ class AnggotaController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Anggota'];
+        return view('content.anggota.main', $data);
     }
 
     /**

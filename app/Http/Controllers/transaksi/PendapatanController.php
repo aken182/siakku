@@ -27,8 +27,11 @@ class PendapatanController extends Controller
     public function index()
     {
         $data = [
-            'transaksi' => $this->transaksiService->getHistoryTransaction()
+            'transaksi' => $this->transaksiService->getHistoryTransaction(),
+            'title' => 'Pendapatan'
         ];
+
+        return view('content.pendapatan.main', $data);
     }
 
     /**

@@ -26,8 +26,11 @@ class PiutangController extends Controller
       public function index()
       {
             $data = [
-                  'transaksi' => $this->transaksiService->getHistoryTransaction()
+                  'transaksi' => $this->transaksiService->getHistoryTransaction(),
+                  'title' => 'Piutang Barang'
             ];
+
+            return view('content.piutang.main', $data);
       }
 
       /**

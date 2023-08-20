@@ -17,6 +17,10 @@ class BukuBesarController extends Controller
 
       public function index(Request $request)
       {
-            //
+            $data = [
+                  'title' => 'Buku Besar'
+            ];
+
+            return view('content.pendapatan.main', $data);
       }
 }

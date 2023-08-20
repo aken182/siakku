@@ -23,7 +23,9 @@ class PenyediaController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Vendor'];
+        return view('content.penyedia.main', $data);
     }
 
     /**

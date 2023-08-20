@@ -22,7 +22,9 @@ class BeritaController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Berita'];
+        return view('content.berita.main', $data);
     }
 
     /**

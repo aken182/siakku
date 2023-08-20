@@ -22,7 +22,9 @@ class UnitController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Unit'];
+        return view('content.unit.main', $data);
     }
 
     /**

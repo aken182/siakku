@@ -18,6 +18,10 @@ class LabaRugiController extends Controller
 
       public function index(Request $request)
       {
-            //
+            $data = [
+                  'title' => 'Laporan Laba Rugi'
+            ];
+
+            return view('content.pendapatan.main', $data);
       }
 }

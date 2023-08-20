@@ -22,7 +22,12 @@ class MasterShuController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = [
+            'title' => 'SHU'
+        ];
+
+        return view('content.shu.main', $data);
     }
 
     /**

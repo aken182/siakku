@@ -27,8 +27,11 @@ class PinjamanController extends Controller
     public function index()
     {
         $data = [
-            'transaksi' => $this->transaksiService->getHistoryTransaction()
+            'transaksi' => $this->transaksiService->getHistoryTransaction(),
+            'title' => 'Pinjaman'
         ];
+
+        return view('content.pinjaman.main', $data);
     }
 
     /**

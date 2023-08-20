@@ -1,0 +1,477 @@
+{
+      "menu": [
+            {
+                  "url": "/",
+                  "name": "Dashboard",
+                  "icon": "bi bi-grid-fill",
+                  "permission": "main-dashboard",
+                  "slug": "main-dashboard"
+            },
+            {
+                  "url": "/profil/koperasi",
+                  "name": "Profil Koperasi",
+                  "icon": "bi bi-info-circle",
+                  "permission": "profil-koperasi",
+                  "slug": "profil-koperasi"
+            },
+            {
+                  "name": "Master Data",
+                  "icon": "bi bi-stack",
+                  "slug": "mdu",
+                  "permission": "master-data-umum",
+                  "submenu": [
+                        {
+                              "url": "/anggota",
+                              "name": "Anggota",
+                              "permission": "master-anggota-view",
+                              "slug": "mdu-anggota"
+                        },
+                        {
+                              "url": "/jabatan",
+                              "name": "Jabatan",
+                              "permission": "master-jabatan-view",
+                              "slug": "mdu-jabatan"
+                        },
+                        {
+                              "url": "/unit",
+                              "name": "Unit",
+                              "permission": "master-unit-view",
+                              "slug": "mdu-unit"
+                        },
+                        {
+                              "url": "/satuan",
+                              "name": "Satuan",
+                              "permission": "master-satuan-view",
+                              "slug": "mdu-satuan"
+                        },
+                        {
+                              "url": "/berita",
+                              "name": "Berita",
+                              "permission": "master-berita-view",
+                              "slug": "mdu-berita"
+                        }
+                  ]
+            },
+            {
+                  "url": "/pesan",
+                  "name": "Pesan",
+                  "icon": "bi bi-envelope",
+                  "permission": "pesan",
+                  "slug": "pesan"
+            },
+            {
+                  "name": "Chart Of Account (COA)",
+                  "icon": "bi bi-stack",
+                  "slug": "coa",
+                  "permission": "chart-of-account",
+                  "submenu": [
+                        {
+                              "url": "/coa",
+                              "name": "Master Data COA",
+                              "permission": "coa-master-view",
+                              "slug": "coa-master"
+                        },
+                        {
+                              "url": "/saldo-awal",
+                              "name": "Saldo Awal",
+                              "permission": "coa-saldo-awal-view",
+                              "slug": "coa-saldo-awal"
+                        },
+                        {
+                              "url": "/kas-bank",
+                              "name": "Kas & Bank",
+                              "permission": "coa-kas-bank-view",
+                              "slug": "coa-kas-bank"
+                        }
+                  ]
+            },
+            {
+                  "menuHeader": "Unit Pertokoan",
+                  "permission": "unit-pertokoan"
+            },
+            {
+                  "name": "Master Data",
+                  "icon": "bi bi-stack",
+                  "slug": "mdt",
+                  "permission": "master-data-pertokoan",
+                  "submenu": [
+                        {
+                              "url": "/persediaan/unit-pertokoan",
+                              "name": "Persediaan",
+                              "permission": "master-persediaan-toko-view",
+                              "slug": "mdt-persediaan"
+                        },
+                        {
+                              "url": "/persediaan-eceran/unit-pertokoan",
+                              "name": "Persediaan Eceran",
+                              "permission": "master-persediaan-eceran-toko-view",
+                              "slug": "mdt-persediaan-eceran"
+                        },
+                        {
+                              "url": "/inventaris/unit-pertokoan",
+                              "name": "Inventaris",
+                              "permission": "master-inventaris-toko-view",
+                              "slug": "mdt-inventaris"
+                        },
+                        {
+                              "url": "/inventaris-eceran/unit-pertokoan",
+                              "name": "Inventaris Eceran",
+                              "permission": "master-inventaris-eceran-toko-view",
+                              "slug": "mdt-inventaris-eceran"
+                        },
+                        {
+                              "url": "/vendor",
+                              "name": "Vendor",
+                              "permission": "master-vendor-view",
+                              "slug": "mdt-vendor"
+                        }
+                  ]
+            },
+            {
+                  "name": "Pendapatan",
+                  "icon": "bi bi-wallet",
+                  "slug": "ptk",
+                  "permission": "pendapatan-unit-pertokoan",
+                  "submenu": [
+                        {
+                              "url": "/penjualan/unit-pertokoan",
+                              "name": "Penjualan",
+                              "permission": "penjualan-unit-pertokoan-view",
+                              "slug": "ptk-penjualan"
+                        },
+                        {
+                              "url": "/pendapatan/unit-pertokoan",
+                              "name": "Pendapatan Lainnya",
+                              "permission": "pendapatan-unit-pertokoan-view",
+                              "slug": "ptk-pendapatan"
+                        },
+                        {
+                              "url": "/piutang-barang/unit-pertokoan",
+                              "name": "Piutang Barang",
+                              "permission": "piutang-barang-unit-pertokoan-view",
+                              "slug": "ptk-piutang"
+                        }
+                  ]
+            },
+            {
+                  "name": "Belanja",
+                  "icon": "bi bi-basket-fill",
+                  "slug": "btk",
+                  "permission": "belanja-unit-pertokoan",
+                  "submenu": [
+                        {
+                              "url": "/belanja-barang/unit-pertokoan",
+                              "name": "Belanja Barang",
+                              "permission": "belanja-barang-unit-pertokoan-view",
+                              "slug": "btk-belanja-barang"
+                        },
+                        {
+                              "url": "/belanja-lain/unit-pertokoan",
+                              "name": "Belanja Lainnya",
+                              "permission": "belanja-lain-unit-pertokoan-view",
+                              "slug": "btk-belanja-lain"
+                        },
+                        {
+                              "url": "/hutang/unit-pertokoan",
+                              "name": "Hutang",
+                              "permission": "hutang-unit-pertokoan-view",
+                              "slug": "btk-hutang"
+                        }
+                  ]
+            },
+            {
+                  "name": "Simpanan Pertokoan",
+                  "icon": "bi bi-credit-card",
+                  "slug": "stk",
+                  "permission": "simpanan-unit-pertokoan",
+                  "submenu": [
+                        {
+                              "url": "/simpanan/unit-pertokoan/setor-history",
+                              "name": "Simpanan",
+                              "permission": "simpanan-unit-pertokoan-view",
+                              "slug": "stk-simpanan"
+                        },
+                        {
+                              "url": "/simpanan/unit-pertokoan/tarik-history",
+                              "name": "Penarikan",
+                              "permission": "simpanan-unit-pertokoan-penarikan-view",
+                              "slug": "stk-penarikan"
+                        }
+                  ]
+            },
+            {
+                  "url": "/penyusutan/unit-pertokoan",
+                  "name": "Penyusutan",
+                  "icon": "bi bi-reception-3",
+                  "permission": "penyusutan-unit-pertokoan-view",
+                  "slug": "penyusutan-unit-pertokoan"
+            },
+            {
+                  "url": "/shu/unit-pertokoan",
+                  "name": "Pembagian SHU",
+                  "icon": "bi bi-wallet",
+                  "permission": "shu-unit-pertokoan-view",
+                  "slug": "shu-unit-pertokoan"
+            },
+            {
+                  "name": "Laporan",
+                  "icon": "bi bi-file-earmark-text",
+                  "slug": "lut",
+                  "permission": "laporan-unit-pertokoan",
+                  "submenu": [
+                        {
+                              "url": "/laporan-gudang/unit-pertokoan",
+                              "name": "Gudang",
+                              "permission": "laporan-gudang-unit-pertokoan",
+                              "slug": "lut-gudang"
+                        },
+                        {
+                              "url": "/laporan-penjualan/unit-pertokoan",
+                              "name": "Penjualan",
+                              "permission": "laporan-penjualan-unit-pertokoan",
+                              "slug": "lut-penjualan"
+                        },
+                        {
+                              "url": "/laporan-transaksi/unit-pertokoan",
+                              "name": "Transaksi",
+                              "permission": "laporan-transaksi-unit-pertokoan",
+                              "slug": "lut-transaksi"
+                        },
+                        {
+                              "url": "/kartu-toko",
+                              "name": "Kartu Toko",
+                              "permission": "kartu-toko",
+                              "slug": "lut-kartu-toko"
+                        },
+                        {
+                              "url": "/jurnal/unit-pertokoan",
+                              "name": "Jurnal Umum",
+                              "permission": "jurnal-umum-unit-pertokoan",
+                              "slug": "lut-jurnal"
+                        },
+                        {
+                              "url": "/buku-besar/unit-pertokoan",
+                              "name": "Buku Besar",
+                              "permission": "buku-besar-unit-pertokoan",
+                              "slug": "lut-buku-besar"
+                        },
+                        {
+                              "url": "/laba-rugi/unit-pertokoan",
+                              "name": "Laba Rugi",
+                              "permission": "laporan-laba-rugi-unit-pertokoan",
+                              "slug": "lut-laba-rugi"
+                        },
+                        {
+                              "url": "/neraca-saldo/unit-pertokoan",
+                              "name": "Neraca Saldo",
+                              "permission": "neraca-saldo-unit-pertokoan",
+                              "slug": "lut-neraca"
+                        }
+                  ]
+            },
+            {
+                  "menuHeader": "Unit Simpan Pinjam",
+                  "permission": "unit-simpan-pinjam"
+            },
+            {
+                  "name": "Master Data",
+                  "icon": "bi bi-stack",
+                  "slug": "mds",
+                  "permission": "master-data-sp",
+                  "submenu": [
+                        {
+                              "url": "/inventaris/unit-sp",
+                              "name": "Inventaris",
+                              "permission": "master-inventaris-sp-view",
+                              "slug": "mds-inventaris"
+                        },
+                        {
+                              "url": "/inventaris-eceran/unit-sp",
+                              "name": "Inventaris Eceran",
+                              "permission": "master-inventaris-eceran-sp-view",
+                              "slug": "mds-inventaris-eceran"
+                        },
+                        {
+                              "url": "/master-simpanan",
+                              "name": "Master Simpanan",
+                              "permission": "master-simpanan-view",
+                              "slug": "mds-simpanan"
+                        }
+                  ]
+            },
+            {
+                  "name": "Simpanan",
+                  "icon": "bi bi-credit-card",
+                  "slug": "sp",
+                  "permission": "simpanan-unit-sp",
+                  "submenu": [
+                        {
+                              "url": "/simpanan/unit-sp/setor-history",
+                              "name": "Simpanan",
+                              "permission": "simpanan-unit-sp-view",
+                              "slug": "sp-simpanan"
+                        },
+                        {
+                              "url": "/simpanan/unit-sp/tarik-history",
+                              "name": "Penarikan",
+                              "permission": "simpanan-unit-sp-penarikan-view",
+                              "slug": "sp-penarikan"
+                        }
+                  ]
+            },
+            {
+                  "name": "Pinjaman",
+                  "icon": "bi bi-cash-stack",
+                  "slug": "pp",
+                  "permission": "pinjaman-unit-sp",
+                  "submenu": [
+                        {
+                              "url": "/pinjaman/unit-sp/pengajuan-history",
+                              "name": "Pengajuan",
+                              "permission": "pinjaman-unit-sp-pengajuan-view",
+                              "slug": "pp-pengajuan"
+                        },
+                        {
+                              "url": "/pinjaman/unit-sp/pinjaman-history",
+                              "name": "Pinjaman",
+                              "permission": "pinjaman-unit-sp-view",
+                              "slug": "pp-pinjaman"
+                        },
+                        {
+                              "url": "/pinjaman/unit-sp/angsuran-history",
+                              "name": "Angsuran",
+                              "permission": "pinjaman-unit-sp-angsuran-view",
+                              "slug": "pp-angsuran"
+                        }
+                  ]
+            },
+            {
+                  "name": "Belanja",
+                  "icon": "bi bi-basket-fill",
+                  "slug": "bsp",
+                  "permission": "belanja-unit-sp",
+                  "submenu": [
+                        {
+                              "url": "/belanja-barang/unit-sp",
+                              "name": "Belanja Barang",
+                              "permission": "belanja-barang-unit-sp-view",
+                              "slug": "bsp-belanja-barang"
+                        },
+                        {
+                              "url": "/belanja-lain/unit-sp",
+                              "name": "Belanja Lainnya",
+                              "permission": "belanja-lain-unit-sp-view",
+                              "slug": "bsp-belanja-lain"
+                        },
+                        {
+                              "url": "/hutang/unit-sp",
+                              "name": "Hutang",
+                              "permission": "hutang-unit-sp-view",
+                              "slug": "bsp-hutang"
+                        }
+                  ]
+            },
+            {
+                  "url": "/pendapatan/unit-sp",
+                  "name": "Pendapatan",
+                  "icon": "bi bi-wallet",
+                  "permission": "pendapatan-unit-sp-view",
+                  "slug": "pendapatan-unit-sp"
+            },
+            {
+                  "url": "/penyusutan/unit-sp",
+                  "name": "Penyusutan",
+                  "icon": "bi bi-reception-3",
+                  "permission": "penyusutan-unit-sp-view",
+                  "slug": "penyusutan-unit-sp"
+            },
+            {
+                  "url": "/shu/unit-sp",
+                  "name": "Pembagian SHU",
+                  "icon": "bi bi-wallet",
+                  "permission": "shu-unit-sp-view",
+                  "slug": "shu-unit-sp"
+            },
+            {
+                  "name": "Laporan",
+                  "icon": "bi bi-file-earmark-text",
+                  "slug": "lus",
+                  "permission": "laporan-unit-sp",
+                  "submenu": [
+                        {
+                              "url": "/laporan-transaksi/unit-sp",
+                              "name": "Transaksi",
+                              "permission": "laporan-transaksi-unit-sp",
+                              "slug": "lus-transaksi"
+                        },
+                        {
+                              "url": "/laporan-simpanan/unit-sp",
+                              "name": "Simpanan",
+                              "permission": "laporan-simpanan-unit-sp",
+                              "slug": "lus-simpanan"
+                        },
+                        {
+                              "url": "/laporan-simpanan-sukarela-berbunga/unit-sp",
+                              "name": "Simpanan Sukarela Berbunga",
+                              "permission": "laporan-simpanan-sukarela-berbunga-unit-sp",
+                              "slug": "lus-simpanan-sb"
+                        },
+                        {
+                              "url": "/laporan-pinjaman/unit-sp",
+                              "name": "Pinjaman",
+                              "permission": "laporan-pinjaman-unit-sp",
+                              "slug": "lus-pinjaman"
+                        },
+                        {
+                              "url": "/jurnal/unit-sp",
+                              "name": "Jurnal Umum",
+                              "permission": "jurnal-umum-unit-sp",
+                              "slug": "lus-jurnal"
+                        },
+                        {
+                              "url": "/buku-besar/unit-sp",
+                              "name": "Buku Besar",
+                              "permission": "buku-besar-unit-sp",
+                              "slug": "lus-buku-besar"
+                        },
+                        {
+                              "url": "/laba-rugi/unit-sp",
+                              "name": "Laba Rugi",
+                              "permission": "laporan-laba-rugi-unit-sp",
+                              "slug": "lus-laba-rugi"
+                        },
+                        {
+                              "url": "/neraca-saldo/unit-sp",
+                              "name": "Neraca Saldo",
+                              "permission": "neraca-saldo-unit-sp",
+                              "slug": "lus-neraca"
+                        }
+                  ]
+            },
+            {
+                  "menuHeader": "Pengaturan",
+                  "permission": "pengaturan-user-dan-otoritas"
+            },
+            {
+                  "url": "/pengaturan-user",
+                  "name": "Pengaturan User",
+                  "icon": "bi bi-gear",
+                  "slug": "pengaturan-user",
+                  "permission": "pengaturan-user"
+            },
+            {
+                  "url": "/otoritas",
+                  "name": "Otoritas",
+                  "icon": "bi bi-gear",
+                  "permission": "pengaturan-otoritas",
+                  "slug": "pengaturan-otoritas"
+            },
+            {
+                  "url": "/otorisasi",
+                  "name": "Otorisasi",
+                  "icon": "bi bi-gear",
+                  "permission": "pengaturan-otorisasi",
+                  "slug": "pengaturan-otorisasi"
+            }
+      ]
+}

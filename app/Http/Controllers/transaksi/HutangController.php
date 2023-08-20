@@ -27,8 +27,11 @@ class HutangController extends Controller
       public function index()
       {
             $data = [
-                  'transaksi' => $this->transaksiService->getHistoryTransaction()
+                  'transaksi' => $this->transaksiService->getHistoryTransaction(),
+                  'title' => 'Hutang'
             ];
+
+            return view('content.hutang.main', $data);
       }
 
       /**

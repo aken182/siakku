@@ -22,7 +22,9 @@ class SatuanController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Satuan'];
+        return view('content.satuan.main', $data);
     }
 
     /**

@@ -27,8 +27,11 @@ class TransferSaldoController extends Controller
       public function index()
       {
             $data = [
-                  'transaksi' => $this->transaksiService->getHistoryTransaction()
+                  'transaksi' => $this->transaksiService->getHistoryTransaction(),
+                  'title' => 'Transfer Saldo Kas & Bank'
             ];
+
+            return view('content.transfer-saldo.main', $data);
       }
 
       /**

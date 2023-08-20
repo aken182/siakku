@@ -17,6 +17,10 @@ class LaporanPinjamanController extends Controller
 
       public function index(Request $request)
       {
-            //
+            $data = [
+                  'title' => 'Laporan Pinjaman'
+            ];
+
+            return view('content.pendapatan.main', $data);
       }
 }

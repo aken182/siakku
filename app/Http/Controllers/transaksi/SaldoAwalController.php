@@ -27,8 +27,11 @@ class SaldoAwalController extends Controller
       public function index()
       {
             $data = [
-                  'transaksi' => $this->transaksiService->getHistoryTransaction()
+                  'transaksi' => $this->transaksiService->getHistoryTransaction(),
+                  'title' => 'Saldo Awal'
             ];
+
+            return view('content.saldo-awal.main', $data);
       }
 
       /**

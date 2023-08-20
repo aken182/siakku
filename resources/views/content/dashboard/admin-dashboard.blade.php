@@ -274,4 +274,6 @@
         </section>
     </div>
 
+    <script src="{{ asset('assets/admin') }}/vendors/apexcharts/apexcharts.js"></script>
+    <script src="{{ asset('assets/admin') }}/js/pages/dashboard.js"></script>
 @endsection

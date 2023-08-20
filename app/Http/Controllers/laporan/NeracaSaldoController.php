@@ -17,6 +17,10 @@ class NeracaSaldoController extends Controller
 
       public function index(Request $request)
       {
-            //
+            $data = [
+                  'title' => 'Neraca Saldo'
+            ];
+
+            return view('content.pendapatan.main', $data);
       }
 }

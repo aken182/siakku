@@ -23,7 +23,8 @@ class ProfilKpriController extends Controller
      */
     public function index()
     {
-        //
+        $data = ['title' => 'Profil Koperasi'];
+        return view('content.profil-kpri.main', $data);
     }
 
     /**

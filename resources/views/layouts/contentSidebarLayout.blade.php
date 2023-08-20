@@ -1,18 +1,22 @@
 @extends('layouts.commonMaster')
-
+@section('pageStyle')
+    @include('layouts.sections.styles.styles-app')
+@endsection
 @section('contentLayout')
-    @include('layouts.sections.sidebar.sidebar')
+    <div id="app">
+        @include('layouts.sections.sidebar.sidebar')
 
-    <div id="main" class='layout-navbar'>
+        <div id="main" class='layout-navbar'>
 
-        @include('layouts.sections.header.header')
+            @include('layouts.sections.header.header')
 
-        <div id="main-content">
+            <div id="main-content">
 
-            @yield('content')
+                @yield('content')
 
-            @include('layouts.sections.footer.footer')
+                @include('layouts.sections.footer.footer')
 
+            </div>
         </div>
     </div>
 @endsection

@@ -22,7 +22,9 @@ class CoaController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = ['title' => 'Chart Of Account'];
+        return view('content.coa.main', $data);
     }
 
     /**
