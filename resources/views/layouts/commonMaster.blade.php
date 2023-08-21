@@ -15,7 +15,7 @@
 </head>
 
 <body>
-
+    @include('sweetalert::alert')
     @yield('contentLayout')
 
     @include('layouts.sections.script.footer-admin')

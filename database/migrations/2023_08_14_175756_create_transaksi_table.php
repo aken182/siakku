@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('nota_transaksi', 250)->nullable();
             $table->unsignedBigInteger('total')->nullable()->default(0);
             $table->text('keterangan')->nullable();
-            $table->string('tpk', 100);
+            $table->enum('tpk', ['Larantuka', 'Pasar Baru', 'Waiwerang'])->default('Larantuka');
             $table->enum('unit', ['Pertokoan', 'Simpan Pinjam', 'Gabungan']);
             $table->timestamps();
         });

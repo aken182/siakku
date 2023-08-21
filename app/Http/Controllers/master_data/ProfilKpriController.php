@@ -5,7 +5,7 @@ namespace App\Http\Controllers\master_data;
 use Illuminate\Http\Request;
 use App\Services\ProfilKpriService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProfilKpriRequest;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfilKpriController extends Controller
 {
@@ -23,73 +23,33 @@ class ProfilKpriController extends Controller
      */
     public function index()
     {
-        $data = ['title' => 'Profil Koperasi'];
+        $data = $this->getData();
         return view('content.profil-kpri.main', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function getData()
     {
-        //
+        $data = [
+            'title' => 'Profil Koperasi',
+            'profil' => $this->profilKpriService->getAllData(1)
+        ];
+        return $data;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(ProfilKpriRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        $data = [
+            'title' => 'Edit Koperasi',
+            'profil' => $this->profilKpriService->getAllData($id)
+        ];
+        return view('content.profil-kpri.edit', $data);
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\ProfilKpriRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(ProfilKpriRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $this->profilKpriService->update($id, $request);
+        Alert::success('Sukses', 'Berhasil menyimpan perubahan data!');
+        return redirect()->route('profil-koperasi');
     }
 }

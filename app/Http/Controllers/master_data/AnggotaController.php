@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\master_data;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AnggotaRequest;
 use App\Services\AnggotaService;
+use App\Services\ImageService;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AnggotaController extends Controller
 {
     protected $anggotaService;
+    protected $imageService;
 
     public function __construct()
     {
         $this->anggotaService = new AnggotaService;
+        $this->imageService = new ImageService;
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +26,14 @@ class AnggotaController extends Controller
     public function index()
     {
 
-        $data = ['title' => 'Anggota'];
+        $data = [
+            'title' => 'Anggota',
+            'routeCreate' => route('mdu-anggota.create'),
+            'routeImport' => route('mdu-anggota.create'),
+            'routeExcel' => route('mdu-anggota.create'),
+            'routePdf' => route('mdu-anggota.create'),
+            'anggota' => $this->anggotaService->getDataAnggotaView(),
+        ];
         return view('content.anggota.main', $data);
     }
 
@@ -34,7 +44,11 @@ class AnggotaController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'title' => 'Form Tambah Anggota',
+            'kode' => $this->anggotaService->getKode()
+        ];
+        return view('content.anggota.create', $data);
     }
 
     /**
@@ -45,7 +59,13 @@ class AnggotaController extends Controller
      */
     public function store(AnggotaRequest $request)
     {
-        //
+        $this->anggotaService->create($request);
+        if ($request->file('pas_foto') != null) {
+            $imageName = $this->imageService->getImageName('Foto', $request->input('kode'), $request->file('pas_foto'));
+            $this->imageService->uploadImage($request->file('pas_foto'), $imageName, 'foto-anggota');
+        }
+        Alert::success('Sukses', 'Data berhasil ditambahkan!');
+        return redirect()->route('mdu-anggota');
     }
 
     /**
