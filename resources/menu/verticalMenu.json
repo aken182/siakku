@@ -53,13 +53,6 @@
                   ]
             },
             {
-                  "url": "/pesan",
-                  "name": "Pesan",
-                  "icon": "bi bi-envelope",
-                  "permission": "pesan",
-                  "slug": "pesan"
-            },
-            {
                   "name": "Chart Of Account (COA)",
                   "icon": "bi bi-stack",
                   "slug": "coa",

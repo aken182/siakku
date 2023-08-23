@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/choices.js/choices.min.css" />
 <link rel="stylesheet" href="{{ asset('assets/admin') }}/css/bootstrap.css">
 <link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/iconly/bold.css">
 <link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/simple-datatables/style.css">

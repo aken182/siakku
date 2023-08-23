@@ -56,7 +56,11 @@
                                             <td><span class="badge bg-success">{{ $field->status }}</span></td>
                                             <td><span class="badge bg-info">{{ $field->updated_at }}</span></td>
                                             <td>
-                                                <x-table.action />
+                                                @php
+                                                    $routeDelete = '#';
+                                                    $routeEdit = '#';
+                                                @endphp
+                                                <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
                                             </td>
                                         </tr>
                                     @endforeach

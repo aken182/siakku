@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers\master_data;
 
-use Illuminate\Http\Request;
+use App\Models\Unit;
+use App\Services\CrudService;
 use App\Services\UnitService;
 use App\Http\Requests\UnitRequest;
 use App\Http\Controllers\Controller;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UnitController extends Controller
 {
     protected $unitService;
+    protected $crudService;
 
     public function __construct()
     {
         $this->unitService = new UnitService;
+        $this->crudService = new CrudService;
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +27,14 @@ class UnitController extends Controller
     public function index()
     {
 
-        $data = ['title' => 'Unit'];
+        $data = [
+            'title' => 'Unit',
+            'routeCreate' => route('mdu-unit.create'),
+            'routeImport' => route('mdu-unit.create'),
+            'routeExcel' => route('mdu-unit.create'),
+            'routePdf' => route('mdu-unit.create'),
+            'unit' => Unit::all(),
+        ];
         return view('content.unit.main', $data);
     }
 
@@ -34,7 +45,10 @@ class UnitController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'title' => 'Form Tambah Unit',
+        ];
+        return view('content.unit.create', $data);
     }
 
     /**
@@ -45,7 +59,9 @@ class UnitController extends Controller
      */
     public function store(UnitRequest $request)
     {
-        //
+        $this->crudService->create($request, new Unit);
+        Alert::success('Sukses', 'Data berhasil ditambahkan!');
+        return redirect()->route('mdu-unit');
     }
 
     /**
@@ -67,7 +83,12 @@ class UnitController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        $data = [
+            'title' => 'Form Edit Unit',
+            'unit' => $this->unitService->getDataUnit($id),
+        ];
+        return view('content.unit.edit', $data);
     }
 
     /**
@@ -79,7 +100,9 @@ class UnitController extends Controller
      */
     public function update(UnitRequest $request, $id)
     {
-        //
+        $this->crudService->update($request, 'id_unit', $id, new Unit);
+        Alert::success('Sukses', 'Berhasil mengubah data unit.');
+        return redirect()->route('mdu-unit');
     }
 
     /**
@@ -90,6 +113,8 @@ class UnitController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->crudService->delete('id_unit', $id, new Unit);
+        Alert::success('Sukses', 'Berhasil menghapus data unit.');
+        return redirect()->back();
     }
 }

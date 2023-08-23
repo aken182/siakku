@@ -53,7 +53,11 @@
                                                 <td>{{ $field->name }}</td>
                                                 <td>{{ $field->updated_at }}</td>
                                                 <td>
-                                                    <x-table.action />
+                                                    @php
+                                                        $routeDelete = '#';
+                                                        $routeEdit = '#';
+                                                    @endphp
+                                                    <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -5,27 +5,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user\UserSettingController;
 use App\Http\Controllers\dashboard\AdminDashboard;
 use App\Http\Controllers\laporan\JurnalController;
-use App\Http\Controllers\master_data\CoaController;
 use App\Http\Controllers\laporan\LabaRugiController;
-use App\Http\Controllers\master_data\UnitController;
 use App\Http\Controllers\transaksi\HutangController;
 use App\Http\Controllers\laporan\BukuBesarController;
-use App\Http\Controllers\master_data\PesanController;
 use App\Http\Controllers\transaksi\BelanjaController;
 use App\Http\Controllers\transaksi\PiutangController;
-use App\Http\Controllers\master_data\BarangController;
-use App\Http\Controllers\master_data\BeritaController;
-use App\Http\Controllers\master_data\SatuanController;
 use App\Http\Controllers\transaksi\PinjamanController;
 use App\Http\Controllers\transaksi\SimpananController;
 use App\Http\Controllers\laporan\NeracaSaldoController;
-use App\Http\Controllers\master_data\AnggotaController;
-use App\Http\Controllers\master_data\JabatanController;
 use App\Http\Controllers\transaksi\PelunasanController;
 use App\Http\Controllers\transaksi\PenarikanController;
 use App\Http\Controllers\transaksi\PenjualanController;
-use App\Http\Controllers\transaksi\SaldoAwalController;
-use App\Http\Controllers\master_data\PenyediaController;
 use App\Http\Controllers\transaksi\PendapatanController;
 use App\Http\Controllers\transaksi\PenyusutanController;
 use App\Http\Controllers\laporan\LaporanGudangController;
@@ -34,12 +24,9 @@ use App\Http\Controllers\master_data\ProfilKpriController;
 use App\Http\Controllers\laporan\LaporanPinjamanController;
 use App\Http\Controllers\laporan\LaporanSimpananController;
 use App\Http\Controllers\transaksi\BelanjaBarangController;
-use App\Http\Controllers\transaksi\TransferSaldoController;
 use App\Http\Controllers\laporan\LaporanPenjualanController;
 use App\Http\Controllers\laporan\LaporanTransaksiController;
-use App\Http\Controllers\master_data\BarangEceranController;
 use App\Http\Controllers\authentications\PermissionController;
-use App\Http\Controllers\master_data\MasterSimpananController;
 use App\Http\Controllers\master_data\PengajuanPinjamanController;
 
 /*
@@ -67,37 +54,21 @@ Route::middleware(['auth'])->group((function () {
             Route::get('profil/koperasi/edit/{id}', 'edit')->name('profil-koperasi.edit');
             Route::patch('profil/koperasi/update/{id}', 'update')->name('profil-koperasi.update');
       });
+
       //Content:
+
       //1.master data umum
-      Route::controller(AnggotaController::class)->group(function () {
-            Route::get('/anggota', 'index')->name('mdu-anggota');
-            Route::get('/anggota/create', 'create')->name('mdu-anggota.create');
-            Route::post('/anggota/store', 'store')->name('mdu-anggota.store');
-            Route::get('/anggota/edit/{id}', 'edit')->name('mdu-anggota.edit');
-            Route::patch('/anggota/update/{id}', 'update')->name('mdu-anggota.update');
-      });
-      Route::get('/jabatan', [JabatanController::class, 'index'])->name('mdu-jabatan');
-      Route::get('/unit', [UnitController::class, 'index'])->name('mdu-unit');
-      Route::get('/satuan', [SatuanController::class, 'index'])->name('mdu-satuan');
-      Route::get('/berita', [BeritaController::class, 'index'])->name('mdu-berita');
-      Route::get('/pesan', [PesanController::class, 'index'])->name('pesan');
+      require __DIR__ . '/master_umum.php';
 
       //2.master data unit pertokoan
-      Route::get('/persediaan/unit-pertokoan', [BarangController::class, 'index'])->name('mdt-persediaan');
-      Route::get('/inventaris/unit-pertokoan', [BarangController::class, 'index'])->name('mdt-inventaris');
-      Route::get('/persediaan-eceran/unit-pertokoan', [BarangEceranController::class, 'index'])->name('mdt-persediaan-eceran');
-      Route::get('/inventaris-eceran/unit-pertokoan', [BarangEceranController::class, 'index'])->name('mdt-inventaris-eceran');
-      Route::get('/vendor', [PenyediaController::class, 'index'])->name('mdt-vendor');
+      require __DIR__ . '/master_pertokoan.php';
 
       //3.master data unit simpan pinjam
-      Route::get('/inventaris/unit-sp', [BarangController::class, 'index'])->name('mds-inventaris');
-      Route::get('/inventaris-eceran/unit-sp', [BarangEceranController::class, 'index'])->name('mds-inventaris-eceran');
-      Route::get('/master-simpanan', [MasterSimpananController::class, 'index'])->name('mds-simpanan');
+      require __DIR__ . '/master_sp.php';
 
       //4.coa
-      Route::get('/coa', [CoaController::class, 'index'])->name('coa-master');
-      Route::get('/saldo-awal', [SaldoAwalController::class, 'index'])->name('coa-saldo-awal');
-      Route::get('/kas-bank', [TransferSaldoController::class, 'index'])->name('coa-kas-bank');
+      require __DIR__ . '/coa.php';
+
 
       //5.transaksi unit pertokoan
       Route::get('/penjualan/unit-pertokoan', [PenjualanController::class, 'index'])->name('ptk-penjualan');
@@ -145,15 +116,6 @@ Route::middleware(['auth'])->group((function () {
       Route::get('/neraca-saldo/unit-sp', [NeracaSaldoController::class, 'index'])->name('lus-neraca');
 
       // 9. Setting User
-      // Route::controller(UserSettingController::class)->group(function () {
-      //       Route::get('/pengaturan-user', 'userManager')->name('pengaturan-user')->middleware('permission:user-create');
-      //       Route::post('/store-user', 'storeUser')->name('pengaturan-user.storeUser')->middleware('permission:user-store');
-      //       Route::get('/otoritas', 'roleManager')->name('pengaturan-otoritas')->middleware('permission:otoritas-create');
-      //       Route::post('/store-otoritas', 'storeRole')->name('pengaturan-otoritas.storeRole')->middleware('permission:otoritas-store');
-      //       Route::get('/otorisasi', 'permissionManager')->name('pengaturan-otorisasi')->middleware('permission:otorisasi-view');
-      //       Route::post('/assign-permission', 'roleHasPermission')->name('pengaturan-otorisasi.assignPermission')->middleware('permission:otoritas-assign');
-      //       Route::get('/set-permission', [PermissionController::class, 'index'])->name('set-permission');
-      // })->middleware('role:super-admin');
       Route::get('/profil/pengguna', [AdminDashboard::class, 'index'])->name('profil-pengguna');
       Route::controller(UserSettingController::class)->group(function () {
             Route::get('/pengaturan-user', 'userManager')->name('pengaturan-user');

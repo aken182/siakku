@@ -14,6 +14,6 @@ class ImageService
 
       public function uploadImage($file, $imageName, $folder)
       {
-            $file->storeAs($folder, $imageName);
+            $file->storeAs($folder, $imageName, 'public');
       }
 }

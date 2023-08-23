@@ -26,7 +26,6 @@ class AnggotaRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode' => 'required|unique:anggota,kode',
             'nama' => 'required',
             'jenis_kelamin' => 'required',
             'pekerjaan' => 'required',
@@ -40,8 +39,6 @@ class AnggotaRequest extends FormRequest
     public function messages()
     {
         return [
-            'kode.required' => 'Kode anggota tidak boleh kosong!',
-            'kode.unique' => 'Kode anggota sudah ada!',
             'nama.required' => 'Nama anggota tidak boleh kosong!',
             'jenis_kelamin.required' => 'Jenis kelamin tidak boleh kosong!',
             'pekerjaan.required' => 'Pekerjaan tidak boleh kosong!',

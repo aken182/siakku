@@ -28,10 +28,10 @@
                     <table class="table table-striped dataTable">
                         <thead>
                             <tr>
-                                <th>No.</th>
-                                <th>Kode</th>
-                                <th>Nama TPK</th>
-                                <th>Unit Induk</th>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Jabatan</th>
+                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -39,16 +39,19 @@
                             @php
                                 $no = 1;
                             @endphp
-                            @forelse ($unit as $a)
+                            @forelse ($jabatan as $a)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ $a->kode_unit }}</td>
-                                    <td>{{ $a->nama }}</td>
-                                    <td>{{ $a->unit }}</td>
+                                    <td>{{ $a->anggota->nama }}</td>
+                                    <td>{{ $a->jabatan }}</td>
+                                    <td>
+                                        <span
+                                            class="badge {{ $a->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}">{{ $a->status }}</span>
+                                    </td>
                                     <td>
                                         @php
-                                            $routeEdit = route('mdu-unit.edit', $a->id_unit);
-                                            $routeDelete = route('mdu-unit.destroy', $a->id_unit);
+                                            $routeEdit = route('mdu-jabatan.edit', $a->id_jabatan);
+                                            $routeDelete = route('mdu-jabatan.destroy', $a->id_jabatan);
                                         @endphp
                                         <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
                                     </td>

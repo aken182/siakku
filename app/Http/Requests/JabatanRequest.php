@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class JabatanRequest extends FormRequest
 {
@@ -24,7 +26,25 @@ class JabatanRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'id_anggota' => 'required',
+            'jabatan' => 'required',
+            'status' => 'required',
         ];
+    }
+
+    public function messages()
+    {
+        return [
+            'id_anggota.required' => 'Nama anggota tidak boleh kosong!',
+            'jabatan.required' => 'Jabatan tidak boleh kosong!',
+            'status.required' => 'Status tidak boleh kosong!',
+        ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        if ($validator->fails()) {
+            Alert::error('Error', 'Data belum diisi dengan benar.');
+        }
     }
 }

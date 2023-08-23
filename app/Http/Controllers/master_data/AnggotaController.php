@@ -2,27 +2,25 @@
 
 namespace App\Http\Controllers\master_data;
 
+use App\Services\AnggotaService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AnggotaRequest;
-use App\Services\AnggotaService;
+use App\Models\Anggota;
+use App\Services\CrudService;
 use App\Services\ImageService;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AnggotaController extends Controller
 {
     protected $anggotaService;
-    protected $imageService;
+    protected $crudService;
 
     public function __construct()
     {
-        $this->anggotaService = new AnggotaService;
-        $this->imageService = new ImageService;
+        $this->anggotaService = new AnggotaService(new ImageService);
+        $this->crudService = new CrudService;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
 
@@ -37,72 +35,51 @@ class AnggotaController extends Controller
         return view('content.anggota.main', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $data = [
             'title' => 'Form Tambah Anggota',
-            'kode' => $this->anggotaService->getKode()
         ];
         return view('content.anggota.create', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(AnggotaRequest $request)
     {
-        $this->anggotaService->create($request);
-        if ($request->file('pas_foto') != null) {
-            $imageName = $this->imageService->getImageName('Foto', $request->input('kode'), $request->file('pas_foto'));
-            $this->imageService->uploadImage($request->file('pas_foto'), $imageName, 'foto-anggota');
-        }
+        $request['kode'] = $this->anggotaService->getKode();
+        $this->anggotaService->addPasFoto($request);
+        $this->crudService->create($request, new Anggota);
         Alert::success('Sukses', 'Data berhasil ditambahkan!');
         return redirect()->route('mdu-anggota');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+
+        $data = [
+            'title' => 'Form Edit Anggota',
+            'anggota' => $this->anggotaService->getDataAnggota($id)
+        ];
+        return view('content.anggota.edit', $data);
     }
 
     public function update(AnggotaRequest $request, $id)
     {
-        //
+        $this->anggotaService->updatePasFoto($request, $id);
+        $this->crudService->update($request, 'id_anggota', $id, new Anggota);
+        Alert::success('Sukses', 'Berhasil mengubah data anggota.');
+        return redirect()->route('mdu-anggota');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $this->anggotaService->deletePasFoto($id);
+        $this->crudService->delete('id_anggota', $id, new Anggota);
+        Alert::success('Sukses', 'Berhasil menghapus data anggota.');
+        return redirect()->back();
     }
 }

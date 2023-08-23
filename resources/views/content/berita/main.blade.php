@@ -23,14 +23,46 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Default Layout</h4>
+                    <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, commodi? Ullam quaerat
-                    similique iusto
-                    temporibus, vero aliquam praesentium, odit deserunt eaque nihil saepe hic deleniti? Placeat
-                    delectus
-                    quibusdam ratione ullam!
+                    <table class="table table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Judul</th>
+                                <th>Slug</th>
+                                <th>Tanggal</th>
+                                <th>Gambar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $no = 1;
+                            @endphp
+                            @forelse ($berita as $a)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $a->judul_berita }}</td>
+                                    <td>{{ $a->slug_berita }}</td>
+                                    <td>{{ date('d/m/Y', strtotime($a->tgl_berita)) }}</td>
+                                    <td> <img width="100px" src="{{ asset('storage/berita/' . $a->gambar_berita) }}"></td>
+                                    <td>
+                                        @php
+                                            $routeEdit = route('mdu-berita.edit', $a->id_berita);
+                                            $routeDelete = route('mdu-berita.destroy', $a->id_berita);
+                                        @endphp
+                                        <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" style="text-align: center">Data Kosong.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>

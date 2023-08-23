@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class SatuanRequest extends FormRequest
 {
@@ -24,7 +26,20 @@ class SatuanRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'nama_satuan' => 'required'
         ];
+    }
+    public function messages()
+    {
+        return [
+            'nama_satuan.required' => 'Nama satuan tidak boleh kosong.'
+        ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        if ($validator->fails()) {
+            Alert::error('Error', 'Data belum diisi dengan benar.');
+        }
     }
 }

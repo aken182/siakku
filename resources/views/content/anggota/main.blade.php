@@ -22,18 +22,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-                        <div class="col">
-                            <a class="btn btn-sm btn-outline-primary" type="button" href="{{ $routeCreate }}">Tambah
-                                Data</a>
-                            <a class="btn btn-sm btn-outline-success" type="button" href="{{ $routeExcel }}">Export
-                                Excel</a>
-                            <a class="btn btn-sm btn-outline-danger" type="button" href="{{ $routePdf }}">Export
-                                PDF</a>
-                            <a class="btn btn-sm btn-outline-success" type="button" href="{{ $routeImport }}">Import
-                                Excel</a>
-                        </div>
-                    </div>
+                    <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable">
@@ -59,7 +48,11 @@
                                             class="badge {{ $a->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}">{{ $a->status }}</span>
                                     </td>
                                     <td>
-                                        <x-table.action />
+                                        @php
+                                            $routeEdit = route('mdu-anggota.edit', $a->id_anggota);
+                                            $routeDelete = route('mdu-anggota.destroy', $a->id_anggota);
+                                        @endphp
+                                        <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
                                     </td>
                                 </tr>
                             @empty

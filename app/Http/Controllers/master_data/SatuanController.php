@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers\master_data;
 
-use Illuminate\Http\Request;
+use App\Models\Satuan;
+use App\Services\CrudService;
 use App\Services\SatuanService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SatuanRequest;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SatuanController extends Controller
 {
     protected $satuanService;
+    protected $crudService;
 
     public function __construct()
     {
         $this->satuanService = new SatuanService;
+        $this->crudService = new CrudService;
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +27,14 @@ class SatuanController extends Controller
     public function index()
     {
 
-        $data = ['title' => 'Satuan'];
+        $data = [
+            'title' => 'Satuan',
+            'routeCreate' => route('mdu-satuan.create'),
+            'routeImport' => route('mdu-satuan.create'),
+            'routeExcel' => route('mdu-satuan.create'),
+            'routePdf' => route('mdu-satuan.create'),
+            'satuan' => Satuan::all(),
+        ];
         return view('content.satuan.main', $data);
     }
 
@@ -34,7 +45,10 @@ class SatuanController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'title' => 'Form Tambah Satuan',
+        ];
+        return view('content.satuan.create', $data);
     }
 
     /**
@@ -45,7 +59,10 @@ class SatuanController extends Controller
      */
     public function store(SatuanRequest $request)
     {
-        //
+
+        $this->crudService->create($request, new Satuan);
+        Alert::success('Sukses', 'Data berhasil ditambahkan!');
+        return redirect()->route('mdu-satuan');
     }
 
     /**
@@ -67,7 +84,11 @@ class SatuanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = [
+            'title' => 'Form Edit Satuan',
+            'satuan' => $this->satuanService->getDataSatuan($id),
+        ];
+        return view('content.satuan.edit', $data);
     }
 
     /**
@@ -79,7 +100,9 @@ class SatuanController extends Controller
      */
     public function update(SatuanRequest $request, $id)
     {
-        //
+        $this->crudService->update($request, 'id_satuan', $id, new Satuan);
+        Alert::success('Sukses', 'Berhasil mengubah data satuan.');
+        return redirect()->route('mdu-satuan');
     }
 
     /**
@@ -90,6 +113,8 @@ class SatuanController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->crudService->delete('id_satuan', $id, new Satuan);
+        Alert::success('Sukses', 'Berhasil menghapus data satuan.');
+        return redirect()->back();
     }
 }
