@@ -2,18 +2,27 @@
 
 namespace App\Http\Controllers\master_data;
 
+use DateTime;
 use Illuminate\Http\Request;
+use App\Services\CrudService;
+use App\Services\ImageService;
+use App\Services\AnggotaService;
 use App\Services\PinjamanService;
+use App\Models\Pengajuan_pinjaman;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PengajuanPinjamanRequest;
 
 class PengajuanPinjamanController extends Controller
 {
     protected $pinjamanService;
+    protected $crudService;
+    protected $anggotaService;
 
     public function __construct()
     {
         $this->pinjamanService = new PinjamanService;
+        $this->crudService = new CrudService;
+        $this->anggotaService = new AnggotaService(new ImageService);
     }
     /**
      * Display a listing of the resource.
@@ -23,8 +32,17 @@ class PengajuanPinjamanController extends Controller
     public function index()
     {
 
-        $data = ['title' => 'Pengajuan Pinjaman'];
-        return view('content.barang-eceran.main', $data);
+        $data = [
+            'title' => 'Pengajuan Pinjaman',
+            'routeCreate' => route('pp-pengajuan.create'),
+            'routeImport' => route('pp-pengajuan.create'),
+            'routeExcel' => route('pp-pengajuan.create'),
+            'routePdf' => route('pp-pengajuan.create'),
+            'pengajuan' => Pengajuan_pinjaman::all()
+        ];
+        $isi = $this->crudService->messageConfirmDelete('pengajuan pinjaman');
+        confirmDelete($isi['title'], $isi['text']);
+        return view('content.pinjaman.pengajuan.main', $data);
     }
 
     /**
@@ -34,7 +52,12 @@ class PengajuanPinjamanController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'title' => "Form Tambah Pengajuan",
+            'anggota' => $this->anggotaService->getDataAnggotaToForm()
+        ];
+
+        return view('content.pinjaman.pengajuan.create', $data);
     }
 
     /**
@@ -45,7 +68,14 @@ class PengajuanPinjamanController extends Controller
      */
     public function store(PengajuanPinjamanRequest $request)
     {
-        //
+        $model = new Pengajuan_pinjaman;
+        $request['kode'] = kode($model, 'PENG-', 'kode');
+        $request['status'] = 'belum acc';
+        $request['status_pencairan'] = 'konfirmasi';
+        $this->pinjamanService->getConvertToNumberRequest($request);
+        $this->crudService->create($request, $model);
+        alert()->success('Sukses', 'Data pengajuan berhasil ditambahkan!');
+        return redirect()->route('pp-pengajuan');
     }
 
     /**
@@ -56,7 +86,29 @@ class PengajuanPinjamanController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = [
+            'title' => 'Detil Pengajuan Pinjaman',
+            'pengajuan' => $this->pinjamanService->getPengajuan($id),
+        ];
+        return view('content.pinjaman.pengajuan.show', $data);
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function konfirmasi(Request $request, $id)
+    {
+        $today = new DateTime();
+        $request['tgl_acc'] = $today->format('Y-m-d');
+        $this->crudService->update($request, 'id_pengajuan', $id, new Pengajuan_pinjaman);
+        alert()->success('Sukses', 'Data pengajuan berhasil dikonfirmasi!');
+        return redirect()->back();
     }
 
     /**
@@ -67,7 +119,13 @@ class PengajuanPinjamanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = [
+            'title' => "Form Edit Pengajuan",
+            'anggota' => $this->anggotaService->getDataAnggotaToForm(),
+            'pengajuan' => $this->pinjamanService->getPengajuan($id),
+        ];
+
+        return view('content.pinjaman.pengajuan.edit', $data);
     }
 
     /**
@@ -79,7 +137,10 @@ class PengajuanPinjamanController extends Controller
      */
     public function update(PengajuanPinjamanRequest $request, $id)
     {
-        //
+        $this->pinjamanService->getConvertToNumberRequest($request);
+        $this->crudService->update($request, 'id_pengajuan', $id, new Pengajuan_pinjaman);
+        alert()->success('Sukses', 'Berhasil mengubah data pengajuan!');
+        return redirect()->route('pp-pengajuan');
     }
 
     /**
@@ -90,6 +151,8 @@ class PengajuanPinjamanController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->crudService->delete('id_pengajuan', $id, new Pengajuan_pinjaman);
+        alert()->success('Sukses', 'Berhasil menghapus data pengajuan pinjaman!');
+        return redirect()->back();
     }
 }

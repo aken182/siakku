@@ -23,14 +23,45 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Default Layout</h4>
+                    <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, commodi? Ullam quaerat
-                    similique iusto
-                    temporibus, vero aliquam praesentium, odit deserunt eaque nihil saepe hic deleniti? Placeat
-                    delectus
-                    quibusdam ratione ullam!
+                    <div class="table-responsive">
+                        <table class="table table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama</th>
+                                    <th>Header</th>
+                                    <th>Kategori</th>
+                                    <th>Sub Kategori</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($coa as $a)
+                                    <tr>
+                                        <td>{{ $a->kode }}</td>
+                                        <td>{{ $a->nama }}</td>
+                                        <td>{{ $a->header }}</td>
+                                        <td>{{ $a->kategori }}</td>
+                                        <td>{{ $a->subkategori }}</td>
+                                        <td>
+                                            @php
+                                                $routeEdit = route('coa-master.edit', $a->id_coa);
+                                                $routeDelete = route('coa-master.destroy', $a->id_coa);
+                                            @endphp
+                                            <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" style="text-align: center">Data Kosong.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>

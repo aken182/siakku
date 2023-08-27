@@ -31,7 +31,7 @@ class PenarikanController extends Controller
                   'title' => 'Penarikan Simpanan'
             ];
 
-            return view('content.simpanan.main', $data);
+            return view('content.simpanan.transaksi-penarikan.main', $data);
       }
 
       /**

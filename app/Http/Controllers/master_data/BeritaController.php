@@ -35,6 +35,8 @@ class BeritaController extends Controller
             'routePdf' => route('mdu-berita.create'),
             'berita' => Berita::all(),
         ];
+        $isi = $this->crudService->messageConfirmDelete('Berita');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.berita.main', $data);
     }
 

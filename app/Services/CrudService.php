@@ -20,4 +20,13 @@ class CrudService
       {
             $model::where($idColumn, $idValue)->delete();
       }
+
+      public function messageConfirmDelete($title)
+      {
+            $data['title'] = 'Hapus ' . $title . '!';
+            $data['text'] = "Yakin ingin menghapus data " . $title . " ini? 
+            Sebaiknya hapus terlebih dahulu data transaksi atau master data lain yang memiliki 
+            data " . $title . " ini sebelum anda menghapusnya.";
+            return $data;
+      }
 }

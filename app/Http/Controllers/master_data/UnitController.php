@@ -35,6 +35,8 @@ class UnitController extends Controller
             'routePdf' => route('mdu-unit.create'),
             'unit' => Unit::all(),
         ];
+        $isi = $this->crudService->messageConfirmDelete('Unit');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.unit.main', $data);
     }
 

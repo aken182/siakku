@@ -113,9 +113,9 @@
                               "slug": "mdt-inventaris-eceran"
                         },
                         {
-                              "url": "/vendor",
+                              "url": "/vendor/unit-pertokoan",
                               "name": "Vendor",
-                              "permission": "master-vendor-view",
+                              "permission": "master-vendor-toko-view",
                               "slug": "mdt-vendor"
                         }
                   ]
@@ -201,7 +201,7 @@
             },
             {
                   "url": "/shu/unit-pertokoan",
-                  "name": "Pembagian SHU",
+                  "name": "Sisa Hasil Usaha",
                   "icon": "bi bi-wallet",
                   "permission": "shu-unit-pertokoan-view",
                   "slug": "shu-unit-pertokoan"
@@ -289,6 +289,12 @@
                               "name": "Master Simpanan",
                               "permission": "master-simpanan-view",
                               "slug": "mds-simpanan"
+                        },
+                        {
+                              "url": "/vendor/unit-sp",
+                              "name": "Vendor",
+                              "permission": "master-vendor-sp-view",
+                              "slug": "mds-vendor"
                         }
                   ]
             },
@@ -380,7 +386,7 @@
             },
             {
                   "url": "/shu/unit-sp",
-                  "name": "Pembagian SHU",
+                  "name": "Sisa Hasil Usaha",
                   "icon": "bi bi-wallet",
                   "permission": "shu-unit-sp-view",
                   "slug": "shu-unit-sp"

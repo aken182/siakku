@@ -19,7 +19,6 @@ use App\Http\Controllers\transaksi\PenjualanController;
 use App\Http\Controllers\transaksi\PendapatanController;
 use App\Http\Controllers\transaksi\PenyusutanController;
 use App\Http\Controllers\laporan\LaporanGudangController;
-use App\Http\Controllers\master_data\MasterShuController;
 use App\Http\Controllers\master_data\ProfilKpriController;
 use App\Http\Controllers\laporan\LaporanPinjamanController;
 use App\Http\Controllers\laporan\LaporanSimpananController;
@@ -27,7 +26,6 @@ use App\Http\Controllers\transaksi\BelanjaBarangController;
 use App\Http\Controllers\laporan\LaporanPenjualanController;
 use App\Http\Controllers\laporan\LaporanTransaksiController;
 use App\Http\Controllers\authentications\PermissionController;
-use App\Http\Controllers\master_data\PengajuanPinjamanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,8 +67,10 @@ Route::middleware(['auth'])->group((function () {
       //4.coa
       require __DIR__ . '/coa.php';
 
+      //5.shu
+      require __DIR__ . '/shu.php';
 
-      //5.transaksi unit pertokoan
+      //6.transaksi unit pertokoan
       Route::get('/penjualan/unit-pertokoan', [PenjualanController::class, 'index'])->name('ptk-penjualan');
       Route::get('/pendapatan/unit-pertokoan', [PendapatanController::class, 'index'])->name('ptk-pendapatan');
       Route::get('/piutang-barang/unit-pertokoan', [PiutangController::class, 'index'])->name('ptk-piutang');
@@ -80,12 +80,10 @@ Route::middleware(['auth'])->group((function () {
       Route::get('/simpanan/unit-pertokoan/setor-history', [SimpananController::class, 'index'])->name('stk-simpanan');
       Route::get('/simpanan/unit-pertokoan/tarik-history', [PenarikanController::class, 'index'])->name('stk-penarikan');
       Route::get('/penyusutan/unit-pertokoan', [PenyusutanController::class, 'index'])->name('penyusutan-unit-pertokoan');
-      Route::get('/shu/unit-pertokoan', [MasterShuController::class, 'index'])->name('shu-unit-pertokoan');
 
-      //6.transaksi unit simpan pinjam
+      //7.transaksi unit simpan pinjam
       Route::get('/simpanan/unit-sp/setor-history', [SimpananController::class, 'index'])->name('sp-simpanan');
       Route::get('/simpanan/unit-sp/tarik-history', [PenarikanController::class, 'index'])->name('sp-penarikan');
-      Route::get('/pinjaman/unit-sp/pengajuan-history', [PengajuanPinjamanController::class, 'index'])->name('pp-pengajuan');
       Route::get('/pinjaman/unit-sp/pinjaman-history', [PinjamanController::class, 'index'])->name('pp-pinjaman');
       Route::get('/pinjaman/unit-sp/angsuran-history', [PelunasanController::class, 'index'])->name('pp-angsuran');
       Route::get('/belanja-barang/unit-sp', [BelanjaBarangController::class, 'index'])->name('bsp-belanja-barang');
@@ -93,9 +91,8 @@ Route::middleware(['auth'])->group((function () {
       Route::get('/hutang/unit-sp', [HutangController::class, 'index'])->name('bsp-hutang');
       Route::get('/pendapatan/unit-sp', [PendapatanController::class, 'index'])->name('pendapatan-unit-sp');
       Route::get('/penyusutan/unit-sp', [PenyusutanController::class, 'index'])->name('penyusutan-unit-sp');
-      Route::get('/shu/unit-sp', [MasterShuController::class, 'index'])->name('shu-unit-sp');
 
-      //7.laporan unit pertokoan
+      //8.laporan unit pertokoan
       Route::get('/laporan-gudang/unit-pertokoan', [LaporanGudangController::class, 'index'])->name('lut-gudang');
       Route::get('/laporan-penjualan/unit-pertokoan', [LaporanPenjualanController::class, 'index'])->name('lut-penjualan');
       Route::get('/laporan-transaksi/unit-pertokoan', [LaporanTransaksiController::class, 'index'])->name('lut-transaksi');
@@ -105,7 +102,7 @@ Route::middleware(['auth'])->group((function () {
       Route::get('/laba-rugi/unit-pertokoan', [LabaRugiController::class, 'index'])->name('lut-laba-rugi');
       Route::get('/neraca-saldo/unit-pertokoan', [NeracaSaldoController::class, 'index'])->name('lut-neraca');
 
-      //8.laporan unit simpan pinjam
+      //9.laporan unit simpan pinjam
       Route::get('/laporan-transaksi/unit-sp', [LaporanTransaksiController::class, 'index'])->name('lus-transaksi');
       Route::get('/laporan-simpanan/unit-sp', [LaporanSimpananController::class, 'index'])->name('lus-simpanan');
       Route::get('/laporan-simpanan-sukarela-berbunga/unit-sp', [LaporanSimpananController::class, 'index'])->name('lus-simpanan-sb');
@@ -115,7 +112,7 @@ Route::middleware(['auth'])->group((function () {
       Route::get('/laba-rugi/unit-sp', [LabaRugiController::class, 'index'])->name('lus-laba-rugi');
       Route::get('/neraca-saldo/unit-sp', [NeracaSaldoController::class, 'index'])->name('lus-neraca');
 
-      // 9. Setting User
+      // 10. Setting User
       Route::get('/profil/pengguna', [AdminDashboard::class, 'index'])->name('profil-pengguna');
       Route::controller(UserSettingController::class)->group(function () {
             Route::get('/pengaturan-user', 'userManager')->name('pengaturan-user');

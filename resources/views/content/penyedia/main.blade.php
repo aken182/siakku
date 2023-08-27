@@ -23,14 +23,46 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Default Layout</h4>
+                    <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, commodi? Ullam quaerat
-                    similique iusto
-                    temporibus, vero aliquam praesentium, odit deserunt eaque nihil saepe hic deleniti? Placeat
-                    delectus
-                    quibusdam ratione ullam!
+                    <div class="table-responsive">
+                        <table class="table table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Nama</th>
+                                    <th>Alamat</th>
+                                    <th>Kontak</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $no = 1;
+                                @endphp
+                                @forelse ($vendor as $a)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $a->nama }}</td>
+                                        <td>{{ $a->alamat }}</td>
+                                        <td>{{ $a->no_tlp }}</td>
+                                        <td>
+                                            @php
+                                                $routee = route($routeEdit, $a->id_penyedia);
+                                                $routed = route($routeDelete, $a->id_penyedia);
+                                            @endphp
+                                            <x-table.action :routeedit="$routee" :routedelete="$routed" />
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" style="text-align: center">Data Kosong.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>

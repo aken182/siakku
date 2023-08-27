@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\master_data;
 
+use App\Models\Penyedia;
 use Illuminate\Http\Request;
+use App\Services\CrudService;
 use App\Services\PenyediaService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PenyediaRequest;
@@ -10,10 +12,12 @@ use App\Http\Requests\PenyediaRequest;
 class PenyediaController extends Controller
 {
     protected $penyediaService;
+    protected $crudService;
 
     public function __construct()
     {
         $this->penyediaService = new PenyediaService;
+        $this->crudService = new CrudService;
     }
 
     /**
@@ -23,8 +27,19 @@ class PenyediaController extends Controller
      */
     public function index()
     {
-
-        $data = ['title' => 'Vendor'];
+        $route = $this->penyediaService->getRouteIndex();
+        $data = [
+            'title' => 'Vendor',
+            'routeCreate' => $route['routeCreate'],
+            'routeEdit' => $route['routeEdit'],
+            'routeDelete' => $route['routeDelete'],
+            'routeImport' => $route['routeImport'],
+            'routeExcel' => $route['routeExportExcel'],
+            'routePdf' => $route['routeExportPdf'],
+            'vendor' => Penyedia::all()
+        ];
+        $isi = $this->crudService->messageConfirmDelete('Vendor');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.penyedia.main', $data);
     }
 
@@ -35,7 +50,13 @@ class PenyediaController extends Controller
      */
     public function create()
     {
-        //
+        $route = $this->penyediaService->getRouteCreate();
+        $data = [
+            'title' => 'Form Tambah Vendor',
+            'routeStore' => $route['store'],
+            'routeMain' => $route['main'],
+        ];
+        return view('content.penyedia.create', $data);
     }
 
     /**
@@ -46,7 +67,10 @@ class PenyediaController extends Controller
      */
     public function store(PenyediaRequest $request)
     {
-        //
+        $route = $this->penyediaService->getRouteStore();
+        $this->crudService->create($request, new Penyedia);
+        alert()->success('Sukses', 'Data vendor berhasil ditambahkan!');
+        return redirect()->route($route);
     }
 
     /**
@@ -68,7 +92,14 @@ class PenyediaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $route = $this->penyediaService->getRouteEdit($id);
+        $data = [
+            'title' => 'Form Edit Vendor',
+            'routeUpdate' => $route['update'],
+            'routeMain' => $route['main'],
+            'vendor' => $this->penyediaService->getVendor($id)
+        ];
+        return view('content.penyedia.edit', $data);
     }
 
     /**
@@ -80,7 +111,10 @@ class PenyediaController extends Controller
      */
     public function update(PenyediaRequest $request, $id)
     {
-        //
+        $route = $this->penyediaService->getRouteUpdate();
+        $this->crudService->update($request, 'id_penyedia', $id, new Penyedia);
+        alert()->success('Sukses', 'Berhasil mengubah data vendor.');
+        return redirect()->route($route);
     }
 
     /**
@@ -91,6 +125,8 @@ class PenyediaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->crudService->delete('id_penyedia', $id, new Penyedia);
+        alert()->success('Sukses', 'Berhasil menghapus data vendor.');
+        return redirect()->back();
     }
 }

@@ -26,7 +26,7 @@
                     <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped dataTable">
+                    <table class="table table-hover dataTable">
                         <thead>
                             <tr>
                                 <th>No</th>

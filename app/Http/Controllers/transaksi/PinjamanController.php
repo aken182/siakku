@@ -31,7 +31,7 @@ class PinjamanController extends Controller
             'title' => 'Pinjaman'
         ];
 
-        return view('content.pinjaman.main', $data);
+        return view('content.pinjaman.transaksi-pinjaman.main', $data);
     }
 
     /**

@@ -31,7 +31,7 @@ class SimpananController extends Controller
             'title' => 'Simpanan'
         ];
 
-        return view('content.simpanan.main', $data);
+        return view('content.simpanan.transaksi-simpanan.main', $data);
     }
 
     /**

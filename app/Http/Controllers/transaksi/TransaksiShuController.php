@@ -26,9 +26,16 @@ class TransaksiShuController extends Controller
        */
       public function index()
       {
+            $index = $this->shuService->getDataIndex();
             $data = [
+                  'title' => 'Sisa Hasil Usaha',
+                  'unit' => $index['unit'],
+                  'tipe' => $index['tipe'],
+                  'routeMaster' => $index['routeMaster'],
+                  'routeTransaksi' => $index['routeTransaksi'],
                   'transaksi' => $this->transaksiService->getHistoryTransaction()
             ];
+            return view('content.shu.main', $data);
       }
 
       /**

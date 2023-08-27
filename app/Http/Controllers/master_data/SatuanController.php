@@ -35,6 +35,8 @@ class SatuanController extends Controller
             'routePdf' => route('mdu-satuan.create'),
             'satuan' => Satuan::all(),
         ];
+        $isi = $this->crudService->messageConfirmDelete('Satuan');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.satuan.main', $data);
     }
 

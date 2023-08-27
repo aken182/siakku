@@ -13,7 +13,7 @@ Route::controller(AnggotaController::class)->group(function () {
       Route::post('/anggota/store', 'store')->name('mdu-anggota.store');
       Route::get('/anggota/edit/{id}', 'edit')->name('mdu-anggota.edit');
       Route::patch('/anggota/update/{id}', 'update')->name('mdu-anggota.update');
-      Route::get('/anggota/destroy/{id}', 'destroy')->name('mdu-anggota.destroy');
+      Route::delete('/anggota/destroy/{id}', 'destroy')->name('mdu-anggota.destroy');
 });
 
 Route::controller(JabatanController::class)->group(function () {
@@ -22,7 +22,7 @@ Route::controller(JabatanController::class)->group(function () {
       Route::post('/jabatan/store', 'store')->name('mdu-jabatan.store');
       Route::get('/jabatan/edit/{id}', 'edit')->name('mdu-jabatan.edit');
       Route::patch('/jabatan/update/{id}', 'update')->name('mdu-jabatan.update');
-      Route::get('/jabatan/destroy/{id}', 'destroy')->name('mdu-jabatan.destroy');
+      Route::delete('/jabatan/destroy/{id}', 'destroy')->name('mdu-jabatan.destroy');
 });
 
 Route::controller(UnitController::class)->group(function () {
@@ -31,7 +31,7 @@ Route::controller(UnitController::class)->group(function () {
       Route::post('/unit/store', 'store')->name('mdu-unit.store');
       Route::get('/unit/edit/{id}', 'edit')->name('mdu-unit.edit');
       Route::patch('/unit/update/{id}', 'update')->name('mdu-unit.update');
-      Route::get('/unit/destroy/{id}', 'destroy')->name('mdu-unit.destroy');
+      Route::delete('/unit/destroy/{id}', 'destroy')->name('mdu-unit.destroy');
 });
 
 Route::controller(SatuanController::class)->group(function () {
@@ -40,7 +40,7 @@ Route::controller(SatuanController::class)->group(function () {
       Route::post('/satuan/store', 'store')->name('mdu-satuan.store');
       Route::get('/satuan/edit/{id}', 'edit')->name('mdu-satuan.edit');
       Route::patch('/satuan/update/{id}', 'update')->name('mdu-satuan.update');
-      Route::get('/satuan/destroy/{id}', 'destroy')->name('mdu-satuan.destroy');
+      Route::delete('/satuan/destroy/{id}', 'destroy')->name('mdu-satuan.destroy');
 });
 
 Route::controller(BeritaController::class)->group(function () {
@@ -49,5 +49,5 @@ Route::controller(BeritaController::class)->group(function () {
       Route::post('/berita/store', 'store')->name('mdu-berita.store');
       Route::get('/berita/edit/{id}', 'edit')->name('mdu-berita.edit');
       Route::patch('/berita/update/{id}', 'update')->name('mdu-berita.update');
-      Route::get('/berita/destroy/{id}', 'destroy')->name('mdu-berita.destroy');
+      Route::delete('/berita/destroy/{id}', 'destroy')->name('mdu-berita.destroy');
 });

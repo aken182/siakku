@@ -39,6 +39,8 @@ class JabatanController extends Controller
             'routePdf' => route('mdu-jabatan.create'),
             'jabatan' => Jabatan::all(),
         ];
+        $isi = $this->crudService->messageConfirmDelete('Jabatan');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.anggota.main-jabatan', $data);
     }
 

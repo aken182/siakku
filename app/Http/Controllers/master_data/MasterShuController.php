@@ -6,14 +6,18 @@ use App\Services\ShuService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MasterShuRequest;
+use App\Models\Shu;
+use App\Services\CrudService;
 
 class MasterShuController extends Controller
 {
     protected $shuService;
+    protected $crudService;
 
     public function __construct()
     {
         $this->shuService = new ShuService;
+        $this->crudService = new CrudService;
     }
     /**
      * Display a listing of the resource.
@@ -22,11 +26,20 @@ class MasterShuController extends Controller
      */
     public function index()
     {
-
+        $route = $this->shuService->getDataIndex();
         $data = [
-            'title' => 'SHU'
+            'title' => 'Sisa Hasil Usaha',
+            'unit' => $route['unit'],
+            'tipe' => $route['tipe'],
+            'routeCreate' => $route['routeCreate'],
+            'routeEdit' => $route['routeEdit'],
+            'routeDelete' => $route['routeDelete'],
+            'routeMaster' => $route['routeMaster'],
+            'routeTransaksi' => $route['routeTransaksi'],
+            'shu' => Shu::where('unit', $route['unit'])->get()
         ];
-
+        $isi = $this->crudService->messageConfirmDelete('SHU');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.shu.main', $data);
     }
 
@@ -37,7 +50,15 @@ class MasterShuController extends Controller
      */
     public function create()
     {
-        //
+        $route = $this->shuService->getDataIndex();
+        $data = [
+            'title' => 'Tambah SHU ' . $route['unit'],
+            'unit' => $route['unit'],
+            'routeStore' => $route['routeStore'],
+            'routeMaster' => $route['routeMaster'],
+        ];
+
+        return view('content.shu.master.create', $data);
     }
 
     /**
@@ -48,7 +69,11 @@ class MasterShuController extends Controller
      */
     public function store(MasterShuRequest $request)
     {
-        //
+        // dd($request->all());
+        $route = $this->shuService->getDataIndex();
+        $this->crudService->create($request, new Shu);
+        alert()->success('Sukses', 'Data berhasil ditambahkan!');
+        return redirect()->route($route['routeMaster']);
     }
 
     /**
@@ -70,7 +95,17 @@ class MasterShuController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        $route = $this->shuService->getDataIndex();
+        $data = [
+            'title' => 'Edit SHU ' . $route['unit'],
+            'unit' => $route['unit'],
+            'routeUpdate' => $route['routeUpdate'],
+            'routeMaster' => $route['routeMaster'],
+            'shu' => Shu::where('id_shu', $id)->first()
+        ];
+
+        return view('content.shu.master.edit', $data);
     }
 
     /**
@@ -82,7 +117,10 @@ class MasterShuController extends Controller
      */
     public function update(MasterShuRequest $request, $id)
     {
-        //
+        $route = $this->shuService->getDataIndex();
+        $this->crudService->update($request, 'id_shu', $id, new Shu);
+        alert()->success('Sukses', 'Berhasil mengubah data SHU !');
+        return redirect()->route($route['routeMaster']);
     }
 
     /**
@@ -93,6 +131,8 @@ class MasterShuController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->crudService->delete('id_shu', $id, new Shu);
+        alert()->success('Sukses', 'Berhasil menghapus data shu!');
+        return redirect()->back();
     }
 }

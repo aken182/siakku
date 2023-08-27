@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class BarangEceranRequest extends FormRequest
 {
@@ -23,8 +24,37 @@ class BarangEceranRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
+        $rules = [
+            'id_barang' => 'required',
+            'id_satuan' => 'required',
+            'standar_nilai' => 'required',
+            'jumlah_konversi' => 'required',
+            'stok_konversi' => 'required',
+            'sisa_stok' => 'required',
+            'harga_barang_konversi' => 'required',
+            'harga_jual_konversi' => 'required'
         ];
+        return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'id_barang.required' => 'Nama barang wajib diisi !',
+            'id_satuan.required' => 'Satuan eceran wajib diisi!',
+            'standar_nilai.required' => 'Nilai standar stok eceran wajib diisi !',
+            'jumlah_konversi.required' => 'Jumlah stok grosir yang ingin dikonversi wajib diisi !',
+            'stok_konversi.required' => 'Stok eceran wajib diisi !',
+            'sisa_stok.required' => 'Sisa stok grosir wajib diisi !',
+            'harga_barang_konversi.required' => 'Harga barang konversi wajib diisi !',
+            'harga_jual_konversi.required' => 'Harga jual konversi wajib diisi !'
+        ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        if ($validator->fails()) {
+            alert()->error('Error', 'Data belum diisi dengan benar.');
+        }
     }
 }

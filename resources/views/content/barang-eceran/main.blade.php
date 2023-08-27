@@ -23,14 +23,60 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Default Layout</h4>
+                    <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, commodi? Ullam quaerat
-                    similique iusto
-                    temporibus, vero aliquam praesentium, odit deserunt eaque nihil saepe hic deleniti? Placeat
-                    delectus
-                    quibusdam ratione ullam!
+                    <div class="table-responsive">
+                        <table class="table table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama</th>
+                                    <th>Jenis</th>
+                                    <th>TPK</th>
+                                    <th>Kuantitas</th>
+                                    <th>Harga Satuan</th>
+                                    @if ($posisi === 'inventaris')
+                                        <th>Nilai Buku</th>
+                                        <th>Umur Ekonomis</th>
+                                    @endif
+                                    <th>Harga Jual/Satuan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($barang as $a)
+                                    <tr>
+                                        <td>{{ $a->barang->kode_barang }}</td>
+                                        <td>{{ $a->barang->nama_barang }}</td>
+                                        <td>{{ $a->barang->jenis_barang }}</td>
+                                        <td>{{ $a->barang->unit->nama }}</td>
+                                        <td>{{ $a->stok . ' ' . $a->satuan->nama_satuan }}</td>
+                                        <td>{{ cek_uang($a->harga_barang) . '/' . $a->satuan->nama_satuan }}</td>
+                                        @if ($posisi === 'inventaris')
+                                            <td>{{ cek_uang($a->nilai_saat_ini) . '/' . $a->satuan->nama_satuan }}</td>
+                                            <td>{{ $a->barang->umur_ekonomis }} tahun</td>
+                                        @endif
+                                        <td>{{ cek_uang($a->harga_jual) . '/' . $a->satuan->nama_satuan }}</td>
+                                        <td>
+                                            @php
+                                                $routee = route($routeEdit, $a->id_eceran);
+                                                $routed = route($routeDelete, $a->id_eceran);
+                                            @endphp
+                                            <x-table.action :routeedit="$routee" :routedelete="$routed" />
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="{{ $posisi === 'inventaris' ? '10' : '8' }}"
+                                            style="text-align: center">
+                                            Data Kosong.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>

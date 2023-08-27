@@ -19,6 +19,7 @@
     @yield('contentLayout')
 
     @include('layouts.sections.script.footer-admin')
+    @yield('pageScript')
 </body>
 
 </html>

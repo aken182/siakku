@@ -32,6 +32,8 @@ class AnggotaController extends Controller
             'routePdf' => route('mdu-anggota.create'),
             'anggota' => $this->anggotaService->getDataAnggotaView(),
         ];
+        $isi = $this->crudService->messageConfirmDelete('Anggota');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.anggota.main', $data);
     }
 
@@ -59,7 +61,6 @@ class AnggotaController extends Controller
 
     public function edit($id)
     {
-
         $data = [
             'title' => 'Form Edit Anggota',
             'anggota' => $this->anggotaService->getDataAnggota($id)
