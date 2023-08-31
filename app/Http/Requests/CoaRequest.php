@@ -29,7 +29,7 @@ class CoaRequest extends FormRequest
         $rules = [
             'header' => 'required',
             'kategori' => 'required',
-            'nama' => 'required|max:150',
+            'nama' => 'required',
         ];
         $route = Route::currentRouteName();
         if ($route === 'coa-master.store') {
@@ -46,7 +46,6 @@ class CoaRequest extends FormRequest
             'kode.required_if' => 'Kode akun wajib diisi!',
             'kode.unique_if' => 'Kode akun harus unik!',
             'nama.required' => 'Nama akun wajib diisi!',
-            'nama.max' => 'Panjang maksimal nama akun harus 150 karakter!'
         ];
     }
 

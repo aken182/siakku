@@ -22,7 +22,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
+                    <x-button.master-data-button :routecreate="$routeCreate" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable">

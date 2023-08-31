@@ -30,10 +30,10 @@ class CoaController extends Controller
 
         $data = [
             'title' => 'Chart Of Account',
-            'routeCreate' => route('coa-master.create'),
-            'routeImport' => route('coa-master.create'),
-            'routeExcel' => route('coa-master.create'),
-            'routePdf' => route('coa-master.create'),
+            'routeCreate' => route('mdu-coa.create'),
+            'routeImport' => route('mdu-coa.form-import'),
+            'routeExcel' => route('mdu-coa.export-excel'),
+            'routePdf' => route('mdu-coa.export-pdf'),
             'coa' => Coa::all()
         ];
         $isi = $this->crudService->messageConfirmDelete('akun COA');
@@ -41,11 +41,6 @@ class CoaController extends Controller
         return view('content.coa.main', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $data = [
@@ -54,36 +49,18 @@ class CoaController extends Controller
         return view('content.coa.create', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(CoaRequest $request)
     {
         $this->crudService->create($request, new Coa);
         Alert::success('Sukses', 'Data berhasil ditambahkan!');
-        return redirect()->route('coa-master');
+        return redirect()->route('mdu-coa');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $data = [
@@ -93,26 +70,13 @@ class CoaController extends Controller
         return view('content.coa.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\CoaRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(CoaRequest $request, $id)
     {
         $this->crudService->update($request, 'id_coa', $id, new Coa);
         Alert::success('Sukses', 'Berhasil mengubah data COA.');
-        return redirect()->route('coa-master');
+        return redirect()->route('mdu-coa');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $this->crudService->delete('id_coa', $id, new Coa);

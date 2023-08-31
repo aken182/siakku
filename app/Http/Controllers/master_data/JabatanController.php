@@ -34,9 +34,8 @@ class JabatanController extends Controller
         $data = [
             'title' => 'Jabatan',
             'routeCreate' => route('mdu-jabatan.create'),
-            'routeImport' => route('mdu-jabatan.create'),
-            'routeExcel' => route('mdu-jabatan.create'),
-            'routePdf' => route('mdu-jabatan.create'),
+            'routeExcel' => route('mdu-jabatan.export-excel'),
+            'routePdf' => route('mdu-jabatan.export-pdf'),
             'jabatan' => Jabatan::all(),
         ];
         $isi = $this->crudService->messageConfirmDelete('Jabatan');

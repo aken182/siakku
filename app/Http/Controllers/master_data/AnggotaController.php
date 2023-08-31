@@ -27,9 +27,9 @@ class AnggotaController extends Controller
         $data = [
             'title' => 'Anggota',
             'routeCreate' => route('mdu-anggota.create'),
-            'routeImport' => route('mdu-anggota.create'),
-            'routeExcel' => route('mdu-anggota.create'),
-            'routePdf' => route('mdu-anggota.create'),
+            'routeImport' => route('mdu-anggota.form-import'),
+            'routeExcel' => route('mdu-anggota.export-excel'),
+            'routePdf' => route('mdu-anggota.export-pdf'),
             'anggota' => $this->anggotaService->getDataAnggotaView(),
         ];
         $isi = $this->crudService->messageConfirmDelete('Anggota');

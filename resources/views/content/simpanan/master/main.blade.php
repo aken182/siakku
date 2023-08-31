@@ -31,8 +31,8 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Nama</th>
-                                <th>Jumlah</th>
-                                <th>Aksi</th>
+                                <th style="text-align: center">Jumlah</th>
+                                <th style="text-align: center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,8 +43,8 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $a->nama }}</td>
-                                    <td>{{ cek_uang($a->jumlah) }}</td>
-                                    <td>
+                                    <td style="text-align: right">{{ cek_uang($a->jumlah) }}</td>
+                                    <td style="text-align: center">
                                         @php
                                             $routeEdit = route('mds-simpanan.edit', $a->id_simpanan);
                                             $routeDelete = route('mds-simpanan.destroy', $a->id_simpanan);

@@ -15,6 +15,7 @@ class ShuService
                         $data['unit'] = 'Pertokoan';
                         $data['tipe'] = 'master';
                         $data['routeCreate'] = route('shu-unit-pertokoan.create');
+                        $data['routeImport'] = route('shu-unit-pertokoan.form-import');
                         $data['routeEdit'] = 'shu-unit-pertokoan.edit';
                         $data['routeDelete'] = 'shu-unit-pertokoan.destroy';
                         $data['routeMaster'] = route('shu-unit-pertokoan');
@@ -24,6 +25,7 @@ class ShuService
                         $data['unit'] = 'Simpan Pinjam';
                         $data['tipe'] = 'master';
                         $data['routeCreate'] = route('shu-unit-sp.create');
+                        $data['routeImport'] = route('shu-unit-sp.form-import');
                         $data['routeEdit'] = 'shu-unit-sp.edit';
                         $data['routeDelete'] = 'shu-unit-sp.destroy';
                         $data['routeMaster'] = route('shu-unit-sp');

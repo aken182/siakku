@@ -24,21 +24,26 @@ class BarangRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'nama_barang' => 'required',
             'id_satuan' => 'required',
             'jenis_barang' => 'required',
             'id_unit' => 'required',
         ];
+        if ($this->input('posisi_pi') === "inventaris") {
+            $rules['umur_ekonomis'] = 'required';
+        }
+        return $rules;
     }
 
     public function messages()
     {
         return [
-            'nama_barang.required' => 'Field Nama wajib diisi!',
-            'id_satuan.required' => 'Field Satuan wajib diisi!',
-            'jenis_barang.required' => 'Field Jenis wajib diisi!',
-            'id_unit.required' => 'Field Unit wajib diisi!'
+            'nama_barang.required' => 'Field nama wajib diisi!',
+            'id_satuan.required' => 'Field satuan wajib diisi!',
+            'jenis_barang.required' => 'Field jenis wajib diisi!',
+            'id_unit.required' => 'Field unit wajib diisi!',
+            'umur_ekonomis.required_if' => 'Field umur ekonomis wajib diisi!'
         ];
     }
 

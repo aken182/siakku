@@ -30,9 +30,9 @@ class SatuanController extends Controller
         $data = [
             'title' => 'Satuan',
             'routeCreate' => route('mdu-satuan.create'),
-            'routeImport' => route('mdu-satuan.create'),
-            'routeExcel' => route('mdu-satuan.create'),
-            'routePdf' => route('mdu-satuan.create'),
+            'routeImport' => route('mdu-satuan.form-import'),
+            'routeExcel' => route('mdu-satuan.export-excel'),
+            'routePdf' => route('mdu-satuan.export-pdf'),
             'satuan' => Satuan::all(),
         ];
         $isi = $this->crudService->messageConfirmDelete('Satuan');

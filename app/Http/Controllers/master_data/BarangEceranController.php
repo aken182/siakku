@@ -34,7 +34,6 @@ class BarangEceranController extends Controller
             'routeCreate' => $route['routeCreate'],
             'routeEdit' => $route['routeEdit'],
             'routeDelete' => $route['routeDelete'],
-            'routeImport' => $route['routeImport'],
             'routeExcel' => $route['routeExportExcel'],
             'routePdf' => $route['routeExportPdf'],
             'barang' => $route['barang']

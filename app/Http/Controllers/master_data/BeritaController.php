@@ -4,7 +4,6 @@ namespace App\Http\Controllers\master_data;
 
 use App\Models\Berita;
 use App\Services\CrudService;
-use App\Services\ImageService;
 use App\Services\BeritaService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BeritaRequest;
@@ -17,7 +16,7 @@ class BeritaController extends Controller
 
     public function __construct()
     {
-        $this->beritaService = new BeritaService(new ImageService);
+        $this->beritaService = new BeritaService;
         $this->crudService = new CrudService;
     }
     /**
@@ -30,9 +29,9 @@ class BeritaController extends Controller
         $data = [
             'title' => 'Berita',
             'routeCreate' => route('mdu-berita.create'),
-            'routeImport' => route('mdu-berita.create'),
-            'routeExcel' => route('mdu-berita.create'),
-            'routePdf' => route('mdu-berita.create'),
+            'routeImport' => route('mdu-berita.form-import'),
+            'routeExcel' => route('mdu-berita.export-excel'),
+            'routePdf' => route('mdu-berita.export-pdf'),
             'berita' => Berita::all(),
         ];
         $isi = $this->crudService->messageConfirmDelete('Berita');

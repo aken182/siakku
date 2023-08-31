@@ -35,9 +35,9 @@ class PengajuanPinjamanController extends Controller
         $data = [
             'title' => 'Pengajuan Pinjaman',
             'routeCreate' => route('pp-pengajuan.create'),
-            'routeImport' => route('pp-pengajuan.create'),
-            'routeExcel' => route('pp-pengajuan.create'),
-            'routePdf' => route('pp-pengajuan.create'),
+            'routeImport' => route('pp-pengajuan.form-import'),
+            'routeExcel' => route('pp-pengajuan.export-excel'),
+            'routePdf' => route('pp-pengajuan.export-pdf'),
             'pengajuan' => Pengajuan_pinjaman::all()
         ];
         $isi = $this->crudService->messageConfirmDelete('pengajuan pinjaman');

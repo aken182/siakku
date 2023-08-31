@@ -29,7 +29,7 @@
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <form class="form" action="{{ route('coa-master.store') }}" method="POST">
+                                <form class="form" action="{{ route('mdu-coa.store') }}" method="POST">
                                     @csrf
                                     <div class="row">
                                         <div class="col-12 col-md-6">
@@ -37,13 +37,40 @@
                                                 <div class="card-body">
                                                     <small>
                                                         <p>Berikut Klasifikasi Header Akun COA:</p>
-                                                        <ol>
-                                                            <li>Akun Harta (Asset)</li>
-                                                            <li>Akun Kewajiban (Hutang)</li>
-                                                            <li>Akun Modal</li>
-                                                            <li>Akun Pendapatan</li>
-                                                            <li>Akun Beban</li>
-                                                        </ol>
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead class="table-secondary">
+                                                                <tr>
+                                                                    <th>Nama</th>
+                                                                    <th>Header</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>Akun Harta (Asset)</td>
+                                                                    <td>1</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Akun Modal</td>
+                                                                    <td>2</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Akun Kewajiban (Hutang)</td>
+                                                                    <td>3</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Akun Beban (Biaya)</td>
+                                                                    <td>4</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Harga Pokok Penjualan</td>
+                                                                    <td>5</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pendapatan</td>
+                                                                    <td>8</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </small>
                                                 </div>
                                             </div>
@@ -169,7 +196,7 @@
                                         </div>
                                         <div class="col-12 d-flex justify-content-end">
                                             <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
-                                            <a type="button" href="{{ route('coa-master') }}"
+                                            <a type="button" href="{{ route('mdu-coa') }}"
                                                 class="btn btn-light-secondary me-1 mb-1">Keluar</a>
                                         </div>
                                     </div>

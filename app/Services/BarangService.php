@@ -20,9 +20,9 @@ class BarangService
                         $routeCreate = route('mdt-persediaan.create');
                         $routeEdit = 'mdt-persediaan.edit';
                         $routeDelete = 'mdt-persediaan.destroy';
-                        $routeImport = route('mdt-persediaan.create');
-                        $routeExportExcel = route('mdt-persediaan.create');
-                        $routeExportPdf = route('mdt-persediaan.create');
+                        $routeImport = route('mdt-persediaan.form-import');
+                        $routeExportExcel = route('mdt-persediaan.export-excel');
+                        $routeExportPdf = route('mdt-persediaan.export-pdf');
                         $barang = self::getDataBarang('Pertokoan', $posisi);
                         break;
                   case 'mdt-inventaris':
@@ -31,9 +31,9 @@ class BarangService
                         $routeCreate = route('mdt-inventaris.create');
                         $routeEdit = 'mdt-inventaris.edit';
                         $routeDelete = 'mdt-inventaris.destroy';
-                        $routeImport = route('mdt-inventaris.create');
-                        $routeExportExcel = route('mdt-inventaris.create');
-                        $routeExportPdf = route('mdt-inventaris.create');
+                        $routeImport = route('mdt-inventaris.form-import');
+                        $routeExportExcel = route('mdt-inventaris.export-excel');
+                        $routeExportPdf = route('mdt-inventaris.export-pdf');
                         $barang = self::getDataBarang('Pertokoan', $posisi);
                         break;
                   case 'mds-inventaris':
@@ -42,9 +42,9 @@ class BarangService
                         $routeCreate = route('mds-inventaris.create');
                         $routeEdit = 'mds-inventaris.edit';
                         $routeDelete = 'mds-inventaris.destroy';
-                        $routeImport = route('mds-inventaris.create');
-                        $routeExportExcel = route('mds-inventaris.create');
-                        $routeExportPdf = route('mds-inventaris.create');
+                        $routeImport = route('mds-inventaris.form-import');
+                        $routeExportExcel = route('mds-inventaris.export-excel');
+                        $routeExportPdf = route('mds-inventaris.export-pdf');
                         $barang = self::getDataBarang('Simpan Pinjam', $posisi);
                         break;
             }
@@ -72,9 +72,8 @@ class BarangService
                         $routeCreate = route('mdt-persediaan-eceran.create');
                         $routeEdit = 'mdt-persediaan-eceran.edit';
                         $routeDelete = 'mdt-persediaan-eceran.destroy';
-                        $routeImport = route('mdt-persediaan-eceran.create');
-                        $routeExportExcel = route('mdt-persediaan-eceran.create');
-                        $routeExportPdf = route('mdt-persediaan-eceran.create');
+                        $routeExportExcel = route('mdt-persediaan-eceran.export-excel');
+                        $routeExportPdf = route('mdt-persediaan-eceran.export-pdf');
                         $barang = self::getDataBarangEceran('Pertokoan', $posisi);
                         break;
                   case 'mdt-inventaris-eceran':
@@ -83,9 +82,8 @@ class BarangService
                         $routeCreate = route('mdt-inventaris-eceran.create');
                         $routeEdit = 'mdt-inventaris-eceran.edit';
                         $routeDelete = 'mdt-inventaris-eceran.destroy';
-                        $routeImport = route('mdt-inventaris-eceran.create');
-                        $routeExportExcel = route('mdt-inventaris-eceran.create');
-                        $routeExportPdf = route('mdt-inventaris-eceran.create');
+                        $routeExportExcel = route('mdt-inventaris-eceran.export-excel');
+                        $routeExportPdf = route('mdt-inventaris-eceran.export-pdf');
                         $barang = self::getDataBarangEceran('Pertokoan', $posisi);
                         break;
                   case 'mds-inventaris-eceran':
@@ -94,9 +92,8 @@ class BarangService
                         $routeCreate = route('mds-inventaris-eceran.create');
                         $routeEdit = 'mds-inventaris-eceran.edit';
                         $routeDelete = 'mds-inventaris-eceran.destroy';
-                        $routeImport = route('mds-inventaris-eceran.create');
-                        $routeExportExcel = route('mds-inventaris-eceran.create');
-                        $routeExportPdf = route('mds-inventaris-eceran.create');
+                        $routeExportExcel = route('mds-inventaris-eceran.export-excel');
+                        $routeExportPdf = route('mds-inventaris-eceran.export-pdf');
                         $barang = self::getDataBarangEceran('Simpan Pinjam', $posisi);
                         break;
             }
@@ -106,7 +103,6 @@ class BarangService
                   'routeCreate' => $routeCreate,
                   'routeEdit' => $routeEdit,
                   'routeDelete' => $routeDelete,
-                  'routeImport' => $routeImport,
                   'routeExportExcel' => $routeExportExcel,
                   'routeExportPdf' => $routeExportPdf,
                   'barang' => $barang
@@ -498,5 +494,28 @@ class BarangService
 
             Barang::where('id_barang', $id_barang)->update($data);
             Barang_eceran::where('id_eceran', $id)->delete();
+      }
+
+      public function createToImport($id_satuan, $id_unit, $kode, $posisi, $row)
+      {
+            $umurEkonomis = self::getUmurEkonomis($posisi, $row);
+            Barang::create([
+                  'id_satuan' => $id_satuan,
+                  'id_unit' => $id_unit,
+                  'kode_barang' => $kode,
+                  'nama_barang' => $row['nama_barang'],
+                  'jenis_barang' => $row['jenis_barang'],
+                  'posisi_pi' => $posisi,
+                  'umur_ekonomis' => $umurEkonomis,
+            ]);
+      }
+
+      public function getUmurEkonomis($posisi, $row)
+      {
+            $u = null;
+            if ($posisi === 'inventaris') {
+                  $u = $row['umur_ekonomis'];
+            }
+            return $u;
       }
 }

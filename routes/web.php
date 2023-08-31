@@ -70,6 +70,12 @@ Route::middleware(['auth'])->group((function () {
       //5.shu
       require __DIR__ . '/shu.php';
 
+      //6. import
+      require __DIR__ . '/import.php';
+
+      //7. export
+      require __DIR__ . '/export.php';
+
       //6.transaksi unit pertokoan
       Route::get('/penjualan/unit-pertokoan', [PenjualanController::class, 'index'])->name('ptk-penjualan');
       Route::get('/pendapatan/unit-pertokoan', [PendapatanController::class, 'index'])->name('ptk-pendapatan');

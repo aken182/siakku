@@ -30,9 +30,9 @@ class MasterSimpananController extends Controller
         $data = [
             'title' => 'Master Simpanan',
             'routeCreate' => route('mds-simpanan.create'),
-            'routeImport' => route('mds-simpanan.create'),
-            'routeExcel' => route('mds-simpanan.create'),
-            'routePdf' => route('mds-simpanan.create'),
+            'routeImport' => route('mds-simpanan.form-import'),
+            'routeExcel' => route('mds-simpanan.export-excel'),
+            'routePdf' => route('mds-simpanan.export-pdf'),
             'simpanan' => Simpanan::all(),
         ];
         $isi = $this->crudService->messageConfirmDelete('simpanan');

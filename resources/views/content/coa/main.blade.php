@@ -48,8 +48,8 @@
                                         <td>{{ $a->subkategori }}</td>
                                         <td>
                                             @php
-                                                $routeEdit = route('coa-master.edit', $a->id_coa);
-                                                $routeDelete = route('coa-master.destroy', $a->id_coa);
+                                                $routeEdit = route('mdu-coa.edit', $a->id_coa);
+                                                $routeDelete = route('mdu-coa.destroy', $a->id_coa);
                                             @endphp
                                             <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
                                         </td>

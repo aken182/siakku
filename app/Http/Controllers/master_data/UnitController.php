@@ -30,9 +30,9 @@ class UnitController extends Controller
         $data = [
             'title' => 'Unit',
             'routeCreate' => route('mdu-unit.create'),
-            'routeImport' => route('mdu-unit.create'),
-            'routeExcel' => route('mdu-unit.create'),
-            'routePdf' => route('mdu-unit.create'),
+            'routeImport' => route('mdu-unit.form-import'),
+            'routeExcel' => route('mdu-unit.export-excel'),
+            'routePdf' => route('mdu-unit.export-pdf'),
             'unit' => Unit::all(),
         ];
         $isi = $this->crudService->messageConfirmDelete('Unit');

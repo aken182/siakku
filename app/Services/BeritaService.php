@@ -11,9 +11,9 @@ class BeritaService
 {
       protected $imageService;
 
-      public function __construct(ImageService $var)
+      public function __construct()
       {
-            $this->imageService = $var;
+            $this->imageService = new ImageService;
       }
 
       public function getDataBerita($id)

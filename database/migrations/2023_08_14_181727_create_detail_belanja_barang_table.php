@@ -25,8 +25,8 @@ return new class extends Migration
             $table->foreign('id_satuan')->references('id_satuan')
                 ->on('satuan')->onDelete('cascade');
             $table->float('qty', 11, 2);
-            $table->float('harga', 11, 2);
-            $table->float('subtotal', 11, 2);
+            $table->double('harga', 11, 2);
+            $table->double('subtotal', 11, 2);
             $table->timestamps();
         });
     }

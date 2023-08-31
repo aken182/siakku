@@ -38,6 +38,11 @@ class Barang extends Model
         return $this->hasMany(Detail_penjualan::class, 'id_barang');
     }
 
+    public function saldo_awal_barang()
+    {
+        return $this->hasMany(Saldo_awal_barang::class, 'id_barang');
+    }
+
     public function detail_penyusutan()
     {
         return $this->hasMany(Detail_penyusutan::class, 'id_barang');

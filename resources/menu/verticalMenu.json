@@ -49,32 +49,12 @@
                               "name": "Berita",
                               "permission": "master-berita-view",
                               "slug": "mdu-berita"
-                        }
-                  ]
-            },
-            {
-                  "name": "Chart Of Account (COA)",
-                  "icon": "bi bi-stack",
-                  "slug": "coa",
-                  "permission": "chart-of-account",
-                  "submenu": [
+                        },
                         {
                               "url": "/coa",
-                              "name": "Master Data COA",
-                              "permission": "coa-master-view",
-                              "slug": "coa-master"
-                        },
-                        {
-                              "url": "/saldo-awal",
-                              "name": "Saldo Awal",
-                              "permission": "coa-saldo-awal-view",
-                              "slug": "coa-saldo-awal"
-                        },
-                        {
-                              "url": "/kas-bank",
-                              "name": "Kas & Bank",
-                              "permission": "coa-kas-bank-view",
-                              "slug": "coa-kas-bank"
+                              "name": "COA",
+                              "permission": "master-coa-view",
+                              "slug": "mdu-coa"
                         }
                   ]
             },
@@ -119,6 +99,39 @@
                               "slug": "mdt-vendor"
                         }
                   ]
+            },
+            {
+                  "name": "Saldo Awal",
+                  "icon": "bi bi-wallet",
+                  "slug": "sltk",
+                  "permission": "saldo-awal-unit-pertokoan",
+                  "submenu": [
+                        {
+                              "url": "/saldo-awal/coa/unit-pertokoan",
+                              "name": "COA",
+                              "permission": "saldo-awal-coa-unit-pertokoan-view",
+                              "slug": "sltk-coa"
+                        },
+                        {
+                              "url": "/saldo-awal/persediaan/unit-pertokoan",
+                              "name": "Persediaan",
+                              "permission": "saldo-awal-persediaan-unit-pertokoan-view",
+                              "slug": "sltk-persediaan"
+                        },
+                        {
+                              "url": "/saldo-awal/inventaris/unit-pertokoan",
+                              "name": "inventaris",
+                              "permission": "saldo-awal-inventaris-unit-pertokoan-view",
+                              "slug": "sltk-inventaris"
+                        }
+                  ]
+            },
+            {
+                  "url": "/transfer-saldo-kas-bank/unit-pertokoan",
+                  "name": "Kas & Bank",
+                  "icon": "bi bi-credit-card",
+                  "permission": "kas-bank-unit-pertokoan-view",
+                  "slug": "transfer-toko"
             },
             {
                   "name": "Pendapatan",
@@ -297,6 +310,39 @@
                               "slug": "mds-vendor"
                         }
                   ]
+            },
+            {
+                  "name": "Saldo Awal",
+                  "icon": "bi bi-wallet",
+                  "slug": "slsp",
+                  "permission": "saldo-awal-unit-sp",
+                  "submenu": [
+                        {
+                              "url": "/saldo-awal/coa/unit-sp",
+                              "name": "COA",
+                              "permission": "saldo-awal-coa-unit-sp-view",
+                              "slug": "slsp-coa"
+                        },
+                        {
+                              "url": "/saldo-awal/persediaan/unit-sp",
+                              "name": "Persediaan",
+                              "permission": "saldo-awal-persediaan-unit-sp-view",
+                              "slug": "slsp-persediaan"
+                        },
+                        {
+                              "url": "/saldo-awal/inventaris/unit-sp",
+                              "name": "inventaris",
+                              "permission": "saldo-awal-inventaris-unit-sp-view",
+                              "slug": "slsp-inventaris"
+                        }
+                  ]
+            },
+            {
+                  "url": "/transfer-saldo-kas-bank/unit-sp",
+                  "name": "Kas & Bank",
+                  "icon": "bi bi-credit-card",
+                  "permission": "kas-bank-unit-sp-view",
+                  "slug": "transfer-sp"
             },
             {
                   "name": "Simpanan",

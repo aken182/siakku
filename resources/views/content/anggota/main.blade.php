@@ -25,44 +25,48 @@
                     <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>Kode</th>
-                                    <th>Nama</th>
-                                    <th>Pekerjaan</th>
-                                    <th>Tempat Tugas</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($anggota as $a)
-                                    <tr>
-                                        <td>{{ $a->kode }}</td>
-                                        <td>{{ $a->nama }}</td>
-                                        <td>{{ $a->pekerjaan }}</td>
-                                        <td>{{ $a->tempat_tugas }}</td>
-                                        <td>
-                                            <span
-                                                class="badge {{ $a->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}">{{ $a->status }}</span>
-                                        </td>
-                                        <td>
-                                            @php
-                                                $routeEdit = route('mdu-anggota.edit', $a->id_anggota);
-                                                $routeDelete = route('mdu-anggota.destroy', $a->id_anggota);
-                                            @endphp
-                                            <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" style="text-align: center">Data Kosong.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table table-hover dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode</th>
+                                            <th>Nama</th>
+                                            <th>Pekerjaan</th>
+                                            <th>Tempat Tugas</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($anggota as $a)
+                                            <tr>
+                                                <td>{{ $a->kode }}</td>
+                                                <td>{{ $a->nama }}</td>
+                                                <td>{{ $a->pekerjaan }}</td>
+                                                <td>{{ $a->tempat_tugas }}</td>
+                                                <td>
+                                                    <span
+                                                        class="badge {{ $a->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}">{{ $a->status }}</span>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $routeEdit = route('mdu-anggota.edit', $a->id_anggota);
+                                                        $routeDelete = route('mdu-anggota.destroy', $a->id_anggota);
+                                                    @endphp
+                                                    <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" style="text-align: center">Data Kosong.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

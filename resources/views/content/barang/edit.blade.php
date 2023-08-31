@@ -76,8 +76,11 @@
                                                         {{ $barang->jenis_barang }}</option>
                                                     @if ($barang->posisi_pi === 'persediaan')
                                                         <option value="Barang Konsumsi">Barang Konsumsi</option>
-                                                        <option value="Perlengkapan">Perlengkapan</option>
-                                                        <option value="Peralatan">Peralatan</option>
+                                                        <option value="Barang Sandang">Barang Sandang</option>
+                                                        <option value="Barang Kosmetik">Barang Kosmetik</option>
+                                                        <option value="Barang ATM">Barang ATM</option>
+                                                        <option value="Barang Elektronik">Barang Elektronik</option>
+                                                        <option value="Barang Bangunan">Barang Bangunan</option>
                                                     @else
                                                         <option value="Perlengkapan">Perlengkapan</option>
                                                         <option value="Peralatan">Peralatan</option>
@@ -115,48 +118,35 @@
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="tgl_beli" class="text-primary">Tanggal Beli (Opsional)</label>
-                                                <input type="date" id="tgl_beli" name="tgl_beli"
-                                                    class="form-control @error('tgl_beli') is-invalid @enderror"
-                                                    placeholder="Masukkan Tanggal Beli" value="{{ $barang->tgl_beli }}">
-                                                @error('tgl_beli')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
+                                                <label for="harga_jual" class="text-primary">Harga Jual (Opsional)</label>
+                                                <div class="form-check form-switch mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="cek_harga_jual"
+                                                        {{ $barang->harga_jual > 0 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="cek_harga_jual">Saya menjual
+                                                        {{ $barang->posisi_pi }} ini.
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                         @if ($barang->posisi_pi === 'inventaris')
                                             <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="umur_ekonomis" class="text-primary">Umur Ekonomis
-                                                        (Tahun)</label>
-                                                    <input type="number" id="umur_ekonomis" name="umur_ekonomis"
-                                                        class="form-control @error('umur_ekonomis') is-invalid @enderror"
-                                                        placeholder="Masukkan umur ekonomis"
-                                                        value="{{ $barang->umur_ekonomis }}">
-                                                    @error('umur_ekonomis')
-                                                        <div class="invalid-feedback">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror
+                                                <div class="form-group  col-6">
+                                                    <label for="umur_ekonomis" class="text-primary">Umur
+                                                        Ekonomis</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.25" name="umur_ekonomis"
+                                                            class="form-control @error('umur_ekonomis') is-invalid @enderror"
+                                                            placeholder="ex. 3" value="{{ $barang->umur_ekonomis }}">
+                                                        <input class="form-control" value="tahun" readonly>
+                                                        @error('umur_ekonomis')
+                                                            <div class="invalid-feedback">
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endif
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label for="stok" class="text-primary">Kuantitas
-                                                    {{ $barang->posisi_pi === 'persediaan' ? '(Opsional)' : '' }}</label>
-                                                <input type="number" id="stok" step="0.25" name="stok"
-                                                    class="form-control @error('stok') is-invalid @enderror"
-                                                    placeholder="Masukkan Qty" value="{{ $barang->stok }}">
-                                                @error('stok')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="cek_status" class="text-primary">Status Konversi
@@ -170,50 +160,6 @@
                                                 </div>
                                                 <input type="hidden" name="status_konversi"
                                                     value="{{ $barang->status_konversi }}" id="status_konversi">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label for="harga_barang" class="text-primary">Harga
-                                                    {{ $barang->posisi_pi === 'persediaan' ? '(Opsional)' : '' }}</label>
-                                                <input type="text" id="harga_barang" name="harga_barang"
-                                                    class="form-control format-rupiah @error('harga_barang') is-invalid @enderror"
-                                                    placeholder="Masukkan Harga"
-                                                    value="{{ buatrp($barang->harga_barang) }}">
-                                                @error('harga_barang')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        @if ($barang->posisi_pi === 'inventaris')
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="nilai_saat_ini" class="text-primary">Nilai Saat
-                                                        Ini</label>
-                                                    <input type="text" name="nilai_saat_ini"
-                                                        class="form-control format-rupiah @error('nilai_saat_ini') is-invalid @enderror"
-                                                        placeholder="Masukkan Nilai Saat Ini"
-                                                        value="{{ buatrp($barang->nilai_saat_ini) }}">
-                                                    @error('nilai_saat_ini')
-                                                        <div class="invalid-feedback">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        @endif
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label for="harga_jual" class="text-primary">Harga Jual (Opsional)</label>
-                                                <div class="form-check form-switch mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="cek_harga_jual"
-                                                        {{ $barang->harga_jual > 0 ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="cek_harga_jual">Saya menjual
-                                                        {{ $barang->posisi_pi }} ini.
-                                                    </label>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12" id="harga_jual_common">

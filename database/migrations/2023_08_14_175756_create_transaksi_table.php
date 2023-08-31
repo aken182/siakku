@@ -27,7 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('total')->nullable()->default(0);
             $table->text('keterangan')->nullable();
             $table->enum('tpk', ['Larantuka', 'Pasar Baru', 'Waiwerang'])->default('Larantuka');
-            $table->enum('unit', ['Pertokoan', 'Simpan Pinjam', 'Gabungan']);
+            $table->enum('unit', ['Pertokoan', 'Simpan Pinjam']);
             $table->timestamps();
         });
     }

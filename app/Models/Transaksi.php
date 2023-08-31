@@ -88,6 +88,11 @@ class Transaksi extends Model
         return $this->hasMany(Main_belanja::class, 'id_transaksi');
     }
 
+    public function saldo_awal_barang()
+    {
+        return $this->hasMany(Saldo_awal_barang::class, 'id_transaksi');
+    }
+
     public function jurnal()
     {
         return $this->hasMany(Jurnal::class, 'id_transaksi');

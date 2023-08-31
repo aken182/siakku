@@ -32,6 +32,7 @@ class MasterShuController extends Controller
             'unit' => $route['unit'],
             'tipe' => $route['tipe'],
             'routeCreate' => $route['routeCreate'],
+            'routeImport' => $route['routeImport'],
             'routeEdit' => $route['routeEdit'],
             'routeDelete' => $route['routeDelete'],
             'routeMaster' => $route['routeMaster'],

@@ -14,9 +14,9 @@ class PenyediaService
                   case 'mdt-vendor':
                         $data = [
                               'routeCreate' => route('mdt-vendor.create'),
-                              'routeImport' => route('mdt-vendor.create'),
-                              'routeExportExcel' => route('mdt-vendor.create'),
-                              'routeExportPdf' => route('mdt-vendor.create'),
+                              'routeImport' => route('mdt-vendor.form-import'),
+                              'routeExportExcel' => route('mdt-vendor.export-excel'),
+                              'routeExportPdf' => route('mdt-vendor.export-pdf'),
                               'routeEdit' => 'mdt-vendor.edit',
                               'routeDelete' => 'mdt-vendor.destroy',
                         ];
@@ -24,9 +24,9 @@ class PenyediaService
                   case 'mds-vendor':
                         $data = [
                               'routeCreate' => route('mds-vendor.create'),
-                              'routeImport' => route('mds-vendor.create'),
-                              'routeExportExcel' => route('mds-vendor.create'),
-                              'routeExportPdf' => route('mds-vendor.create'),
+                              'routeImport' => route('mds-vendor.form-import'),
+                              'routeExportExcel' => route('mds-vendor.export-excel'),
+                              'routeExportPdf' => route('mds-vendor.export-pdf'),
                               'routeEdit' => 'mds-vendor.edit',
                               'routeDelete' => 'mds-vendor.destroy',
                         ];

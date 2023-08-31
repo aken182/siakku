@@ -40,7 +40,7 @@
                         <div class="tab-pane fade {{ $tipe == 'master' ? 'show active' : '' }}" role="tabpanel">
                             @if ($tipe === 'master')
                                 <div class="row mt-3 mb-3">
-                                    <x-button.master-data-button :routecreate="$routeCreate" />
+                                    <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" />
                                 </div>
                                 <div class="row">
                                     <x-shu.table-master class="table-master" :shu="$shu" :routee="$routeEdit"
