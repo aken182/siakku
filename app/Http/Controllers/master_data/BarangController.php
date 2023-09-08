@@ -57,6 +57,10 @@ class BarangController extends Controller
     public function store(BarangRequest $request)
     {
         $route = $this->barangService->getDataStore();
+        if ($request->input('posisi_pi') === 'inventaris') {
+            $request['nilai_saat_ini'] = convertToNumber($request->input('nilai_saat_ini'));
+        }
+        $request['harga_barang'] = convertToNumber($request->input('harga_barang'));
         $request['harga_jual'] = convertToNumber($request->input('harga_jual'));
         $request['kode_barang'] = $this->barangService->getKodeBarang($request->input('id_unit'));
         $this->crudService->create($request, new Barang);
@@ -86,6 +90,10 @@ class BarangController extends Controller
     public function update(BarangRequest $request, $id)
     {
         $route = $this->barangService->getDataUpdate();
+        if ($request->input('posisi_pi') === 'inventaris') {
+            $request['nilai_saat_ini'] = convertToNumber($request->input('nilai_saat_ini'));
+        }
+        $request['harga_barang'] = convertToNumber($request->input('harga_barang'));
         $request['harga_jual'] = convertToNumber($request->input('harga_jual'));
         $request['kode_barang'] = $this->barangService->getKodeBarangUpdate($id);
         $this->crudService->update($request, 'id_barang', $id, new Barang);

@@ -7,6 +7,8 @@ use App\Models\Barang;
 use App\Models\Barang_eceran;
 use Illuminate\Support\Facades\Route;
 
+use function PHPUnit\Framework\isEmpty;
+
 class BarangService
 {
       public function getDataIndex()
@@ -498,7 +500,7 @@ class BarangService
 
       public function createToImport($id_satuan, $id_unit, $kode, $posisi, $row)
       {
-            $umurEkonomis = self::getUmurEkonomis($posisi, $row);
+            $posisiData = self::getDataPosisi($posisi, $row);
             Barang::create([
                   'id_satuan' => $id_satuan,
                   'id_unit' => $id_unit,
@@ -506,16 +508,110 @@ class BarangService
                   'nama_barang' => $row['nama_barang'],
                   'jenis_barang' => $row['jenis_barang'],
                   'posisi_pi' => $posisi,
-                  'umur_ekonomis' => $umurEkonomis,
+                  'tgl_beli' => $posisiData['tgl_beli'],
+                  'harga_barang' => $posisiData['harga_barang'],
+                  'nilai_saat_ini' => $posisiData['nilai_saat_ini'],
+                  'umur_ekonomis' => $posisiData['umur_ekonomis'],
             ]);
       }
 
-      public function getUmurEkonomis($posisi, $row)
+      public function getDataPosisi($posisi, $row)
       {
-            $u = null;
             if ($posisi === 'inventaris') {
-                  $u = $row['umur_ekonomis'];
+                  $importService = new ImportExportService;
+                  $u = [
+                        'tgl_beli' => $importService->getTanggalImport($row['tgl_beli']),
+                        'harga_barang' => convertToNumber($row['harga_barang']),
+                        'nilai_saat_ini' => convertToNumber($row['nilai_saat_ini']),
+                        'umur_ekonomis' => $row['umur_ekonomis'],
+                  ];
+            } else {
+                  $u = [
+                        'tgl_beli' => null,
+                        'harga_barang' => convertToNumber($row['harga_barang']),
+                        'nilai_saat_ini' => null,
+                        'umur_ekonomis' => null,
+                  ];
             }
             return $u;
+      }
+
+      /**
+       * Dokumentasi createBarang transaksi pengadaan
+       *
+       * Menyimpan data barang baru dari 
+       * transaksi pengadaan barang ke tabel barang
+       *
+       * @param mixed $model
+       * @param Array $data
+       * @param mixed $kode
+       * @param mixed $jenis
+       * @return void
+       **/
+      public function createPengadaanBarang($model, $data, $kode, $jenis)
+      {
+            $barang = self::getDataToBarang($data);
+            $model::create([
+                  'kode_barang' => $kode,
+                  'id_unit' => $data['id_unit'],
+                  'id_satuan' => $data['id_satuan'],
+                  'nama_barang' => $data['nama'],
+                  'jenis_barang' => $data['jenis_barang'],
+                  'posisi_pi' => $jenis,
+                  'stok' => $data['qty'],
+                  'harga_barang' => $data['harga'],
+                  'tgl_beli' => $barang['tgl_beli'],
+                  'umur_ekonomis' => $barang['umur_ekonomis'],
+                  'nilai_saat_ini' => $barang['nilai_buku'],
+            ]);
+      }
+
+      /**
+       * Dokumentasi updateBarang transaksi pengadaan
+       *
+       * Mengubah stok dan harga barang pada 
+       * tabel barang dari transaksi pengadaan barang
+       *
+       * @param mixed $model
+       * @param Array $data
+       * @return void
+       **/
+      public function updatePengadaanBarang($model, $data)
+      {
+            $stok = $model::where('id_barang', $data['id_barang'])->value('stok');
+            $stok = $stok === null ? 0 : $stok;
+            $stokSekarang = $stok + $data['qty'];
+
+            $barang = self::getDataToBarang($data);
+
+            $model::where('id_barang', $data['id_barang'])
+                  ->update([
+                        'stok' => $stokSekarang,
+                        'tgl_beli' => $barang['tgl_beli'],
+                        'harga_barang' => $data['harga'],
+                        'nilai_saat_ini' => $barang['nilai_buku'],
+                        'umur_ekonomis' => $barang['umur_ekonomis'],
+                  ]);
+      }
+
+      /**
+       * Dokumentasi getDataToBarang
+       *
+       * Mengecek apakah data terdefenisi atau tidak 
+       * menggunakan operator null coalescing (??) 
+       * untuk memberikan nilai default null jika variabel
+       * tersebut tidak terdefinisi dan 
+       * mengirim kembali data yang telah dicek.
+       *
+       * @param Array $data
+       * @return Array $barang
+       **/
+      public function getDataToBarang($data)
+      {
+            $barang = [];
+            $barang['tgl_beli'] = $data['tgl_beli'] ?? null;
+            $barang['umur_ekonomis'] = $data['umur_ekonomis'] ?? null;
+            $barang['nilai_buku'] = $data['nilai_buku'] ?? null;
+            return $barang;
       }
 }

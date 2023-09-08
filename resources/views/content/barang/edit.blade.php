@@ -118,25 +118,46 @@
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="harga_jual" class="text-primary">Harga Jual (Opsional)</label>
-                                                <div class="form-check form-switch mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="cek_harga_jual"
-                                                        {{ $barang->harga_jual > 0 ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="cek_harga_jual">Saya menjual
-                                                        {{ $barang->posisi_pi }} ini.
-                                                    </label>
-                                                </div>
+                                                <label for="harga_barang" class="text-primary">Harga Barang
+                                                    (Opsional)</label>
+                                                <input type="text" name="harga_barang"
+                                                    {{ buatrp($barang->harga_barang) }} class="form-control format-rupiah">
                                             </div>
                                         </div>
                                         @if ($barang->posisi_pi === 'inventaris')
                                             <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="tgl_beli" class="text-primary">Tanggal Beli
+                                                        (Opsional)</label>
+                                                    <input type="date" name="tgl_beli" value="{{ $barang->tgl_beli }}"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="stok" class="text-primary">Stok
+                                                        (Opsional)</label>
+                                                    <input type="number" step="0.25" name="stok" class="form-control"
+                                                        value="{{ $barang->stok }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="nilai_saat_ini" class="text-primary">Nilai Buku
+                                                        (Opsional)</label>
+                                                    <input type="text" name="nilai_saat_ini"
+                                                        value="{{ buatrp($barang->nilai_saat_ini) }}"
+                                                        class="form-control format-rupiah">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="form-group  col-6">
-                                                    <label for="umur_ekonomis" class="text-primary">Umur
-                                                        Ekonomis</label>
+                                                    <label for="umur_ekonomis" class="text-primary">Umur Ekonomis</label>
                                                     <div class="input-group">
                                                         <input type="number" step="0.25" name="umur_ekonomis"
+                                                            value="{{ $barang->umur_ekonomis }}"
                                                             class="form-control @error('umur_ekonomis') is-invalid @enderror"
-                                                            placeholder="ex. 3" value="{{ $barang->umur_ekonomis }}">
+                                                            placeholder="ex. 3">
                                                         <input class="form-control" value="tahun" readonly>
                                                         @error('umur_ekonomis')
                                                             <div class="invalid-feedback">
@@ -160,6 +181,18 @@
                                                 </div>
                                                 <input type="hidden" name="status_konversi"
                                                     value="{{ $barang->status_konversi }}" id="status_konversi">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="harga_jual" class="text-primary">Harga Jual (Opsional)</label>
+                                                <div class="form-check form-switch mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="cek_harga_jual"
+                                                        {{ $barang->harga_jual > 0 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="cek_harga_jual">Saya menjual
+                                                        {{ $barang->posisi_pi }} ini.
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12" id="harga_jual_common">

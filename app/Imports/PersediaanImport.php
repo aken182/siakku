@@ -31,6 +31,7 @@ class PersediaanImport implements ToCollection, WithValidation, WithHeadingRow, 
         'nama_unit.required' => 'Nama unit harus diisi!',
         'unit.required' => 'Unit harus diisi!',
         'satuan.required' => 'satuan harus diisi!',
+        // 'harga_barang.required' => 'Harga barang harus diisi!',
     ];
 
     public function __construct()
@@ -72,7 +73,8 @@ class PersediaanImport implements ToCollection, WithValidation, WithHeadingRow, 
             'jenis_barang' => 'required',
             'nama_unit' => 'required',
             'unit' => 'required',
-            'satuan' => 'required'
+            'satuan' => 'required',
+            // 'harga_barang' => 'required',
         ];
     }
 

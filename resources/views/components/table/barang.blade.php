@@ -6,7 +6,10 @@
             <th>nama_unit</th>
             <th>unit</th>
             <th>satuan</th>
+            <th>harga_barang</th>
             @if ($jenis === 'inventaris')
+                <th>tgl_beli</th>
+                <th>nilai_saat_ini</th>
                 <th>umur_ekonomis</th>
             @endif
         </tr>
@@ -20,7 +23,10 @@
                 <td>{{ $t->unit->nama }}</td>
                 <td>{{ $t->unit->unit }}</td>
                 <td>{{ $t->satuan->nama_satuan }}</td>
+                <td>{{ $t->harga_barang }}</td>
                 @if ($jenis === 'inventaris')
+                    <td>{{ $t->tgl_beli }}</td>
+                    <td>{{ $t->nilai_saat_ini }}</td>
                     <td>{{ $t->umur_ekonomis }}</td>
                 @endif
             </tr>

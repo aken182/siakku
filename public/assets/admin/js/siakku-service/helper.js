@@ -2,11 +2,6 @@
 'use-strict';
 
 $(document).ready(function () {
-      /* Simple DataTable*/
-      $('.dataTable').each(function () {
-            new simpleDatatables.DataTable(this);
-      });
-
       /* Tooltip*/
       var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
       var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -38,8 +33,10 @@ $(document).ready(function () {
       /* end real time format ke rupiah */
 });
 
-
 function currencyIdr(angka, prefix) {
+      if (typeof angka === 'number') {
+            angka = angka.toString();
+      }
       if (prefix != "") {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
                   split = number_string.split(','),
@@ -65,4 +62,18 @@ function currencyIdr(angka, prefix) {
             }
             return rupiah == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
       }
+};
+
+function toastInfoTopRight(info, color) {
+      const result = Toastify({
+            text: info,
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            backgroundColor: color,
+      });
+      return result;
 }
+
+

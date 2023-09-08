@@ -27,8 +27,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive">
-                                <table class="table table-hover dataTable">
+                            <div class="table-responsive datatable-minimal">
+                                <table class="table dataTable">
                                     <thead>
                                         <tr>
                                             <th>Kode</th>

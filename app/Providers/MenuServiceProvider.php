@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class MenuServiceProvider extends ServiceProvider
@@ -25,9 +26,10 @@ class MenuServiceProvider extends ServiceProvider
       {
             $verticalMenuJson = file_get_contents(base_path('resources/menu/verticalMenu.json'));
             $verticalMenuData = json_decode($verticalMenuJson);
+            $kategoriCoaJson = file_get_contents(base_path('resources/menu/kategoriCoa.json'));
+            $kategoriCoaData = json_decode($kategoriCoaJson);
 
             // Share all menuData to all the views
-            \View::share('menuData', [$verticalMenuData]);
-            // return view('layouts.sections.menu.verticalMenu', ['menuData' => $verticalMenuData]);
+            View::share('menuData', [$verticalMenuData, $kategoriCoaData]);
       }
 }

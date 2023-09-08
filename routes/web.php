@@ -4,27 +4,18 @@ use App\Http\Controllers\auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user\UserSettingController;
 use App\Http\Controllers\dashboard\AdminDashboard;
-use App\Http\Controllers\laporan\JurnalController;
-use App\Http\Controllers\laporan\LabaRugiController;
 use App\Http\Controllers\transaksi\HutangController;
-use App\Http\Controllers\laporan\BukuBesarController;
 use App\Http\Controllers\transaksi\BelanjaController;
 use App\Http\Controllers\transaksi\PiutangController;
 use App\Http\Controllers\transaksi\PinjamanController;
 use App\Http\Controllers\transaksi\SimpananController;
-use App\Http\Controllers\laporan\NeracaSaldoController;
 use App\Http\Controllers\transaksi\PelunasanController;
 use App\Http\Controllers\transaksi\PenarikanController;
 use App\Http\Controllers\transaksi\PenjualanController;
 use App\Http\Controllers\transaksi\PendapatanController;
 use App\Http\Controllers\transaksi\PenyusutanController;
-use App\Http\Controllers\laporan\LaporanGudangController;
 use App\Http\Controllers\master_data\ProfilKpriController;
-use App\Http\Controllers\laporan\LaporanPinjamanController;
-use App\Http\Controllers\laporan\LaporanSimpananController;
 use App\Http\Controllers\transaksi\BelanjaBarangController;
-use App\Http\Controllers\laporan\LaporanPenjualanController;
-use App\Http\Controllers\laporan\LaporanTransaksiController;
 use App\Http\Controllers\authentications\PermissionController;
 
 /*
@@ -99,24 +90,10 @@ Route::middleware(['auth'])->group((function () {
       Route::get('/penyusutan/unit-sp', [PenyusutanController::class, 'index'])->name('penyusutan-unit-sp');
 
       //8.laporan unit pertokoan
-      Route::get('/laporan-gudang/unit-pertokoan', [LaporanGudangController::class, 'index'])->name('lut-gudang');
-      Route::get('/laporan-penjualan/unit-pertokoan', [LaporanPenjualanController::class, 'index'])->name('lut-penjualan');
-      Route::get('/laporan-transaksi/unit-pertokoan', [LaporanTransaksiController::class, 'index'])->name('lut-transaksi');
-      Route::get('/kartu-toko', [LaporanSimpananController::class, 'index'])->name('lut-kartu-toko');
-      Route::get('/jurnal/unit-pertokoan', [JurnalController::class, 'index'])->name('lut-jurnal');
-      Route::get('/buku-besar/unit-pertokoan', [BukuBesarController::class, 'index'])->name('lut-buku-besar');
-      Route::get('/laba-rugi/unit-pertokoan', [LabaRugiController::class, 'index'])->name('lut-laba-rugi');
-      Route::get('/neraca-saldo/unit-pertokoan', [NeracaSaldoController::class, 'index'])->name('lut-neraca');
+      require __DIR__ . '/laporan_toko.php';
 
-      //9.laporan unit simpan pinjam
-      Route::get('/laporan-transaksi/unit-sp', [LaporanTransaksiController::class, 'index'])->name('lus-transaksi');
-      Route::get('/laporan-simpanan/unit-sp', [LaporanSimpananController::class, 'index'])->name('lus-simpanan');
-      Route::get('/laporan-simpanan-sukarela-berbunga/unit-sp', [LaporanSimpananController::class, 'index'])->name('lus-simpanan-sb');
-      Route::get('/laporan-pinjaman/unit-sp', [LaporanPinjamanController::class, 'index'])->name('lus-pinjaman');
-      Route::get('/jurnal/unit-sp', [JurnalController::class, 'index'])->name('lus-jurnal');
-      Route::get('/buku-besar/unit-sp', [BukuBesarController::class, 'index'])->name('lus-buku-besar');
-      Route::get('/laba-rugi/unit-sp', [LabaRugiController::class, 'index'])->name('lus-laba-rugi');
-      Route::get('/neraca-saldo/unit-sp', [NeracaSaldoController::class, 'index'])->name('lus-neraca');
+      //9. laporan unit simpan pinjam
+      require __DIR__ . '/laporan_sp.php';
 
       // 10. Setting User
       Route::get('/profil/pengguna', [AdminDashboard::class, 'index'])->name('profil-pengguna');

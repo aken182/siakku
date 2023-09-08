@@ -169,7 +169,7 @@ function convertToNumber($nominal)
       return $nom;
 }
 
-function jurnal($jurnal, $id_coa, $id_transaksi, $posisi_dr_cr, $nominal, $keterangan)
+function jurnal($jurnal, $id_coa, $id_transaksi, $posisi_dr_cr, $nominal)
 {
       if ($nominal > 0 && $nominal != null) {
             $result = $jurnal::create([
@@ -177,7 +177,6 @@ function jurnal($jurnal, $id_coa, $id_transaksi, $posisi_dr_cr, $nominal, $keter
                   'id_transaksi' => $id_transaksi,
                   'posisi_dr_cr' => $posisi_dr_cr,
                   'nominal' => $nominal,
-                  'keterangan' => $keterangan
             ]);
             return $result;
       } else {
@@ -344,16 +343,16 @@ function cekPenyusutan($tgl_beli, $umur, $harga_beli, $nilai_saat_ini)
 /*end penyusutan aset*/
 
 /*jurnal pembalik*/
-function jurnalPembalik($jurnal, $id_transaksi, $id_transaksi_penyesuaian, $ket)
+function jurnalPembalik($jurnal, $id_transaksi, $id_transaksi_penyesuaian)
 {
       $jurnalPembalik = $jurnal::with(['transaksi', 'coa'])->where('id_transaksi', $id_transaksi_penyesuaian)
             ->orderBy('id_jurnal', 'desc')->get();
       if ($jurnalPembalik) {
             foreach ($jurnalPembalik as $d) {
                   if ($d->posisi_dr_cr == 'kredit') {
-                        jurnal($jurnal, $d->id_coa, $id_transaksi, 'debet', $d->nominal, $ket);
+                        jurnal($jurnal, $d->id_coa, $id_transaksi, 'debet', $d->nominal);
                   } else {
-                        jurnal($jurnal, $d->id_coa, $id_transaksi, 'kredit', $d->nominal, $ket);
+                        jurnal($jurnal, $d->id_coa, $id_transaksi, 'kredit', $d->nominal);
                   }
             }
             $data = [

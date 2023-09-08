@@ -21,6 +21,12 @@
                   "permission": "master-data-umum",
                   "submenu": [
                         {
+                              "url": "/coa",
+                              "name": "COA",
+                              "permission": "master-coa-view",
+                              "slug": "mdu-coa"
+                        },
+                        {
                               "url": "/anggota",
                               "name": "Anggota",
                               "permission": "master-anggota-view",
@@ -49,12 +55,6 @@
                               "name": "Berita",
                               "permission": "master-berita-view",
                               "slug": "mdu-berita"
-                        },
-                        {
-                              "url": "/coa",
-                              "name": "COA",
-                              "permission": "master-coa-view",
-                              "slug": "mdu-coa"
                         }
                   ]
             },
@@ -322,12 +322,6 @@
                               "name": "COA",
                               "permission": "saldo-awal-coa-unit-sp-view",
                               "slug": "slsp-coa"
-                        },
-                        {
-                              "url": "/saldo-awal/persediaan/unit-sp",
-                              "name": "Persediaan",
-                              "permission": "saldo-awal-persediaan-unit-sp-view",
-                              "slug": "slsp-persediaan"
                         },
                         {
                               "url": "/saldo-awal/inventaris/unit-sp",

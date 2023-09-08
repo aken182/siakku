@@ -31,6 +31,9 @@ class InventarisImport implements ToCollection, WithValidation, WithHeadingRow, 
         'nama_unit.required' => 'Nama unit harus diisi!',
         'unit.required' => 'Unit harus diisi!',
         'satuan.required' => 'satuan harus diisi!',
+        // 'harga_barang.required' => 'Harga barang harus diisi!',
+        'tgl_beli.required' => 'Tanggal beli harus diisi!',
+        // 'nilai_saat_ini.required' => 'Nilai buku harus diisi!',
         'umur_ekonomis.required' => 'Umur ekonomis harus diisi!',
     ];
 
@@ -74,6 +77,9 @@ class InventarisImport implements ToCollection, WithValidation, WithHeadingRow, 
             'nama_unit' => 'required',
             'unit' => 'required',
             'satuan' => 'required',
+            // 'harga_barang' => 'required',
+            'tgl_beli' => 'required',
+            // 'nilai_saat_ini' => 'required',
             'umur_ekonomis' => 'required',
         ];
     }

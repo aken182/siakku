@@ -1,0 +1,34 @@
+{
+      "kategori":[
+            {
+                  "nama" :"Aktiva Lancar"
+            },
+            {
+                  "nama" :"Aktiva Tetap"
+            },
+            {
+                  "nama" :"Depresiasi dan Amortisasi"
+            },
+            {
+                  "nama" :"Penyertaan"
+            },
+            {
+                  "nama" :"Passiva Lancar"
+            },
+            {
+                  "nama" :"Modal Sendiri"
+            },
+            {
+                  "nama" :"Kewajiban"
+            },
+            {
+                  "nama" :"Pendapatan"
+            },
+            {
+                  "nama" :"Biaya"
+            },
+            {
+                  "nama" :"HPP"
+            }
+      ]
+}

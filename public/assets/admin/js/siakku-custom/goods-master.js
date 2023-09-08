@@ -24,7 +24,7 @@ $(document).ready(function () {
     }
   });
 
-  if (h.val() <= 0 || h.val() == "Rp 0" ) {
+  if (h.val() <= 0 || h.val() == "Rp 0") {
     hc.hide();
   }
 

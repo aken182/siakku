@@ -51,7 +51,11 @@
                                         <td>{{ $a->barang->nama_barang }}</td>
                                         <td>{{ $a->barang->jenis_barang }}</td>
                                         <td>{{ $a->barang->unit->nama }}</td>
-                                        <td>{{ $a->stok . ' ' . $a->satuan->nama_satuan }}</td>
+                                        @if ($a->stok == null || $a->stok == 0)
+                                            <td><span class="badge bg-danger">Stok kosong !</span></td>
+                                        @else
+                                            <td>{{ $a->stok . ' ' . $a->satuan->nama_satuan }}</td>
+                                        @endif
                                         <td>{{ cek_uang($a->harga_barang) . '/' . $a->satuan->nama_satuan }}</td>
                                         @if ($posisi === 'inventaris')
                                             <td>{{ cek_uang($a->nilai_saat_ini) . '/' . $a->satuan->nama_satuan }}</td>

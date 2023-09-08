@@ -114,16 +114,36 @@
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="harga_jual" class="text-primary">Harga Jual (Opsional)</label>
-                                                <div class="form-check form-switch mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="cek_harga_jual">
-                                                    <label class="form-check-label" for="cek_harga_jual">Saya menjual
-                                                        {{ $posisi }} ini.
-                                                    </label>
-                                                </div>
+                                                <label for="harga_barang" class="text-primary">Harga Barang
+                                                    (Opsional)</label>
+                                                <input type="text" name="harga_barang"
+                                                    class="form-control format-rupiah">
                                             </div>
                                         </div>
                                         @if ($posisi === 'inventaris')
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="tgl_beli" class="text-primary">Tanggal Beli
+                                                        (Opsional)</label>
+                                                    <input type="date" name="tgl_beli" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="stok" class="text-primary">Stok
+                                                        (Opsional)</label>
+                                                    <input type="number" step="0.25" name="stok"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="nilai_saat_ini" class="text-primary">Nilai Buku
+                                                        (Opsional)</label>
+                                                    <input type="text" name="nilai_saat_ini"
+                                                        class="form-control format-rupiah">
+                                                </div>
+                                            </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group  col-6">
                                                     <label for="umur_ekonomis" class="text-primary">Umur Ekonomis</label>
@@ -141,18 +161,6 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        <div class="col-md-6 col-12" id="harga_jual_common">
-                                            <div class="form-group">
-                                                <input type="text" id="harga_jual" name="harga_jual"
-                                                    class="form-control format-rupiah @error('harga_jual') is-invalid @enderror"
-                                                    placeholder="Masukkan Harga Jual" value="{{ old('harga_jual') }}">
-                                                @error('harga_jual')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="cek_status" class="text-primary">Status Konversi
@@ -165,6 +173,29 @@
                                                 </div>
                                                 <input type="hidden" name="status_konversi" value="T"
                                                     id="status_konversi">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="harga_jual" class="text-primary">Harga Jual (Opsional)</label>
+                                                <div class="form-check form-switch mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="cek_harga_jual">
+                                                    <label class="form-check-label" for="cek_harga_jual">Saya menjual
+                                                        {{ $posisi }} ini.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12" id="harga_jual_common">
+                                            <div class="form-group">
+                                                <input type="text" id="harga_jual" name="harga_jual"
+                                                    class="form-control format-rupiah @error('harga_jual') is-invalid @enderror"
+                                                    placeholder="Masukkan Harga Jual" value="{{ old('harga_jual') }}">
+                                                @error('harga_jual')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex justify-content-end">
