@@ -262,8 +262,8 @@
     </div>
     <div class="row">
         <div class="col-12 d-flex justify-content-end">
-            <a type="button" href="{{ route($main) }}" class="btn btn-light-secondary me-1 mb-1">Kembali</a>
             <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+            <a type="button" href="{{ route($main) }}" class="btn btn-light-secondary me-1 mb-1">Kembali</a>
         </div>
     </div>
 </form>

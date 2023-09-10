@@ -41,4 +41,18 @@ class JurnalController extends Controller
             ];
             return view('content.laporan.jurnal', $data);
       }
+
+      /**
+       * undocumented function summary
+       *
+       * Undocumented function long description
+       *
+       * @param Type $var Description
+       * @return type
+       * @throws conditon
+       **/
+      public function pdf($bulan, $tahun)
+      {
+            # code...
+      }
 }

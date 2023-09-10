@@ -574,13 +574,16 @@ class BarangService
        *
        * @param mixed $model
        * @param Array $data
+       * @param mixed $id_barang
        * @return void
        **/
-      public function updatePengadaanBarang($model, $data)
+      public function updatePengadaanBarang($model, $data, $id_barang = null)
       {
+            $data['id_barang'] = $data['id_barang'] ?? $id_barang;
+            $dataStok = $data['qty'] ?? $data['stok'];
             $stok = $model::where('id_barang', $data['id_barang'])->value('stok');
             $stok = $stok === null ? 0 : $stok;
-            $stokSekarang = $stok + $data['qty'];
+            $stokSekarang = $stok + $dataStok;
 
             $barang = self::getDataToBarang($data);
 
@@ -588,7 +591,7 @@ class BarangService
                   ->update([
                         'stok' => $stokSekarang,
                         'tgl_beli' => $barang['tgl_beli'],
-                        'harga_barang' => $data['harga'],
+                        'harga_barang' => $data['harga'] ?? $data['harga_barang'],
                         'nilai_saat_ini' => $barang['nilai_buku'],
                         'umur_ekonomis' => $barang['umur_ekonomis'],
                   ]);
@@ -613,5 +616,32 @@ class BarangService
             $barang['umur_ekonomis'] = $data['umur_ekonomis'] ?? null;
             $barang['nilai_buku'] = $data['nilai_buku'] ?? null;
             return $barang;
+      }
+
+      /**
+       * Dokumentasi getIdBarang Import
+       *
+       * Mengambil id barang dari file import
+       * saldo awal barang yang sudah ada dalam
+       * database.
+       *
+       * @param mixed $data
+       * @param mixed $unit
+       * @param mixed $posisi
+       * @return mixed $id_barang
+       *
+       **/
+      public function getIdBarangImport($data, $unit, $posisi)
+      {
+            $nama = $data['nama_unit'];
+            $id_barang = Barang::with(['unit'])
+                  ->where('nama_barang', $data['nama_barang'])
+                  ->where('jenis_barang', $data['jenis_barang'])
+                  ->where('posisi_pi', $posisi)
+                  ->whereHas('unit', function ($query) use ($unit, $nama) {
+                        $query->where('unit', $unit)
+                              ->where('nama', $nama);
+                  })->value('id_barang');
+            return $id_barang;
       }
 }

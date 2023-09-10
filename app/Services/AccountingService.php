@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Coa;
 use App\Models\Jurnal;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 class AccountingService
@@ -38,6 +39,33 @@ class AccountingService
             return $data;
       }
 
+      public function getTanggalIdCoa($request)
+      {
+            $data = [];
+            if ($request->input('bulan') == null && $request->input('tahun') == null && $request->input('id_coa') == null) {
+                  $data['bulan'] = date('m');
+                  $data['tahun'] = date('Y');
+                  $data['id_coa'] = 1;
+            } elseif ($request->input('bulan') == null && $request->input('tahun') != null && $request->input('id_coa') != null) {
+                  $data['bulan'] = date('m');
+                  $data['tahun'] = $request->input('tahun');
+                  $data['id_coa'] = $request->input('id_coa');
+            } elseif ($request->input('bulan') != null && $request->input('tahun') == null && $request->input('id_coa') != null) {
+                  $data['bulan'] = $request->input('bulan');
+                  $data['tahun'] = date('Y');
+                  $data['id_coa'] = $request->input('id_coa');
+            } elseif ($request->input('bulan') != null && $request->input('tahun') != null && $request->input('id_coa') == null) {
+                  $data['bulan'] = $request->input('bulan');
+                  $data['tahun'] = $request->input('tahun');
+                  $data['id_coa'] = 1;
+            } else {
+                  $data['bulan'] = $request->input('bulan');
+                  $data['tahun'] = $request->input('tahun');
+                  $data['id_coa'] = $request->input('id_coa');
+            }
+            return $data;
+      }
+
       /**
        * Dokumentasi getDataJurnal
        *
@@ -54,16 +82,138 @@ class AccountingService
                   $data['title'] = 'Jurnal Umum Unit Pertokoan';
                   $data['unit'] = 'Pertokoan';
                   $data['route_post'] = 'lut-jurnal';
-                  $data['route_pdf'] = 'lut-jurnal';
-                  $data['route_detail'] = 'lut-jurnal';
+                  $data['route_pdf'] = 'lut-jurnal.pdf';
+                  $data['route_detail'] = 'lut-jurnal.detail';
             } else {
                   $data['title'] = 'Jurnal Umum Unit Simpan Pinjam';
                   $data['unit'] = 'Simpan Pinjam';
                   $data['route_post'] = 'lus-jurnal';
-                  $data['route_pdf'] = 'lus-jurnal';
-                  $data['route_detail'] = 'lus-jurnal';
+                  $data['route_pdf'] = 'lus-jurnal.pdf';
+                  $data['route_detail'] = 'lus-jurnal.detail';
             }
             return $data;
+      }
+
+      /**
+       * Dokumentasi getDatatoBukuBesar
+       *
+       * Mengambil data untuk buku besar berdasarkan
+       * nama route saat ini.
+       *
+       * @return $data
+       **/
+      public function getDataToBukuBesar()
+      {
+            $cek_route = Route::currentRouteName();
+            $data = [];
+            $data['title'] = 'Buku Besar';
+            if ($cek_route == "lut-buku-besar") {
+                  $data['unit'] = 'Pertokoan';
+                  $data['route_post'] = 'lut-buku-besar';
+                  $data['route_detail'] = 'lut-buku-besar.detail';
+                  $data['route_pdf'] = 'lut-buku-besar.pdf';
+            } else {
+                  $data['unit'] = 'Simpan Pinjam';
+                  $data['route_post'] = 'lus-buku-besar';
+                  $data['route_detail'] = 'lus-buku-besar.detail';
+                  $data['route_pdf'] = 'lus-buku-besar.pdf';
+            }
+            return $data;
+      }
+
+      /**
+       * Dokumentasi getCoaToBukuBesar
+       *
+       * Mengambil data akun pada tabel
+       * coa berdasarkan id_coa
+       *
+       * @param mixed $id
+       * @return mixed $data
+       **/
+      public function getCoaToBukuBesar($id, $unit)
+      {
+            $data = [];
+            $coa = Coa::all();
+            $coas = $coa->firstWhere('id_coa', $id);
+            $data['coa'] = $coa;
+            if (empty($coas)) {
+                  $data['kode'] = '';
+                  $data['nama'] = '';
+                  $data['kategori'] = '';
+            } else {
+                  $data['kode'] = $coas->kode;
+                  $data['nama'] = $coas->nama;
+                  $data['kategori'] = $coas->kategori;
+            }
+            return $data;
+      }
+
+      /**
+       * Dokumentasi getBukuBesar
+       *
+       * Mengambil data buku besar dari database.
+       *
+       * @param Type $var Description
+       * @param mixed $id_coa
+       * @param mixed $bulan
+       * @param mixed $tahun
+       * @param mixed $unit
+       * @return \Illuminate\Database\Eloquent\Collection<array-key, 
+       * \Illuminate\Database\Eloquent\Builder>
+       **/
+      public function getBukuBesar($id_coa, $bulan, $tahun, $unit, $keywords = null)
+      {
+            $buku_besar = Jurnal::with(['coa', 'transaksi'])
+                  ->where('id_coa', $id_coa)
+                  ->whereHas('transaksi', function ($query) use ($bulan, $tahun, $unit) {
+                        $query->whereMonth('tgl_transaksi', $bulan)
+                              ->whereYear('tgl_transaksi', $tahun)
+                              ->where(function ($query) use ($unit) {
+                                    $query->where('unit', $unit);
+                              });
+                  })
+                  ->where(function ($query) use ($keywords) {
+                        $query->where('posisi_dr_cr', 'LIKE', '%' . $keywords . '%')
+                              ->orWhere('nominal', 'LIKE', '%' . $keywords . '%')
+                              ->orWhereHas('transaksi', function ($query) use ($keywords) {
+                                    $query->where('tgl_transaksi', 'LIKE', '%' . $keywords . '%');
+                              })
+                              ->orWhereHas('coa', function ($query) use ($keywords) {
+                                    $query->where('nama', 'LIKE', '%' . $keywords . '%')
+                                          ->orWhere('kode', 'LIKE', '%' . $keywords . '%');
+                              });
+                  })->get();
+
+            return $buku_besar;
+      }
+
+      /**
+       * Dokumentasi getSaldoAwal
+       *
+       * Mengambil data saldo awal buku besar dari database berdasarkan
+       * id coa, tanggal, dan unit.
+       *
+       * @param mixed $id_coa
+       * @param mixed $date
+       * @param mixed $unit
+       * @return $saldo_awal
+       **/
+      public function getSaldoAwal($id_coa, $date, $unit)
+      {
+            $saldo_awal = Jurnal::with(['coa', 'transaksi'])
+                  ->select('coa.header', DB::raw('SUM(IF(posisi_dr_cr = "debet", nominal, 0)) as total_debet'), DB::raw('SUM(IF(posisi_dr_cr = "kredit", nominal, 0)) as total_kredit'))
+                  ->join('coa', 'jurnal.id_coa', '=', 'coa.id_coa')
+                  ->where('jurnal.id_coa', $id_coa)
+                  ->whereHas('transaksi', function ($query) use ($date, $unit) {
+                        $query->whereDate('tgl_transaksi', '<', $date)
+                              ->where(function ($query) use ($unit) {
+                                    $query->where('unit', $unit);
+                              });
+                  })
+                  ->groupBy('jurnal.id_jurnal', 'jurnal.id_coa', 'coa.header')
+                  ->get();
+
+            return $saldo_awal;
       }
 
       /**
@@ -156,7 +306,7 @@ class AccountingService
                   jurnal($model, $coa['id_kendaraan'], $id_transaksi, 'debet', $total['kendaraan']);
                   jurnal($model, $coa['id_gedung'], $id_transaksi, 'debet', $total['gedung']);
                   jurnal($model, $coa['id_tanah'], $id_transaksi, 'debet', $total['tanah']);
-                  jurnal($model, $coa['id_kredit'], $id_transaksi, 'kredit', $total['inventaris']);
+                  jurnal($model, $id_kredit, $id_transaksi, 'kredit', $total['inventaris']);
             }
       }
 
@@ -353,27 +503,25 @@ class AccountingService
             ];
 
             foreach ($data as $d) {
-                  $subtotal = $d['subtotal'];
-                  switch ($d['jenis_barang']) {
-                        case 'Barang Konsumsi':
-                              $totals['konsumsi'] += $subtotal;
-                              break;
-                        case 'Barang Sandang':
-                              $totals['sandang'] += $subtotal;
-                              break;
-                        case 'Barang Kosmetik':
-                              $totals['kosmetik'] += $subtotal;
-                              break;
-                        case 'Barang ATM':
-                              $totals['atm'] += $subtotal;
-                              break;
-                        case 'Barang Elektronik':
-                              $totals['elektronik'] += $subtotal;
-                              break;
-                        case 'Barang Bangunan':
-                              $totals['bangunan'] += $subtotal;
-                              break;
+                  $subtotal = $d['subtotal'] ?? ($d['stok'] * $d['harga_barang']);
+
+                  // Menggunakan array asosiatif untuk memetakan jenis_barang ke subtotalnya
+                  $jenisBarangMapping = [
+                        'Barang Konsumsi' => 'konsumsi',
+                        'Barang Sandang' => 'sandang',
+                        'Barang Kosmetik' => 'kosmetik',
+                        'Barang ATM' => 'atm',
+                        'Barang Elektronik' => 'elektronik',
+                        'Barang Bangunan' => 'bangunan',
+                  ];
+
+                  // Menambahkan subtotal ke jenis barang yang sesuai
+                  $jenisBarang = $d['jenis_barang'];
+                  if (isset($jenisBarangMapping[$jenisBarang])) {
+                        $totals[$jenisBarangMapping[$jenisBarang]] += $subtotal;
                   }
+
+                  // Menambahkan subtotal ke persediaan
                   $totals['persediaan'] += $subtotal;
             }
 
@@ -402,27 +550,24 @@ class AccountingService
             ];
 
             foreach ($data as $d) {
-                  $subtotal = $d['subtotal'];
-                  switch ($d['jenis_barang']) {
-                        case 'Perlengkapan':
-                              $totals['perlengkapan'] += $subtotal;
-                              break;
-                        case 'Peralatan':
-                              $totals['peralatan'] += $subtotal;
-                              break;
-                        case 'Mesin':
-                              $totals['mesin'] += $subtotal;
-                              break;
-                        case 'Kendaraan':
-                              $totals['kendaraan'] += $subtotal;
-                              break;
-                        case 'Gedung':
-                              $totals['gedung'] += $subtotal;
-                              break;
-                        case 'Tanah':
-                              $totals['tanah'] += $subtotal;
-                              break;
+                  $subtotal = $d['subtotal'] ?? ($d['stok'] * $d['nilai_saat_ini']);
+                  // Menggunakan array asosiatif untuk memetakan jenis_barang ke subtotalnya
+                  $jenisBarangMapping = [
+                        'Perlengkapan' => 'perlengkapan',
+                        'Peralatan' => 'peralatan',
+                        'Mesin' => 'mesin',
+                        'Kendaraan' => 'kendaraan',
+                        'Gedung' => 'gedung',
+                        'Tanah' => 'tanah',
+                  ];
+
+                  // Menambahkan subtotal ke jenis barang yang sesuai
+                  $jenisBarang = $d['jenis_barang'];
+                  if (isset($jenisBarangMapping[$jenisBarang])) {
+                        $totals[$jenisBarangMapping[$jenisBarang]] += $subtotal;
                   }
+
+                  // Menambahkan subtotal ke inventaris
                   $totals['inventaris'] += $subtotal;
             }
 
@@ -467,5 +612,64 @@ class AccountingService
             $data['id_elektronik'] = self::getIdCoa("%Persediaan Barang Elektronik%");
             $data['id_bangunan'] = self::getIdCoa("%Persediaan Barang Bangunan%");
             return $data;
+      }
+
+      /**
+       * Dokumentasi getNeracaSaldo
+       *
+       * Mengambil data neraca dan kategori yang sudah
+       * dikelola dalam bentuk array berdasarkan
+       * parameter unit, bulan dan tahun .
+       *
+       * @param mixed $bulan
+       * @param mixed $tahun
+       * @param mixed $unit
+       * @return array<int, mixed>[]
+       **/
+      public function getNeracaSaldo($bulan, $tahun, $unit)
+      {
+            if ($bulan == date('m') && $tahun == date('Y')) {
+                  $hari = date('d');
+            } else {
+                  $hari = getTglHari($bulan, $tahun);
+            }
+            $neraca = self::getNeraca($hari, $bulan, $tahun, $unit);
+            $collection = new ImportExportService;
+            return [
+                  'neraca' => $collection->getDataUnique($neraca, 'id_coa'),
+                  'kategori' => $collection->getDataUnique($neraca, 'kategori')
+            ];
+      }
+
+      /**
+       * Dokumentasi getNeraca
+       *
+       * Mengambil data neraca dari database 
+       * dengan parameter bulan,tahun dan hari.
+       *
+       * @param mixed $hari
+       * @param mixed $bulan
+       * @param mixed $tahun
+       * @param mixed $unit
+       * @return mixed
+       **/
+      public function getNeraca($hari, $bulan, $tahun, $unit)
+      {
+            return Jurnal::with(['coa', 'transaksi'])
+                  ->select(
+                        'coa.header',
+                        'coa.kode',
+                        'coa.kategori',
+                        'coa.nama',
+                        'jurnal.id_coa',
+                        DB::raw('SUM(IF(posisi_dr_cr = "debet", nominal, 0)) as total_debet'),
+                        DB::raw('SUM(IF(posisi_dr_cr = "kredit", nominal, 0)) as total_kredit')
+                  )
+                  ->join('coa', 'jurnal.id_coa', '=', 'coa.id_coa')
+                  ->whereHas('transaksi', function ($query) use ($bulan, $tahun, $hari, $unit) {
+                        $query->whereDate('tgl_transaksi', '<=', $tahun . '-' . $bulan . '-' . $hari)
+                              ->where('unit', $unit);
+                  })->groupBy('jurnal.id_coa', 'coa.header', 'coa.kode', 'coa.nama', 'coa.kategori')
+                  ->get();
       }
 }

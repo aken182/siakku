@@ -6,7 +6,6 @@ use App\Models\Jurnal;
 use App\Models\Transaksi;
 use App\Models\Detail_saldo_awal;
 use App\Models\Saldo_awal_barang;
-use Illuminate\Support\Facades\DB;
 
 class SaldoAwalService
 {
@@ -58,6 +57,11 @@ class SaldoAwalService
                   'sltk-inventaris.update' => self::cekSaldoAwal($modelBarang, 'Pertokoan', 'update', 'inventaris'),
                   'slsp-coa.update' => self::cekSaldoAwal($modelCoa, 'Simpan Pinjam', 'update'),
                   'slsp-inventaris.update' => self::cekSaldoAwal($modelBarang, 'Simpan Pinjam', 'update', 'inventaris'),
+                  'sltk-coa.form-import' => 'import',
+                  'sltk-persediaan.form-import' => 'import',
+                  'sltk-inventaris.form-import' => 'import',
+                  'slsp-coa.form-import' => 'import',
+                  'slsp-inventaris.form-import' => 'import',
             ];
             return $active[$route];
       }
@@ -138,6 +142,11 @@ class SaldoAwalService
                   'sltk-inventaris.update' => 'Pertokoan',
                   'slsp-coa.update' => 'Simpan Pinjam',
                   'slsp-inventaris.update' => 'Simpan Pinjam',
+                  'sltk-coa.form-import' => 'Pertokoan',
+                  'sltk-persediaan.form-import' => 'Pertokoan',
+                  'sltk-inventaris.form-import' => 'Pertokoan',
+                  'slsp-coa.form-import' => 'Simpan Pinjam',
+                  'slsp-inventaris.form-import' => 'Simpan Pinjam',
             ];
             return $unit[$route];
       }
@@ -175,6 +184,11 @@ class SaldoAwalService
                   'sltk-inventaris.update' => 'inventaris',
                   'slsp-coa.update' => 'coa',
                   'slsp-inventaris.update' => 'inventaris',
+                  'sltk-coa.form-import' => 'coa',
+                  'sltk-persediaan.form-import' => 'persediaan',
+                  'sltk-inventaris.form-import' => 'inventaris',
+                  'slsp-coa.form-import' => 'coa',
+                  'slsp-inventaris.form-import' => 'inventaris',
             ];
             return $jenis[$route];
       }
@@ -187,6 +201,18 @@ class SaldoAwalService
                   'inventaris-Pertokoan' => 'sltk-inventaris',
                   'coa-Simpan Pinjam' => 'slsp-coa',
                   'inventaris-Simpan Pinjam' => 'slsp-inventaris',
+            ];
+            return $route[$jenis . '-' . $unit];
+      }
+
+      public function getRouteImport($jenis, $unit)
+      {
+            $route = [
+                  'coa-Pertokoan' => 'sltk-coa.form-import',
+                  'persediaan-Pertokoan' => 'sltk-persediaan.form-import',
+                  'inventaris-Pertokoan' => 'sltk-inventaris.form-import',
+                  'coa-Simpan Pinjam' => 'slsp-coa.form-import',
+                  'inventaris-Simpan Pinjam' => 'slsp-inventaris.form-import',
             ];
             return $route[$jenis . '-' . $unit];
       }
@@ -239,6 +265,30 @@ class SaldoAwalService
             return $routeCreate[$route];
       }
 
+      public function getRouteStoreImport($route)
+      {
+            $routeStore = [
+                  'sltk-coa.form-import' => 'sltk-coa.import',
+                  'sltk-persediaan.form-import' => 'sltk-persediaan.import',
+                  'sltk-inventaris.form-import' => 'sltk-inventaris.import',
+                  'slsp-coa.form-import' => 'slsp-coa.import',
+                  'slsp-inventaris.form-import' => 'slsp-inventaris.import',
+            ];
+            return $routeStore[$route];
+      }
+
+      public function getRouteTemplateImport($route)
+      {
+            $routeTemplate = [
+                  'sltk-coa.form-import' => 'sltk-coa.import-template',
+                  'sltk-persediaan.form-import' => 'sltk-persediaan.import-template',
+                  'sltk-inventaris.form-import' => 'sltk-inventaris.import-template',
+                  'slsp-coa.form-import' => 'slsp-coa.import-template',
+                  'slsp-inventaris.form-import' => 'slsp-inventaris.import-template',
+            ];
+            return $routeTemplate[$route];
+      }
+
       public function getRouteUpdateTransaksi($route)
       {
             $routeCreate = [
@@ -251,18 +301,17 @@ class SaldoAwalService
             return $routeCreate[$route];
       }
 
-      public function createTransaksiSaldoAwalCoa($request, $kode, $unit)
+      public function createTransaksiSaldoAwalCoa($total, $tanggal, $kode, $unit)
       {
-            $total_transaksi = ($request->input('total_debet') + $request->input('total_kredit'));
             $this->transaksi::create([
-                  'tgl_transaksi' => $request->input('tgl_transaksi'),
+                  'tgl_transaksi' => $tanggal,
                   'kode' => $kode,
                   'jenis_transaksi' => 'Saldo Awal COA',
                   'detail_tabel' => 'detail_saldo_awal',
                   'metode_transaksi' => 'Saldo Awal',
                   'unit' => $unit,
                   'keterangan' => 'Input Saldo Awal Unit ' . $unit,
-                  'total' => $total_transaksi,
+                  'total' => $total,
             ]);
       }
 
@@ -312,12 +361,11 @@ class SaldoAwalService
             }
       }
 
-      function updateTransaksiCoa($id, $debet, $kredit)
+      function updateTransaksiCoa($id = null, $debet, $kredit)
       {
             $total = $debet + $kredit;
             $update_transaksi = [
-                  'total' => $total,
-                  'updated_at' => now()
+                  'total' => $total
             ];
             $this->transaksi::where('id_transaksi', $id)->update($update_transaksi);
       }

@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Coa;
+use App\Services\CoaService;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -24,19 +25,20 @@ class CoaImport implements ToCollection, WithValidation, WithHeadingRow, SkipsOn
         'header.in' => 'Header akun harus salah satu dari 1,2,3,4,5 atau 8!',
     ];
 
+    private $coaService;
+
+    public function __construct()
+    {
+        $this->coaService = new CoaService;
+    }
+
     /**
      * @param Collection $collection
      */
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            Coa::create([
-                'kode' => $row['kode'],
-                'nama' => $row['nama'],
-                'kategori' => $row['kategori'],
-                'subkategori' => $row['subkategori'],
-                'header' => $row['header']
-            ]);
+            $this->coaService->createCoa($row);
         }
     }
 

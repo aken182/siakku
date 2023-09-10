@@ -25,6 +25,12 @@ Route::controller(ImportController::class)->group(function () {
       //shu
       Route::get('/shu/unit-pertokoan/import-template', 'template')->name('shu-unit-pertokoan.import-template');
       Route::get('/shu/unit-sp/import-template', 'template')->name('shu-unit-sp.import-template');
+      //saldo-awal
+      Route::get('/saldo-awal/coa/unit-pertokoan/import-template', 'template')->name('sltk-coa.import-template');
+      Route::get('/saldo-awal/persediaan/unit-pertokoan/import-template', 'template')->name('sltk-persediaan.import-template');
+      Route::get('/saldo-awal/inventaris/unit-pertokoan/import-template', 'template')->name('sltk-inventaris.import-template');
+      Route::get('/saldo-awal/coa/unit-sp/import-template', 'template')->name('slsp-coa.import-template');
+      Route::get('/saldo-awal/inventaris/unit-sp/import-template', 'template')->name('slsp-inventaris.import-template');
 });
 
 Route::controller(ExportController::class)->group(function () {

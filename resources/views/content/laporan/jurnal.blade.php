@@ -100,11 +100,11 @@
                                                     </td>
                                                     @if ($jurnal->posisi_dr_cr == 'debet')
                                                         <td>
-                                                            <a href="{{ route($route_detail, ['id' => Crypt::encrypt($jurnal->transaksi->id_transaksi), 'detail' => $jurnal->transaksi->detail_transaksi]) }}"
-                                                                class="{{ $jurnal->transaksi->tipe == 'transaksi kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
+                                                            <a href="{{ route($route_detail, ['id' => Crypt::encrypt($jurnal->transaksi->id_transaksi), 'detail' => $jurnal->transaksi->detail_tabel, 'unit' => $jurnal->transaksi->unit]) }}"
+                                                                class="{{ $jurnal->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="top" data-bs-html="true"
-                                                                title="<i class='bx bx-show bx-xs' ></i> <span>{{ $jurnal->transaksi->tipe == 'transaksi kadaluwarsa' ? 'Detail Transaksi Kadaluwarsa' : 'Detail Transaksi' }}</span>">{{ $jurnal->transaksi->kode }}
+                                                                title="<i class='bx bx-show bx-xs' ></i> <span>{{ $jurnal->transaksi->tipe == 'kadaluwarsa' ? 'Detail Transaksi Kadaluwarsa' : 'Detail Transaksi' }}</span>">{{ $jurnal->transaksi->kode }}
                                                             </a>
                                                         </td>
                                                         <td>{{ $jurnal->coa->nama }}</td>
@@ -112,11 +112,11 @@
                                                         <td style="text-align:right">{{ buatrp($jurnal->nominal) }}</td>
                                                         <td>-</td>
                                                     @else
-                                                        <td><a href="{{ route($route_detail, ['id' => Crypt::encrypt($jurnal->transaksi->id_transaksi), 'detail' => $jurnal->transaksi->detail_transaksi]) }}"
-                                                                class="{{ $jurnal->transaksi->tipe == 'transaksi kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
+                                                        <td><a href="{{ route($route_detail, ['id' => Crypt::encrypt($jurnal->transaksi->id_transaksi), 'detail' => $jurnal->transaksi->detail_tabel, 'unit' => $jurnal->transaksi->unit]) }}"
+                                                                class="{{ $jurnal->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="top" data-bs-html="true"
-                                                                title="<i class='bx bx-show bx-xs' ></i> <span>{{ $jurnal->transaksi->tipe == 'transaksi kadaluwarsa' ? 'Detail Transaksi Kadaluwarsa' : 'Detail Transaksi' }}</span>">{{ $jurnal->transaksi->kode }}</a>
+                                                                title="<i class='bx bx-show bx-xs' ></i> <span>{{ $jurnal->transaksi->tipe == 'kadaluwarsa' ? 'Detail Transaksi Kadaluwarsa' : 'Detail Transaksi' }}</span>">{{ $jurnal->transaksi->kode }}</a>
                                                         </td>
                                                         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $jurnal->coa->nama }}
                                                         </td>

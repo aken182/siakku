@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\detail\DetailTransaksiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\laporan\JurnalController;
 use App\Http\Controllers\laporan\LabaRugiController;
@@ -15,6 +16,10 @@ Route::get('/laporan-penjualan/unit-pertokoan', [LaporanPenjualanController::cla
 Route::get('/laporan-transaksi/unit-pertokoan', [LaporanTransaksiController::class, 'index'])->name('lut-transaksi');
 Route::get('/kartu-toko', [LaporanSimpananController::class, 'index'])->name('lut-kartu-toko');
 Route::get('/jurnal/unit-pertokoan', [JurnalController::class, 'index'])->name('lut-jurnal');
+Route::get('/jurnal/unit-pertokoan/detail/{id}/{detail}/{unit}', [DetailTransaksiController::class, 'index'])->name('lut-jurnal.detail');
+Route::get('/jurnal/unit-pertokoan/pdf/{bulan}/{tahun}', [JurnalController::class, 'pdf'])->name('lut-jurnal.pdf');
 Route::get('/buku-besar/unit-pertokoan', [BukuBesarController::class, 'index'])->name('lut-buku-besar');
+Route::get('/buku-besar/unit-pertokoan/detail/{id}/{detail}/{unit}', [DetailTransaksiController::class, 'index'])->name('lut-buku-besar.detail');
+Route::get('/buku-besar/unit-pertokoan/pdf/{bulan}/{tahun}/{id_coa}', [BukuBesarController::class, 'pdf'])->name('lut-buku-besar.pdf');
 Route::get('/laba-rugi/unit-pertokoan', [LabaRugiController::class, 'index'])->name('lut-laba-rugi');
 Route::get('/neraca-saldo/unit-pertokoan', [NeracaSaldoController::class, 'index'])->name('lut-neraca');

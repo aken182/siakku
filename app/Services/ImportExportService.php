@@ -23,6 +23,9 @@ use App\Imports\InventarisImport;
 use App\Imports\PersediaanImport;
 use App\Models\Pengajuan_pinjaman;
 use App\Imports\MasterSimpananImport;
+use App\Imports\SaldoCoaImport;
+use App\Imports\SaldoInventarisImport;
+use App\Imports\SaldoPersediaanImport;
 use App\Models\Jabatan;
 use Illuminate\Support\Facades\Route;
 use Carbon\Carbon;
@@ -30,11 +33,13 @@ use Carbon\Carbon;
 class ImportExportService
 {
       private $barangService;
+      private $transaksiService;
       private $route;
 
       public function __construct()
       {
             $this->barangService = new BarangService;
+            $this->transaksiService = new TransaksiService;
             $this->route = Route::currentRouteName();
       }
 
@@ -140,12 +145,27 @@ class ImportExportService
                         $routeTemplate = 'shu-unit-sp.import-template';
                         $routeMain = 'shu-unit-sp';
                         break;
+                  case 'sltk-coa.import':
+                        $routeMain = 'sltk-coa';
+                        break;
+                  case 'sltk-persediaan.import':
+                        $routeMain = 'sltk-persediaan';
+                        break;
+                  case 'sltk-inventaris.import':
+                        $routeMain = 'sltk-inventaris';
+                        break;
+                  case 'slsp-coa.import':
+                        $routeMain = 'slsp-coa';
+                        break;
+                  case 'slsp-inventaris.import':
+                        $routeMain = 'slsp-inventaris';
+                        break;
             }
             return [
-                  'title' => $title,
-                  'routeStore' => $routeStore,
+                  'title' => $title ?? '',
+                  'routeStore' => $routeStore ?? '',
                   'routeMain' => $routeMain,
-                  'routeTemplate' => $routeTemplate,
+                  'routeTemplate' => $routeTemplate ?? '',
                   'routeNow' => $this->route
             ];
       }
@@ -255,6 +275,26 @@ class ImportExportService
                         $dataTabel = Shu::where('unit', 'Simpan Pinjam')->get();
                         $jenisTabel = 'shu';
                         break;
+                  case 'sltk-coa.import-template':
+                        $dataTabel = $this->transaksiService->saldoAwal('Pertokoan');
+                        $jenisTabel = 'saldo awal coa';
+                        break;
+                  case 'sltk-persediaan.import-template':
+                        $dataTabel = $this->transaksiService->saldoAwalBarang('Pertokoan', 'persediaan');
+                        $jenisTabel = 'saldo awal persediaan';
+                        break;
+                  case 'sltk-inventaris.import-template':
+                        $dataTabel = $this->transaksiService->saldoAwalBarang('Pertokoan', 'inventaris');
+                        $jenisTabel = 'saldo awal inventaris';
+                        break;
+                  case 'slsp-coa.import-template':
+                        $dataTabel = $this->transaksiService->saldoAwal('Simpan Pinjam');
+                        $jenisTabel = 'saldo awal coa';
+                        break;
+                  case 'slsp-inventaris.import-template':
+                        $dataTabel = $this->transaksiService->saldoAwalBarang('Simpan pinjam', 'inventaris');
+                        $jenisTabel = 'saldo awal inventaris';
+                        break;
             }
 
             return [
@@ -280,6 +320,11 @@ class ImportExportService
                   'mdu-coa.import' => new CoaImport,
                   'shu-unit-pertokoan.import' => new ShuImport,
                   'shu-unit-sp.import' => new ShuImport,
+                  'sltk-coa.import' => new SaldoCoaImport('Pertokoan'),
+                  'sltk-persediaan.import' => new SaldoPersediaanImport('Pertokoan'),
+                  'sltk-inventaris.import' => new SaldoInventarisImport('Pertokoan'),
+                  'slsp-coa.import' => new SaldoCoaImport('Simpan Pinjam'),
+                  'slsp-inventaris.import' => new SaldoInventarisImport('Simpan Pinjam'),
             ];
             return $import;
       }

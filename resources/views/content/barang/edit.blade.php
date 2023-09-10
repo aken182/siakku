@@ -121,7 +121,8 @@
                                                 <label for="harga_barang" class="text-primary">Harga Barang
                                                     (Opsional)</label>
                                                 <input type="text" name="harga_barang"
-                                                    {{ buatrp($barang->harga_barang) }} class="form-control format-rupiah">
+                                                    value="{{ buatrp($barang->harga_barang) }}"
+                                                    class="form-control format-rupiah">
                                             </div>
                                         </div>
                                         @if ($barang->posisi_pi === 'inventaris')
@@ -137,8 +138,8 @@
                                                 <div class="form-group">
                                                     <label for="stok" class="text-primary">Stok
                                                         (Opsional)</label>
-                                                    <input type="number" step="0.25" name="stok" class="form-control"
-                                                        value="{{ $barang->stok }}">
+                                                    <input type="number" step="0.25" name="stok"
+                                                        class="form-control" value="{{ $barang->stok }}">
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12">

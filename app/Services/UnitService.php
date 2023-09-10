@@ -23,7 +23,7 @@ class UnitService
                   ->where('unit', $unit)->first();
       }
 
-      public function createUnitToImport($data_unit)
+      public function createUnitToImport($data_unit, $indexUnit = null)
       {
             foreach ($data_unit as $row) {
 
@@ -31,10 +31,11 @@ class UnitService
                   if ($unit === $row['kode_unit']) {
                         continue;
                   } else {
+                        $u = $indexUnit == null ? $row['unit'] : $indexUnit;
                         Unit::create([
                               'kode_unit' => $row['kode_unit'],
                               'nama' => $row['nama_unit'],
-                              'unit' => $row['unit'],
+                              'unit' => $u,
                         ]);
                   }
             }

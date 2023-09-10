@@ -4,9 +4,14 @@ namespace App\Services;
 
 use App\Models\Unit;
 use App\Models\Barang;
-use App\Models\Saldo_awal_barang;
 use App\Models\Transaksi;
+use App\Services\UnitService;
+use App\Services\BarangService;
+use App\Services\SatuanService;
+use App\Models\Saldo_awal_barang;
 use App\Services\TransaksiService;
+use App\Services\AccountingService;
+use App\Services\ImportExportService;
 
 
 class SaldoAwalBarangService
@@ -14,12 +19,18 @@ class SaldoAwalBarangService
       private $transaksiService;
       private $accountingService;
       private $barangService;
+      private $importService;
+      private $satuanService;
+      private $unitService;
 
       public function __construct()
       {
             $this->transaksiService = new TransaksiService;
             $this->accountingService = new AccountingService;
             $this->barangService = new BarangService;
+            $this->importService = new ImportExportService;
+            $this->satuanService = new SatuanService;
+            $this->unitService = new UnitService;
       }
 
       /**
@@ -131,18 +142,19 @@ class SaldoAwalBarangService
        * @param mixed $id_barang
        * @param mixed $nilaiBuku
        * @param Array $data
+       * @param mixed $subtotal
        * @return void
        **/
-      public function createSaldoAwalBarang($id_transaksi, $jenis, $id_barang, $nilaiBuku, $data)
+      public function createSaldoAwalBarang($id_transaksi, $jenis, $id_barang, $nilaiBuku, $data, $subtotal = null)
       {
             Saldo_awal_barang::create([
                   'id_transaksi' => $id_transaksi,
                   'posisi' => $jenis,
                   'id_barang' => $id_barang,
-                  'qty' => $data['qty'],
-                  'harga' => $data['harga'],
+                  'qty' => $data['qty'] ?? $data['stok'],
+                  'harga' => $data['harga'] ?? $data['harga_barang'],
                   'nilai_buku' => $nilaiBuku,
-                  'subtotal' => $data['subtotal'],
+                  'subtotal' => $data['subtotal'] ?? $subtotal,
             ]);
       }
 
@@ -156,19 +168,20 @@ class SaldoAwalBarangService
        * @param mixed $id_transaksi
        * @param mixed $jenis
        * @param Array $data
+       * @param mixed $subtotal
+       * @param mixed $nilai_buku
        * @return void
        **/
-      public function updateSaldoAwalBarang($id_saldo, $id_transaksi, $jenis, $data)
+      public function updateSaldoAwalBarang($id_saldo, $id_transaksi, $jenis, $data, $subtotal = null, $nilai_buku = null)
       {
             Saldo_awal_barang::where('id_saldo', $id_saldo)
                   ->update([
                         'id_transaksi' => $id_transaksi,
                         'posisi' => $jenis,
-                        'id_barang' => $data['id_barang'],
-                        'qty' => $data['qty'],
-                        'harga' => $data['harga'],
-                        'nilai_buku' => $data['nilai_buku'] ?? null,
-                        'subtotal' => $data['subtotal']
+                        'qty' => $data['qty'] ?? $data['stok'],
+                        'harga' => $data['harga'] ?? $data['harga_barang'],
+                        'nilai_buku' => $data['nilai_buku'] ?? $nilai_buku,
+                        'subtotal' => $data['subtotal'] ?? $subtotal
                   ]);
       }
 
@@ -285,5 +298,189 @@ class SaldoAwalBarangService
       public function getIdSaldo($id, $id_barang)
       {
             return Saldo_awal_barang::where('id_transaksi', $id)->where('id_barang', $id_barang)->value('id_saldo');
+      }
+
+      /**
+       * Dokumentasi getTotalTransaksi
+       *
+       * Menghitung total transaksi saldo awal
+       * barang menggunakan perulangan dari file
+       * import excel saldo awal barang
+       *
+       * @param mixed $rows
+       * @return mixed $total
+       **/
+      public function getTotalTransaksi($rows)
+      {
+            $total = 0;
+            foreach ($rows as $row) {
+                  $subtotal = $row['stok'] * $row['harga_barang'];
+                  $total += $subtotal;
+            }
+            return $total;
+      }
+
+      /**
+       * Dokumentasi getIdTransaksiImport
+       *
+       * Mencari dan mengambil id_transaksi saldo awal barang 
+       * dari tabel transaksi berdasarkan parameter 
+       * tanggal transaksi, unit, dan posisi.
+       *
+       * @param mixed $tanggal
+       * @param mixed $unit
+       * @param mixed $posisi
+       * @return mixed $id
+       **/
+      public function getIdTransaksiImport($tanggal, $unit, $posisi)
+      {
+            $id = Transaksi::where('tgl_transaksi', $tanggal)
+                  ->where('tgl_transaksi', $tanggal)
+                  ->where('jenis_transaksi', 'Saldo Awal ' . $posisi)
+                  ->where('detail_tabel', 'saldo_awal_barang')
+                  ->where('unit', $unit)
+                  ->value('id_transaksi');
+            return $id;
+      }
+
+      /**
+       * Dokumentasi importMainBarang
+       *
+       * Memuat semua fungsi untuk mengimport
+       * file excel menyangkut data satuan, data unit,
+       * dan data barang
+       *
+       * @param mixed $rows
+       * @param mixed $model
+       * @param mixed $unit
+       * @param mixed $posisi
+       * @return void
+       **/
+      public function importToMainBarang($rows, $model, $unit, $posisi)
+      {
+            $data_satuan = $this->importService->getDataUnique($rows, 'satuan');
+            $data_unit = $this->importService->getDataUnique($rows, 'kode_unit');
+            $this->satuanService->createSatuanToImport($data_satuan);
+            $this->unitService->createUnitToImport($data_unit, $unit);
+            foreach ($rows as $row) {
+                  $row['unit'] = $row['unit'] ?? $unit;
+                  $satuan = $this->satuanService->getSatuanToImport($row['satuan']);
+                  $dataUnit = $this->unitService->getUnitToImport($row['nama_unit'], $row['unit']);
+                  if ($dataUnit) {
+                        $id_barang = $this->barangService->getIdBarangImport($row, $unit, $posisi);
+                        if ($id_barang) {
+                              continue;
+                        } else {
+                              $kode = kode($model, $dataUnit->kode_unit, 'kode_barang');
+                              $this->barangService->createToImport($satuan->id_satuan, $dataUnit->id_unit, $kode, $posisi, $row);
+                        }
+                  } else {
+                        continue;
+                  }
+            }
+      }
+
+      /**
+       * Dokumentasi importToTransaksi
+       *
+       * Memuat semua fungsi untuk mengimport data excel
+       * kedalam tabel transaksi dalam database.
+       *
+       * @param mixed $rows
+       * @param mixed $unit
+       * @return mixed $posisi
+       * @return void
+       **/
+      public function importToTransaksi($rows, $unit, $posisi)
+      {
+            $total = self::getTotalTransaksi($rows);
+            $transaksi = $this->importService->getDataUnique($rows, 'tanggal_mulai');
+            foreach ($transaksi as $t) {
+                  $tanggal = $this->importService->getTanggalImport($t['tanggal_mulai']);
+                  $id_transaksi = self::getIdTransaksiImport($tanggal, $unit, $posisi);
+                  if ($id_transaksi) {
+                        self::updateTransaksi($id_transaksi, $tanggal);
+                  } else {
+                        $kode = self::getKode(new Transaksi, $posisi);
+                        self::createTransaksi($tanggal, $kode, $unit, $posisi, $total);
+                  }
+            }
+      }
+
+      /**
+       * Dokumentasi updateStokImportSementara
+       *
+       * Mengecek apakah terdapat transaksi saldo
+       * awal barang dan jika transaksinya ada maka
+       * stok barang dari file excel akan diupdate 
+       * untuk sementara sebelum mengimport data detail dan 
+       * jurnalnya.
+       *
+       * @param mixed $model
+       * @param mixed $unit
+       * @param mixed $posisi
+       * @return void
+       **/
+      public function updateStokImportSementara($model, $unit, $posisi)
+      {
+            $modelSaldo = new Saldo_awal_barang;
+            $transaksiBarang = $this->transaksiService->saldoAwalBarang($unit, $posisi);
+            if ($transaksiBarang) {
+                  foreach ($transaksiBarang as $t) {
+                        self::updateStokBarangSementara($model, $modelSaldo, $t->id_saldo, $t->id_barang);
+                  }
+            }
+      }
+
+      /**
+       * Dokumentasi importToTransaksi
+       *
+       * Memuat semua fungsi untuk mengimport data excel
+       * kedalam tabel saldo_awal_barang dan tabel 
+       * jurnal dalam database.
+       *
+       * @param mixed $data
+       * @param mixed $model
+       * @param mixed $unit
+       * @param mixed $posisi
+       * @param mixed $id
+       * @return void
+       **/
+      public function importToDetailJurnal($data, $model, $unit, $posisi, $id)
+      {
+            foreach ($data as $d) {
+                  $id_barang = $this->barangService->getIdBarangImport($d, $unit, $posisi);
+                  $id_saldo = self::getIdSaldo($id, $id_barang);
+                  $subtotal = self::getSubtotalImport($d, $posisi);
+                  $nilai_buku = $d['nilai_saat_ini'] ?? null;
+                  if ($id_saldo) {
+                        $this->barangService->updatePengadaanBarang($model, $d, $id_barang);
+                        self::updateSaldoAwalBarang($id_saldo, $id, $posisi, $d, $subtotal, $nilai_buku);
+                  } else {
+                        $this->barangService->updatePengadaanBarang($model, $d, $id_barang);
+                        self::createSaldoAwalBarang($id, $posisi, $id_barang, $nilai_buku, $d, $subtotal);
+                  }
+            }
+            $this->accountingService->updateJurnalSaldoAwalBarang($data, $id, $posisi);
+      }
+
+      /**
+       *Dokumentasi getIdSubtotal
+       *
+       * Mengambil subtotal barang dari data file excel 
+       * sesuai dengan jenisnya.
+       * 
+       * @param mixed $data
+       * @param mixed $posisi
+       * @return mixed
+       **/
+      public function getSubtotalImport($data, $posisi)
+      {
+            if ($posisi === 'persediaan') {
+                  $subtotal = $data['stok'] * $data['harga_barang'];
+            } else {
+                  $subtotal = $data['stok'] * $data['nilai_saat_ini'];
+            }
+            return $subtotal;
       }
 }

@@ -40,5 +40,14 @@
         @case('shu')
             <x-table.shu :tabel="$tabel" />
         @break
+
+        @case('saldo awal coa')
+            <x-table.saldo-awal-coa :tabel="$tabel" />
+        @break
+
+        @case('saldo awal persediaan')
+        @case('saldo awal inventaris')
+            <x-table.saldo-awal-barang :tabel="$tabel" :jenis="$jenisTabel" />
+        @break
     @endswitch
 </table>

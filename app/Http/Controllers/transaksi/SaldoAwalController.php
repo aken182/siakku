@@ -30,6 +30,7 @@ class SaldoAwalController extends Controller
       private $title;
       private $coa;
       private $routeMain;
+      private $routeImport;
 
       public function __construct(TransaksiService $transaksi, SaldoAwalService $saldo)
       {
@@ -44,6 +45,7 @@ class SaldoAwalController extends Controller
             $this->title = 'Saldo Awal ' . $this->jenis;
             $this->coa = Coa::all();
             $this->routeMain = $this->saldoAwalService->getRouteMain($this->jenis, $this->unit);
+            $this->routeImport = $this->saldoAwalService->getRouteImport($this->jenis, $this->unit);
       }
 
       /**
@@ -65,6 +67,7 @@ class SaldoAwalController extends Controller
                   'unit' => $this->unit,
                   'jenis' => $this->jenis,
                   'routeMain' => $this->routeMain,
+                  'routeImport' => $this->routeImport,
             ];
 
             return view('content.saldo-awal.main', $data);
@@ -88,6 +91,7 @@ class SaldoAwalController extends Controller
                   'unit' => $this->unit,
                   'jenis' => $this->jenis,
                   'routeMain' => $this->routeMain,
+                  'routeImport' => $this->routeImport,
                   'routeStore' => $this->saldoAwalService->getRouteStoreTanggal($this->route),
             ];
 
@@ -130,6 +134,7 @@ class SaldoAwalController extends Controller
                   'active' => $this->active,
                   'jenis' => $this->jenis,
                   'routeMain' => $this->routeMain,
+                  'routeImport' => $this->routeImport,
                   'coa' => $this->coa,
                   'satuan' => Satuan::all(),
                   'barang' => $this->barangService->getDataBarang($this->unit, $this->jenis),
@@ -148,9 +153,10 @@ class SaldoAwalController extends Controller
        */
       public function storeCoa(SaldoAwalRequest $request)
       {
-            // dd($request->all());
+            $total = $request->input('total_debet') + $request->input('total_kredit');
             $kode = kode(new Transaksi, 'SLDOC-', 'kode');
-            $this->saldoAwalService->createTransaksiSaldoAwalCoa($request, $kode, $this->unit);
+            $tanggal = $request->input('tgl_transaksi');
+            $this->saldoAwalService->createTransaksiSaldoAwalCoa($total, $tanggal, $kode, $this->unit);
             $id_transaksi = $this->transaksiService->getIdTransaksiCreate($kode);
             $this->saldoAwalService->createSaldoAwalCoa($request, $id_transaksi, $this->coa);
             alert()->success('Sukses', 'Berhasil menambah data saldo awal COA unit ' . $this->unit . '.');
@@ -183,6 +189,7 @@ class SaldoAwalController extends Controller
                   'active' => $this->active,
                   'jenis' => $this->jenis,
                   'routeMain' => $this->routeMain,
+                  'routeImport' => $this->routeImport,
                   'coa' => $this->saldoAwalService->getCoa($this->unit, $this->coa, $transaksi->id_transaksi),
                   'id_transaksi' => $transaksi->id_transaksi,
                   'tgl_transaksi' => $transaksi->tgl_transaksi,
@@ -211,6 +218,7 @@ class SaldoAwalController extends Controller
                   'active' => $this->active,
                   'jenis' => $this->jenis,
                   'routeMain' => $this->routeMain,
+                  'routeImport' => $this->routeImport,
                   'satuan' => Satuan::all(),
                   'barang' => $this->barangService->getDataBarang($this->unit, $this->jenis),
                   'unitBarang' => $this->barangService->getDataUnit($this->unit),
@@ -257,5 +265,26 @@ class SaldoAwalController extends Controller
       public function show($id)
       {
             //
+      }
+
+      /**
+       * Menampikan form import saldo awal
+       *
+       **/
+      public function import()
+      {
+            $data = [
+                  'title' => $this->title,
+                  'childTitle' => 'Import Excel',
+                  'active' => $this->active,
+                  'routeStore' => $this->saldoAwalService->getRouteStoreImport($this->route),
+                  'routeTemplate' => $this->saldoAwalService->getRouteTemplateImport($this->route),
+                  'unit' => $this->unit,
+                  'jenis' => $this->jenis,
+                  'routeMain' => $this->routeMain,
+                  'routeImport' => $this->routeImport,
+            ];
+
+            return view('content.saldo-awal.main', $data);
       }
 }

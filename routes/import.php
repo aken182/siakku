@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\laporan\ImportController;
+use App\Http\Controllers\transaksi\SaldoAwalController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(ImportController::class)->group(function () {
@@ -45,4 +46,20 @@ Route::controller(ImportController::class)->group(function () {
       //shu
       Route::post('/shu/unit-pertokoan/import-store', 'import')->name('shu-unit-pertokoan.import');
       Route::post('/shu/unit-sp/import-store', 'import')->name('shu-unit-sp.import');
+
+      //saldo-awal-store
+      Route::post('/saldo-awal/coa/unit-pertokoan/import-store', 'import')->name('sltk-coa.import');
+      Route::post('/saldo-awal/persediaan/unit-pertokoan/import-store', 'import')->name('sltk-persediaan.import');
+      Route::post('/saldo-awal/inventaris/unit-pertokoan/import-store', 'import')->name('sltk-inventaris.import');
+      Route::post('/saldo-awal/coa/unit-sp/import-store', 'import')->name('slsp-coa.import');
+      Route::post('/saldo-awal/inventaris/unit-sp/import-store', 'import')->name('slsp-inventaris.import');
+});
+
+//saldo-awal-form
+Route::controller(SaldoAwalController::class)->group(function () {
+      Route::get('/saldo-awal/coa/unit-pertokoan/import', 'import')->name('sltk-coa.form-import');
+      Route::get('/saldo-awal/persediaan/unit-pertokoan/import', 'import')->name('sltk-persediaan.form-import');
+      Route::get('/saldo-awal/inventaris/unit-pertokoan/import', 'import')->name('sltk-inventaris.form-import');
+      Route::get('/saldo-awal/coa/unit-sp/import', 'import')->name('slsp-coa.form-import');
+      Route::get('/saldo-awal/inventaris/unit-sp/import', 'import')->name('slsp-inventaris.form-import');
 });

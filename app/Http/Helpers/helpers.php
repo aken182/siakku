@@ -356,7 +356,7 @@ function jurnalPembalik($jurnal, $id_transaksi, $id_transaksi_penyesuaian)
                   }
             }
             $data = [
-                  'tipe' => 'transaksi kadaluwarsa',
+                  'tipe' => 'kadaluwarsa',
             ];
             Transaksi::where('id_transaksi', $id_transaksi_penyesuaian)->update($data);
       }

@@ -30,11 +30,13 @@
                             <a class="nav-link {{ $active != 'import' ? 'active text-primary' : 'text-secondary' }}"
                                 href="{{ route($routeMain) }}">Home</a>
                         </li>
+                        {{-- @if ($jenis === 'coa') --}}
                         <li class="nav-item">
                             <a class="nav-link {{ $active === 'import' ? 'active text-primary' : 'text-secondary' }}"
-                                href="#">Import
+                                href="{{ route($routeImport) }}">Import
                                 Saldo Awal</a>
                         </li>
+                        {{-- @endif --}}
                     </ul>
                 </div>
             </div>
@@ -77,7 +79,7 @@
                         @break
 
                         @case('import')
-                            <x-saldo-awal.views.saldo-awal />
+                            <x-form.import :main="$routeMain" :store="$routeStore" :template="$routeTemplate" />
                         @break
 
                         @default
