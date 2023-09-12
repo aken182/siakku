@@ -38,6 +38,11 @@ class Satuan extends Model
         return $this->hasMany(Detail_penjualan::class, 'id_detail', 'id_satuan');
     }
 
+    public function detail_penjualan_lain()
+    {
+        return $this->hasMany(Detail_penjualan_lain::class, 'id_detail', 'id_satuan');
+    }
+
     public function detail_penyusutan()
     {
         return $this->hasMany(Detail_penyusutan::class, 'id_detail', 'id_satuan');

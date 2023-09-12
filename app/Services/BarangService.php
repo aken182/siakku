@@ -20,6 +20,7 @@ class BarangService
                         $title = 'Persediaan Unit Pertokoan';
                         $posisi = 'persediaan';
                         $routeCreate = route('mdt-persediaan.create');
+                        $routeList = 'mdt-persediaan.list';
                         $routeEdit = 'mdt-persediaan.edit';
                         $routeDelete = 'mdt-persediaan.destroy';
                         $routeImport = route('mdt-persediaan.form-import');
@@ -31,6 +32,7 @@ class BarangService
                         $title = 'Inventaris Unit Pertokoan';
                         $posisi = 'inventaris';
                         $routeCreate = route('mdt-inventaris.create');
+                        $routeList = 'mdt-inventaris.list';
                         $routeEdit = 'mdt-inventaris.edit';
                         $routeDelete = 'mdt-inventaris.destroy';
                         $routeImport = route('mdt-inventaris.form-import');
@@ -42,6 +44,7 @@ class BarangService
                         $title = 'Inventaris Unit Simpan Pinjam';
                         $posisi = 'inventaris';
                         $routeCreate = route('mds-inventaris.create');
+                        $routeList = 'mds-inventaris.list';
                         $routeEdit = 'mds-inventaris.edit';
                         $routeDelete = 'mds-inventaris.destroy';
                         $routeImport = route('mds-inventaris.form-import');
@@ -54,6 +57,7 @@ class BarangService
                   'title' => $title,
                   'posisi' => $posisi,
                   'routeCreate' => $routeCreate,
+                  'routeList' => $routeList,
                   'routeEdit' => $routeEdit,
                   'routeDelete' => $routeDelete,
                   'routeImport' => $routeImport,

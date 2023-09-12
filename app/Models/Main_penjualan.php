@@ -28,6 +28,11 @@ class Main_penjualan extends Model
         return $this->hasMany(Detail_penjualan::class, 'id_penjualan');
     }
 
+    public function detail_penjualan_lain()
+    {
+        return $this->hasMany(Detail_penjualan_lain::class, 'id_penjualan');
+    }
+
     public function anggota()
     {
         return $this->belongsTo(Anggota::class, 'id_anggota');

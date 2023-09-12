@@ -117,41 +117,15 @@ class SaldoAwalService
                   'sltk-inventaris' => 'Pertokoan',
                   'slsp-coa' => 'Simpan Pinjam',
                   'slsp-inventaris' => 'Simpan Pinjam',
-                  'sltk-coa.store-tanggal' => 'Pertokoan',
-                  'sltk-persediaan.store-tanggal' => 'Pertokoan',
-                  'sltk-inventaris.store-tanggal' => 'Pertokoan',
-                  'slsp-coa.store-tanggal' => 'Simpan Pinjam',
-                  'slsp-inventaris.store-tanggal' => 'Simpan Pinjam',
-                  'sltk-coa.store' => 'Pertokoan',
-                  'sltk-persediaan.store' => 'Pertokoan',
-                  'sltk-inventaris.store' => 'Pertokoan',
-                  'slsp-coa.store' => 'Simpan Pinjam',
-                  'slsp-inventaris.store' => 'Simpan Pinjam',
-                  'sltk-coa.create' => 'Pertokoan',
-                  'sltk-persediaan.create' => 'Pertokoan',
-                  'sltk-inventaris.create' => 'Pertokoan',
-                  'slsp-coa.create' => 'Simpan Pinjam',
-                  'slsp-inventaris.create' => 'Simpan Pinjam',
-                  'sltk-coa.edit' => 'Pertokoan',
-                  'sltk-persediaan.edit' => 'Pertokoan',
-                  'sltk-inventaris.edit' => 'Pertokoan',
-                  'slsp-coa.edit' => 'Simpan Pinjam',
-                  'slsp-inventaris.edit' => 'Simpan Pinjam',
-                  'sltk-coa.update' => 'Pertokoan',
-                  'sltk-persediaan.update' => 'Pertokoan',
-                  'sltk-inventaris.update' => 'Pertokoan',
-                  'slsp-coa.update' => 'Simpan Pinjam',
-                  'slsp-inventaris.update' => 'Simpan Pinjam',
-                  'sltk-coa.form-import' => 'Pertokoan',
-                  'sltk-persediaan.form-import' => 'Pertokoan',
-                  'sltk-inventaris.form-import' => 'Pertokoan',
-                  'slsp-coa.form-import' => 'Simpan Pinjam',
-                  'slsp-inventaris.form-import' => 'Simpan Pinjam',
             ];
+
+            // Menghapus bagian yang sama dalam kunci
+            $route = str_replace(['.store-tanggal', '.store', '.create', '.edit', '.update', '.form-import'], '', $route);
+
             return $unit[$route];
       }
 
-      public function  getJenis($route)
+      public function getJenis($route)
       {
             $jenis = [
                   'sltk-coa' => 'coa',
@@ -159,37 +133,11 @@ class SaldoAwalService
                   'sltk-inventaris' => 'inventaris',
                   'slsp-coa' => 'coa',
                   'slsp-inventaris' => 'inventaris',
-                  'sltk-coa.store-tanggal' => 'coa',
-                  'sltk-persediaan.store-tanggal' => 'persediaan',
-                  'sltk-inventaris.store-tanggal' => 'inventaris',
-                  'slsp-coa.store-tanggal' => 'coa',
-                  'slsp-inventaris.store-tanggal' => 'inventaris',
-                  'sltk-coa.store' => 'coa',
-                  'sltk-persediaan.store' => 'persediaan',
-                  'sltk-inventaris.store' => 'inventaris',
-                  'slsp-coa.store' => 'coa',
-                  'slsp-inventaris.store' => 'inventaris',
-                  'sltk-coa.create' => 'coa',
-                  'sltk-persediaan.create' => 'persediaan',
-                  'sltk-inventaris.create' => 'inventaris',
-                  'slsp-coa.create' => 'coa',
-                  'slsp-inventaris.create' => 'inventaris',
-                  'sltk-coa.edit' => 'coa',
-                  'sltk-persediaan.edit' => 'persediaan',
-                  'sltk-inventaris.edit' => 'inventaris',
-                  'slsp-coa.edit' => 'coa',
-                  'slsp-inventaris.edit' => 'inventaris',
-                  'sltk-coa.update' => 'coa',
-                  'sltk-persediaan.update' => 'persediaan',
-                  'sltk-inventaris.update' => 'inventaris',
-                  'slsp-coa.update' => 'coa',
-                  'slsp-inventaris.update' => 'inventaris',
-                  'sltk-coa.form-import' => 'coa',
-                  'sltk-persediaan.form-import' => 'persediaan',
-                  'sltk-inventaris.form-import' => 'inventaris',
-                  'slsp-coa.form-import' => 'coa',
-                  'slsp-inventaris.form-import' => 'inventaris',
             ];
+
+            // Menghapus bagian yang sama dalam kunci
+            $route = str_replace(['.store-tanggal', '.store', '.create', '.edit', '.update', '.form-import'], '', $route);
+
             return $jenis[$route];
       }
 

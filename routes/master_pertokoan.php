@@ -7,6 +7,7 @@ use App\Http\Controllers\master_data\BarangEceranController;
 
 Route::controller(BarangController::class)->group(function () {
       Route::get('/persediaan/unit-pertokoan', 'index')->name('mdt-persediaan');
+      Route::get('/persediaan/unit-pertokoan/list', 'dataTableBarang')->name('mdt-persediaan.list');
       Route::get('/persediaan/unit-pertokoan/create', 'create')->name('mdt-persediaan.create');
       Route::post('/persediaan/unit-pertokoan/store', 'store')->name('mdt-persediaan.store');
       Route::get('/persediaan/unit-pertokoan/edit/{id}', 'edit')->name('mdt-persediaan.edit');
@@ -14,6 +15,7 @@ Route::controller(BarangController::class)->group(function () {
       Route::delete('/persediaan/unit-pertokoan/destroy/{id}', 'destroy')->name('mdt-persediaan.destroy');
 
       Route::get('/inventaris/unit-pertokoan', 'index')->name('mdt-inventaris');
+      Route::get('/inventaris/unit-pertokoan/list', 'dataTableBarang')->name('mdt-inventaris.list');
       Route::get('/inventaris/unit-pertokoan/create', 'create')->name('mdt-inventaris.create');
       Route::post('/inventaris/unit-pertokoan/store', 'store')->name('mdt-inventaris.store');
       Route::get('/inventaris/unit-pertokoan/edit/{id}', 'edit')->name('mdt-inventaris.edit');

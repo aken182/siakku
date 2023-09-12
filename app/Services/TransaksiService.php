@@ -33,6 +33,10 @@ class TransaksiService
                   case 'transfer-sp':
                         $data = self::transferSaldoKasBank($unit);
                         break;
+                  case 'ptk-penjualan.list':
+                        $penjualan = new PenjualanService;
+                        $data = $penjualan->getDataPenjualan($unit, $route);
+                        break;
                   default:
                         $data = 'kosong';
                         break;

@@ -150,12 +150,6 @@
                               "name": "Pendapatan Lainnya",
                               "permission": "pendapatan-unit-pertokoan-view",
                               "slug": "ptk-pendapatan"
-                        },
-                        {
-                              "url": "/piutang-barang/unit-pertokoan",
-                              "name": "Piutang Barang",
-                              "permission": "piutang-barang-unit-pertokoan-view",
-                              "slug": "ptk-piutang"
                         }
                   ]
             },

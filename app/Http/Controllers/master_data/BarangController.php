@@ -4,21 +4,28 @@ namespace App\Http\Controllers\master_data;
 
 use App\Models\Barang;
 use App\Models\Satuan;
+use Illuminate\Http\Request;
 use App\Services\CrudService;
 use App\Services\BarangService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BarangRequest;
+use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Services\dataTable\DataTableBarangService;
 
 class BarangController extends Controller
 {
     protected $barangService;
     protected $crudService;
+    protected $dataTableService;
+    private $route;
 
     public function __construct()
     {
         $this->barangService = new BarangService;
         $this->crudService = new CrudService;
+        $this->dataTableService = new DataTableBarangService;
+        $this->route = Route::currentRouteName();
     }
 
     public function index()
@@ -28,6 +35,7 @@ class BarangController extends Controller
             'title' => $route['title'],
             'posisi' => $route['posisi'],
             'routeCreate' => $route['routeCreate'],
+            'routeList' => $route['routeList'],
             'routeEdit' => $route['routeEdit'],
             'routeDelete' => $route['routeDelete'],
             'routeImport' => $route['routeImport'],
@@ -38,6 +46,27 @@ class BarangController extends Controller
         $isi = $this->crudService->messageConfirmDelete($route['posisi']);
         confirmDelete($isi['title'], $isi['text']);
         return view('content.barang.main', $data);
+    }
+
+    /**
+     * Mengambil datatable barang berdasarkan
+     * request ajax
+     *
+     * @param \Illuminate\Http\Request $request
+     **/
+    public function dataTableBarang(Request $request)
+    {
+        if ($request->ajax()) {
+            $route = $this->dataTableService->getRouteDataTable($this->route);
+            $data = $this->barangService->getDataBarang($route['unit'], $route['posisi']);
+            if ($route['posisi'] === 'persediaan') {
+                $dataTables = $this->dataTableService->getDataTablePersediaan($data, $this->route);
+            } else {
+                $dataTables = $this->dataTableService->getDataTableInventaris($data, $this->route);
+            }
+
+            return $dataTables;
+        }
     }
 
     public function create()

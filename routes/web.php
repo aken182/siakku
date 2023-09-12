@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\auth\LoginController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\user\UserSettingController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\dashboard\AdminDashboard;
+use App\Http\Controllers\user\UserSettingController;
 use App\Http\Controllers\transaksi\PenyusutanController;
 use App\Http\Controllers\master_data\ProfilKpriController;
 use App\Http\Controllers\authentications\PermissionController;
@@ -97,3 +99,5 @@ Route::middleware(['auth'])->group((function () {
             Route::get('/set-permission', [PermissionController::class, 'index']);
       });
 }));
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

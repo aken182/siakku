@@ -26,63 +26,36 @@
                     <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" :routeexcel="$routeExcel" :routepdf="$routePdf" />
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>Kode</th>
-                                    <th>Nama</th>
-                                    <th>Jenis</th>
-                                    <th>TPK</th>
-                                    <th>Kuantitas</th>
-                                    <th>Harga Satuan</th>
-                                    @if ($posisi === 'inventaris')
-                                        <th>Nilai Buku</th>
-                                        <th>Umur Ekonomis</th>
-                                    @endif
-                                    <th>Harga Jual/Satuan</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($barang as $a)
-                                    <tr>
-                                        <td>{{ $a->kode_barang }}</td>
-                                        <td>{{ $a->nama_barang }}</td>
-                                        <td>{{ $a->jenis_barang }}</td>
-                                        <td>{{ $a->unit->nama }}</td>
-                                        @if ($a->stok == null || $a->stok == 0)
-                                            <td><span class="badge bg-danger">Stok kosong !</span></td>
-                                        @else
-                                            <td>{{ $a->stok . ' ' . $a->satuan->nama_satuan }}</td>
-                                        @endif
-                                        <td>{{ cek_uang($a->harga_barang) . '/' . $a->satuan->nama_satuan }}</td>
-                                        @if ($posisi === 'inventaris')
-                                            <td>{{ cek_uang($a->nilai_saat_ini) . '/' . $a->satuan->nama_satuan }}</td>
-                                            <td>{{ $a->umur_ekonomis }} tahun</td>
-                                        @endif
-                                        <td>{{ cek_uang($a->harga_jual) . '/' . $a->satuan->nama_satuan }}</td>
-                                        <td>
-                                            @php
-                                                $routee = route($routeEdit, $a->id_barang);
-                                                $routed = route($routeDelete, $a->id_barang);
-                                            @endphp
-                                            <x-table.action :routeedit="$routee" :routedelete="$routed" />
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="{{ $posisi === 'inventaris' ? '10' : '8' }}"
-                                            style="text-align: center">
-                                            Data Kosong.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                    <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
+                    <table class="table table-hover" id="yajra-datatable">
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Jenis</th>
+                                <th>TPK</th>
+                                <th>Kuantitas</th>
+                                <th>Harga</th>
+                                @if ($posisi === 'inventaris')
+                                    <th>Nilai Buku</th>
+                                    <th>Umur Ekonomis</th>
+                                @endif
+                                <th>Harga Jual</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
     </div>
+@endsection
+@section('pageScript')
+    @if ($posisi === 'persediaan')
+        <script type="text/javascript" src="{{ asset('assets/admin') }}/js/siakku-custom/datatable-persediaan.js"></script>
+    @else
+        <script type="text/javascript" src="{{ asset('assets/admin') }}/js/siakku-custom/datatable-inventaris.js"></script>
+    @endif
 @endsection

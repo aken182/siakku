@@ -1,8 +1,12 @@
 <div class="row">
     <div class="col">
         @if (isset($routecreate))
-            <a class="btn btn-sm btn-outline-primary" type="button" href="{{ $routecreate }}">Tambah
-                Data</a>
+            <a class="btn btn-sm btn-outline-primary" type="button"
+                href="{{ $routecreate }}">{{ $createtitle ?? 'Tambah Data' }}</a>
+        @endif
+        @if (isset($routecreatee))
+            <a class="btn btn-sm btn-outline-primary" type="button"
+                href="{{ $routecreatee }}">{{ $createetitle ?? 'Tambah Data Lain' }}</a>
         @endif
         @if (isset($routeexcel))
             <a class="btn btn-sm btn-outline-success" target="_blank" type="button" href="{{ $routeexcel }}">Export

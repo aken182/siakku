@@ -28,11 +28,6 @@ class Anggota extends Model
         return $this->hasMany(Main_simpanan::class, 'id_anggota');
     }
 
-    public function detail_piutang()
-    {
-        return $this->hasMany(Detail_piutang::class, 'id_anggota');
-    }
-
     public function detail_penarikan()
     {
         return $this->hasMany(Detail_penarikan::class, 'id_anggota');

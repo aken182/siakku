@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\master_data;
 
+use App\DataTables\AnggotaDataTable;
 use App\Services\AnggotaService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AnggotaRequest;
@@ -21,20 +22,18 @@ class AnggotaController extends Controller
         $this->crudService = new CrudService;
     }
 
-    public function index()
+    /**
+     * Menampilkan data anggota menggunakan
+     * yajra datatable
+     *
+     * @param \App\DataTables\AnggotaDataTable $dataTable
+     * @return mixed
+     **/
+    public function index(AnggotaDataTable $dataTable)
     {
-
-        $data = [
-            'title' => 'Anggota',
-            'routeCreate' => route('mdu-anggota.create'),
-            'routeImport' => route('mdu-anggota.form-import'),
-            'routeExcel' => route('mdu-anggota.export-excel'),
-            'routePdf' => route('mdu-anggota.export-pdf'),
-            'anggota' => $this->anggotaService->getDataAnggotaView(),
-        ];
         $isi = $this->crudService->messageConfirmDelete('Anggota');
         confirmDelete($isi['title'], $isi['text']);
-        return view('content.anggota.main', $data);
+        return $dataTable->render('content.anggota.main');
     }
 
     public function create()

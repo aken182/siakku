@@ -17,52 +17,25 @@ class AccountingService
        * berdasarkan request.
        *
        * @param mixed $request
-       * @param mixed $jenis
        * @return $data
        **/
       public function getTanggal($request)
       {
-            $data = [];
-            if ($request->input('bulan') == null && $request->input('tahun') == null) {
-                  $data['bulan'] = date('m');
-                  $data['tahun'] = date('Y');
-            } elseif ($request->input('bulan') == null && $request->input('tahun') != null) {
-                  $data['bulan'] = date('m');
-                  $data['tahun'] = $request->input('tahun');
-            } elseif ($request->input('bulan') != null && $request->input('tahun') == null) {
-                  $data['bulan'] = $request->input('bulan');
-                  $data['tahun'] = date('Y');
-            } else {
-                  $data['bulan'] = $request->input('bulan');
-                  $data['tahun'] = $request->input('tahun');
-            }
+            $data = [
+                  'bulan' => $request->input('bulan') ?: date('m'),
+                  'tahun' => $request->input('tahun') ?: date('Y'),
+            ];
             return $data;
       }
 
       public function getTanggalIdCoa($request)
       {
-            $data = [];
-            if ($request->input('bulan') == null && $request->input('tahun') == null && $request->input('id_coa') == null) {
-                  $data['bulan'] = date('m');
-                  $data['tahun'] = date('Y');
-                  $data['id_coa'] = 1;
-            } elseif ($request->input('bulan') == null && $request->input('tahun') != null && $request->input('id_coa') != null) {
-                  $data['bulan'] = date('m');
-                  $data['tahun'] = $request->input('tahun');
-                  $data['id_coa'] = $request->input('id_coa');
-            } elseif ($request->input('bulan') != null && $request->input('tahun') == null && $request->input('id_coa') != null) {
-                  $data['bulan'] = $request->input('bulan');
-                  $data['tahun'] = date('Y');
-                  $data['id_coa'] = $request->input('id_coa');
-            } elseif ($request->input('bulan') != null && $request->input('tahun') != null && $request->input('id_coa') == null) {
-                  $data['bulan'] = $request->input('bulan');
-                  $data['tahun'] = $request->input('tahun');
-                  $data['id_coa'] = 1;
-            } else {
-                  $data['bulan'] = $request->input('bulan');
-                  $data['tahun'] = $request->input('tahun');
-                  $data['id_coa'] = $request->input('id_coa');
-            }
+            $data = [
+                  'bulan' => $request->input('bulan') ?: date('m'),
+                  'tahun' => $request->input('tahun') ?: date('Y'),
+                  'id_coa' => $request->input('id_coa') ?: 1,
+            ];
+
             return $data;
       }
 
@@ -77,20 +50,14 @@ class AccountingService
       public function getDataToJurnal()
       {
             $cek_route = Route::currentRouteName();
-            $data = [];
-            if ($cek_route == "lut-jurnal") {
-                  $data['title'] = 'Jurnal Umum Unit Pertokoan';
-                  $data['unit'] = 'Pertokoan';
-                  $data['route_post'] = 'lut-jurnal';
-                  $data['route_pdf'] = 'lut-jurnal.pdf';
-                  $data['route_detail'] = 'lut-jurnal.detail';
-            } else {
-                  $data['title'] = 'Jurnal Umum Unit Simpan Pinjam';
-                  $data['unit'] = 'Simpan Pinjam';
-                  $data['route_post'] = 'lus-jurnal';
-                  $data['route_pdf'] = 'lus-jurnal.pdf';
-                  $data['route_detail'] = 'lus-jurnal.detail';
-            }
+            $data = [
+                  'title' => ($cek_route == "lut-jurnal") ? 'Jurnal Umum Unit Pertokoan' : 'Jurnal Umum Unit Simpan Pinjam',
+                  'unit' => ($cek_route == "lut-jurnal") ? 'Pertokoan' : 'Simpan Pinjam',
+                  'route_post' => ($cek_route == "lut-jurnal") ? 'lut-jurnal' : 'lus-jurnal',
+                  'route_pdf' => ($cek_route == "lut-jurnal") ? 'lut-jurnal.pdf' : 'lus-jurnal.pdf',
+                  'route_detail' => ($cek_route == "lut-jurnal") ? 'lut-jurnal.detail' : 'lus-jurnal.detail',
+            ];
+
             return $data;
       }
 

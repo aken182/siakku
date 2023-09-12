@@ -9,6 +9,7 @@ use App\Http\Controllers\master_data\PengajuanPinjamanController;
 
 Route::controller(BarangController::class)->group(function () {
       Route::get('/inventaris/unit-sp', 'index')->name('mds-inventaris');
+      Route::get('/inventaris/unit-sp/list', 'dataTableBarang')->name('mds-inventaris.list');
       Route::get('/inventaris/unit-sp/create', 'create')->name('mds-inventaris.create');
       Route::post('/inventaris/unit-sp/store', 'store')->name('mds-inventaris.store');
       Route::get('/inventaris/unit-sp/edit/{id}', 'edit')->name('mds-inventaris.edit');
