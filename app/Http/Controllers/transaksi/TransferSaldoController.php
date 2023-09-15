@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Route;
 use App\Services\TransferSaldoService;
 use App\Http\Requests\TransferSaldoRequest;
+use App\Services\dataTable\DataTableTransferService;
 
 class TransferSaldoController extends Controller
 {
       protected $transaksiService;
       protected $transferSaldoService;
+      protected $dataTableService;
       protected $unit;
       protected $route;
       protected $routeMain;
@@ -24,6 +26,7 @@ class TransferSaldoController extends Controller
       {
             $this->transaksiService = new TransaksiService;
             $this->transferSaldoService = new TransferSaldoService;
+            $this->dataTableService = new DataTableTransferService;
             $this->route = Route::currentRouteName();
             $this->unit = $this->transferSaldoService->getUnitTransaksi($this->route);
             $this->routeMain = $this->transferSaldoService->getRouteMain($this->unit);
@@ -40,11 +43,29 @@ class TransferSaldoController extends Controller
             $data = [
                   'title' => 'Transfer Saldo Kas & Bank',
                   'routeCreate' => $route['create'],
+                  'routeList' => $route['list'],
                   'routeShow' => $route['show'],
                   'unit' => $this->unit,
-                  'transaksi' => $this->transaksiService->getHistoryTransaction($this->route, $this->unit),
+                  // 'transaksi' => $this->transaksiService->getHistoryTransaction($this->route, $this->unit),
             ];
             return view('content.transfer-saldo.main', $data);
+      }
+
+      /**
+       * Mengambil data tabel transfer saldo 
+       * berdasarkan request ajax
+       *
+       * @param \Illuminate\Http\Request $request
+       * @return \Illuminate\Http\JsonResponse|void
+       **/
+      public function dataTable(Request $request)
+      {
+            if ($request->ajax()) {
+                  $data = $this->transaksiService->getHistoryTransaction($this->route, $this->unit);
+                  $route = $this->transferSaldoService->getRouteToTable($this->route);
+                  $dataTables = $this->dataTableService->getDataTable($data, $route);
+                  return $dataTables;
+            }
       }
 
       /**
@@ -82,7 +103,7 @@ class TransferSaldoController extends Controller
             /*upload file nota transaksi dan get image*/
             $imageName = $this->transaksiService->addNotaTransaksi(
                   $request->file('nota_transaksi'),
-                  $request->file('nomor'),
+                  $request->input('nomor'),
                   'nota-transfer-saldo'
             );
 

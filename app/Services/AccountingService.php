@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Models\Coa;
+use App\Models\Barang;
 use App\Models\Jurnal;
+use App\Models\Barang_eceran;
 use Illuminate\Support\Facades\DB;
+use App\Services\ImportExportService;
 use Illuminate\Support\Facades\Route;
 
 class AccountingService
@@ -582,6 +585,26 @@ class AccountingService
       }
 
       /**
+       * Dokumentasi getIdPenjualanPersediaan
+       *
+       * Mengambil id_coa penjualan persediaan dari tabel coa
+       * pada database dengan parameter tertentu
+       *
+       * @return mixed $data
+       **/
+      public function getIdPenjualanPersediaan()
+      {
+            $data = [];
+            $data['id_konsumsi'] = self::getIdCoa("%Penjualan Barang Konsumsi%");
+            $data['id_sandang'] = self::getIdCoa("%Penjualan Barang Sandang%");
+            $data['id_kosmetik'] = self::getIdCoa("%Penjualan Barang Kosmetik%");
+            $data['id_atm'] = self::getIdCoa("%Penjualan Barang ATM%");
+            $data['id_elektronik'] = self::getIdCoa("%Penjualan Barang Elektronik%");
+            $data['id_bangunan'] = self::getIdCoa("%Penjualan Barang Bangunan%");
+            return $data;
+      }
+
+      /**
        * Dokumentasi getNeracaSaldo
        *
        * Mengambil data neraca dan kategori yang sudah
@@ -638,5 +661,190 @@ class AccountingService
                               ->where('unit', $unit);
                   })->groupBy('jurnal.id_coa', 'coa.header', 'coa.kode', 'coa.nama', 'coa.kategori')
                   ->get();
+      }
+
+      /**
+       * Dokumentasi jurnalPenjualanPersediaan
+       *
+       * Merangkum semua fungsi untuk menyimpan penjualan
+       * persediaan ke dalam jurnal
+       *
+       * @param mixed $data
+       * @param mixed $id_debet
+       * @param mixed $id_transaksi
+       * @return void
+       **/
+      public function jurnalPenjualanPersediaan($data, $id_debet, $id_transaksi)
+      {
+            $total = self::getNilaiPenjualanPersediaan($data);
+            if ($total['jualPersediaan'] > 0) {
+                  $id_hpp = self::getIdCoa("%Harga Pokok Penjualan Persediaan%");
+                  $model = new Jurnal;
+                  $penjualan = self::getIdPenjualanPersediaan();
+                  $coa = self::getIdPersediaan();
+
+                  /**Penjualan */
+                  jurnal($model, $id_debet, $id_transaksi, 'debet', $total['jualPersediaan']);
+                  jurnal($model, $penjualan['id_konsumsi'], $id_transaksi, 'kredit', $total['jualKonsumsi']);
+                  jurnal($model, $penjualan['id_sandang'], $id_transaksi, 'kredit', $total['jualSandang']);
+                  jurnal($model, $penjualan['id_kosmetik'], $id_transaksi, 'kredit', $total['jualKosmetik']);
+                  jurnal($model, $penjualan['id_atm'], $id_transaksi, 'kredit', $total['jualAtm']);
+                  jurnal($model, $penjualan['id_elektronik'], $id_transaksi, 'kredit', $total['jualElektronik']);
+                  jurnal($model, $penjualan['id_bangunan'], $id_transaksi, 'kredit', $total['jualBangunan']);
+                  /**Depresiasi */
+                  jurnal($model, $id_hpp, $id_transaksi, 'debet', $total['persediaan']);
+                  jurnal($model, $coa['id_konsumsi'], $id_transaksi, 'kredit', $total['konsumsi']);
+                  jurnal($model, $coa['id_sandang'], $id_transaksi, 'kredit', $total['sandang']);
+                  jurnal($model, $coa['id_kosmetik'], $id_transaksi, 'kredit', $total['kosmetik']);
+                  jurnal($model, $coa['id_atm'], $id_transaksi, 'kredit', $total['atm']);
+                  jurnal($model, $coa['id_elektronik'], $id_transaksi, 'kredit', $total['elektronik']);
+                  jurnal($model, $coa['id_bangunan'], $id_transaksi, 'kredit', $total['bangunan']);
+            }
+      }
+
+      /**
+       * Dokumentasi getNilaiPenjualanPersediaan
+       *
+       * Mengambil nilai persediaan dari transaksi 
+       * penjualan sebagai parameter dalam input jurnal
+       * penjualan
+       *
+       * @param mixed $data
+       * @return array 
+       **/
+      public function getNilaiPenjualanPersediaan($data)
+      {
+            $totals = [
+                  'konsumsi' => 0,
+                  'sandang' => 0,
+                  'kosmetik' => 0,
+                  'atm' => 0,
+                  'elektronik' => 0,
+                  'bangunan' => 0,
+                  'jualKonsumsi' => 0,
+                  'jualSandang' => 0,
+                  'jualKosmetik' => 0,
+                  'jualAtm' => 0,
+                  'jualElektronik' => 0,
+                  'jualBangunan' => 0,
+                  'persediaan' => 0,
+                  'jualPersediaan' => 0,
+            ];
+
+            foreach ($data as $datum) {
+                  $barang = self::getDataBarangToJurnal($datum['id_barang'], $datum['id_eceran']);
+
+                  if ($barang && $barang['posisi_pi'] === 'persediaan') {
+                        $subtotal = $datum['qty'] * $barang['harga_beli'];
+                        $jenisBarang = strtolower(str_replace('Barang ', '', $barang['kegunaan']));
+
+                        $totals[$jenisBarang] += $subtotal;
+                        $totals['jual' . ucfirst($jenisBarang)] += $datum['subtotal'];
+                        $totals['persediaan'] += $subtotal;
+                        $totals['jualPersediaan'] += $datum['subtotal'];
+                  }
+            }
+
+            return $totals;
+      }
+
+      public function getDataBarangToJurnal($id_barang, $id_eceran)
+      {
+            if ($id_eceran === "") {
+                  $data['jenis_barang'] = 'grosir';
+                  $data['id_barang'] = $id_barang;
+                  $data['id_eceran'] = null;
+                  $grosir = Barang::with('unit')->where('id_barang', $id_barang)->first();
+                  $data['id_satuan'] = $grosir->id_satuan;
+                  $data['stok'] = $grosir->stok;
+                  $data['posisi_pi'] = $grosir->posisi_pi;
+                  $data['kegunaan'] = $grosir->jenis_barang;
+                  $data['nilai_buku'] = $grosir->nilai_saat_ini;
+                  $data['harga_beli'] = $grosir->harga_barang;
+            } else {
+                  $data['jenis_barang'] = 'eceran';
+                  $data['id_barang'] = null;
+                  $data['id_eceran'] = $id_eceran;
+                  $eceran = Barang_eceran::with(['barang', 'barang.unit'])->where('id_eceran', $id_eceran)->first();
+                  $data['id_satuan'] = $eceran->id_satuan;
+                  $data['stok'] = $eceran->stok;
+                  $data['posisi_pi'] = $eceran->barang->posisi_pi;
+                  $data['kegunaan'] = $eceran->barang->jenis_barang;
+                  $data['nilai_buku'] = $eceran->nilai_saat_ini;
+                  $data['harga_beli'] = $eceran->harga_barang;
+            }
+            return $data;
+      }
+      /**
+       * Dokumentasi jurnalPenjualanInventaris
+       *
+       * Merangkum semua fungsi untuk menyimpan penjualan
+       * inventaris ke dalam jurnal
+       *
+       * @param mixed $data
+       * @param mixed $id_debet
+       * @param mixed $id_transaksi
+       * @return void
+       **/
+      public function jurnalPenjualanInventaris($data, $id_debet, $id_transaksi)
+      {
+            $total = self::getNilaiPenjualanAsset($data);
+            if ($total['jualInventaris'] > 0) {
+                  $id_hpp = self::getIdCoa("%Harga Pokok Penjualan Inventaris%");
+                  $id_kredit = self::getIdCoa("%Pendapatan Penjualan Barang%");
+                  $model = new Jurnal;
+                  $coa = self::getIdInventaris();
+                  /**Penjualan */
+                  jurnal($model, $id_debet, $id_transaksi, 'debet', $total['jualInventaris']);
+                  jurnal($model, $id_kredit, $id_transaksi, 'kredit', $total['jualInventaris']);
+                  /**Depresiasi */
+                  jurnal($model, $id_hpp, $id_transaksi, 'debet', $total['inventaris']);
+                  jurnal($model, $coa['id_perlengkapan'], $id_transaksi, 'kredit', $total['perlengkapan']);
+                  jurnal($model, $coa['id_peralatan'], $id_transaksi, 'kredit', $total['peralatan']);
+                  jurnal($model, $coa['id_mesin'], $id_transaksi, 'kredit', $total['mesin']);
+                  jurnal($model, $coa['id_kendaraan'], $id_transaksi, 'kredit', $total['kendaraan']);
+                  jurnal($model, $coa['id_gedung'], $id_transaksi, 'kredit', $total['gedung']);
+                  jurnal($model, $coa['id_tanah'], $id_transaksi, 'kredit', $total['tanah']);
+            }
+      }
+
+      /**
+       * Dokumentasi getNilaiPenjualanAsset
+       *
+       * Mengambil nilai Inventaris dari transaksi 
+       * penjualan sebagai parameter dalam input jurnal
+       * penjualan
+       *
+       * @param mixed $data
+       * @return array 
+       **/
+      public function getNilaiPenjualanAsset($data)
+      {
+            $totals = array_fill_keys([
+                  'inventaris',
+                  'perlengkapan',
+                  'peralatan',
+                  'mesin',
+                  'kendaraan',
+                  'gedung',
+                  'tanah',
+                  'jualInventaris',
+            ], 0);
+
+            foreach ($data as $datum) {
+                  $barang = self::getDataBarangToJurnal($datum['id_barang'], $datum['id_eceran']);
+
+                  if ($barang && $barang['posisi_pi'] === 'inventaris') {
+                        $subtotal = $datum['qty'] * $barang['nilai_buku'];
+                        $totalPenjualan = $datum['qty'] * $datum['harga'];
+
+                        $kategori = strtolower($barang['kegunaan']);
+                        $totals[$kategori] += $subtotal;
+                        $totals['inventaris'] += $subtotal;
+                        $totals['jualInventaris'] += $totalPenjualan;
+                  }
+            }
+
+            return $totals;
       }
 }

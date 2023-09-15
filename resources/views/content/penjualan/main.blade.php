@@ -24,24 +24,51 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Manajemen Penjualan</h4>
-                    <x-button.master-data-button :routecreate="$routeCreate" :createtitle="$createTitle" :createetitle="$createTitle2" :routecreatee="$routeCreate2" />
+                    <div class="btn-group mb-1">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle me-1" type="button"
+                                id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"><i class="bi bi-plus"></i>Penjualan
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{{ $createLrtk }}">TPK Larantuka</a>
+                                <a class="dropdown-item" href="{{ $createWrg }}">TPK Waiwerang</a>
+                                <a class="dropdown-item" href="{{ $createPsr }}">TPK Pasar Baru</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group mb-1">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle me-1" type="button"
+                                id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"><i class="bi bi-plus"></i>Penjualan Lainnya
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{{ $createLrtk2 }}">TPK Larantuka</a>
+                                <a class="dropdown-item" href="{{ $createWrg2 }}">TPK Waiwerang</a>
+                                <a class="dropdown-item" href="{{ $createPsr2 }}">TPK Pasar Baru</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
-                        <table class="table table-bordered table-hover penjualan-table">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th>Nomor</th>
-                                    <th>Tanggal</th>
-                                    <th>Keterangan</th>
-                                    <th>Status</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover penjualan-table">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Nomor</th>
+                                        <th>Tanggal</th>
+                                        <th>Keterangan</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

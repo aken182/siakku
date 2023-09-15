@@ -29,8 +29,8 @@ class TransaksiService
                   case 'slsp-inventaris':
                         $data = self::saldoAwalBarang($unit, 'inventaris');
                         break;
-                  case 'transfer-toko':
-                  case 'transfer-sp':
+                  case 'transfer-toko.list':
+                  case 'transfer-sp.list':
                         $data = self::transferSaldoKasBank($unit);
                         break;
                   case 'ptk-penjualan.list':
@@ -160,6 +160,6 @@ class TransaksiService
       public function transferSaldoKasBank($unit)
       {
             return Transaksi::where('detail_tabel', 'detail_transfer_saldo')
-                  ->where('unit', $unit)->paginate(15);
+                  ->where('unit', $unit)->get();
       }
 }

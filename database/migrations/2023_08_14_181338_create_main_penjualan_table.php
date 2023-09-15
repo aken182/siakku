@@ -26,7 +26,7 @@ return new class extends Migration
             $table->enum('jenis_penjualan', ['kredit', 'debet']);
             $table->enum('status_penjualan', ['belum terbayar', 'belum lunas', 'lunas']);
             $table->unsignedBigInteger('jumlah_penjualan');
-            $table->unsignedBigInteger('saldo_piutang')->nullable();
+            $table->unsignedBigInteger('saldo_piutang')->nullable()->default(0);
             $table->timestamps();
         });
     }

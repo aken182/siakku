@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
-class PenjualanRequest extends FormRequest
+class PenjualanBarangRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,19 +27,24 @@ class PenjualanRequest extends FormRequest
         $rules = [
             'tgl_transaksi' => 'required|date|before_or_equal:today',
             'cek_penjualan' => 'required',
+            'pembeli' => 'required',
             'nomor' => 'required|unique:transaksi,kode',
-            'no_bukti' => 'required',
             'nota_transaksi' => 'required|mimes:jpeg,png,jpg,gif,svg|max:1048',
             'metode_transaksi' => 'required',
-            'pembeli' => 'required',
-            'id_kredit' => 'required',
-            'keterangan' => 'required',
-            'data' => 'required',
+            'no_bukti' => 'required',
+            'data_barang' => 'required',
             'total_transaksi' => 'required',
         ];
 
         if ($this->input('cek_penjualan') === 'penyesuaian') {
             $rules['id_penjualan_penyesuaian'] = 'required';
+        }
+        if ($this->input('pembeli') === 'pegawai') {
+            $rules['pegawai_id'] = 'required';
+        }
+
+        if ($this->input('pembeli') === 'non-pegawai') {
+            $rules['nama_bukan_pegawai'] = 'required';
         }
 
         if ($this->input('metode_transaksi') === 'Kas') {
@@ -54,14 +59,6 @@ class PenjualanRequest extends FormRequest
             $rules['id_piutang'] = 'required';
         }
 
-        if ($this->input('pembeli') === 'pegawai') {
-            $rules['pegawai_id'] = 'required';
-        }
-
-        if ($this->input('pembeli') === 'non-pegawai') {
-            $rules['nama_bukan_pegawai'] = 'required';
-        }
-
         return $rules;
     }
 
@@ -72,22 +69,20 @@ class PenjualanRequest extends FormRequest
             'tgl_transaksi.before_or_equal' => 'Tanggal transaksi tidak boleh lebih besar dari tanggal hari ini!',
             'cek_penjualan.required' => 'Jenis penjualan wajib dipilih!',
             'id_penjualan_penyesuaian.required_if' => 'Nomor transaksi penyesuaian penjualan wajib dipilih!',
-            'nomor.required' => 'Nomor transaksi wajib diisi!',
-            'nomor.unique' => 'Nomor transaksi harus unik!',
-            'no_bukti.required' => 'Nomor bukti wajib diisi!',
             'pembeli.required' => 'Data Pembeli wajib diisi!',
             'pegawai_id.required_if' => 'Nama pegawai atau karyawan pembeli wajib dipilih!',
             'nama_bukan_pegawai.required_if' => 'Nama pembeli wajib diisi!',
+            'nomor.required' => 'Nomor transaksi wajib diisi!',
+            'nomor.unique' => 'Nomor transaksi sudah ada dalam database. Ganti nomor transaksi !',
             'nota_transaksi.required' => 'File nota transaksi wajib diisi!',
             'nota_transaksi.mimes' => 'Jenis file nota transaksi harus jpeg/png/jpg/gif/svg!',
             'nota_transaksi.max' => 'Ukuran file nota transaksi tidak boleh lebih besar dari 1048 kb!',
-            'metode_transaksi.required' => 'Metode transaksi wajib pilih!',
+            'metode_transaksi.required' => 'Metode pembayaran wajib dipilih!',
             'id_kas.required_if' => 'Rekening kas wajib dipilih!',
             'id_bank.required_if' => 'Rekening bank wajib dipilih!',
             'id_piutang.required_if' => 'Rekening piutang wajib dipilih!',
-            'id_kredit.required' => 'Nama akun wajib dipilih!',
-            'keterangan.required' => 'Keterangan wajib diisi!',
-            'data.required' => 'Detail transaksi wajib diisi!',
+            'no_bukti.required' => 'Nomor bukti wajib diisi!',
+            'data_barang.required' => 'Data keranjang wajib diisi!',
             'total_transaksi.required' => 'Total transaksi tidak boleh kosong!'
         ];
     }

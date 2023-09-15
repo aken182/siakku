@@ -16,10 +16,9 @@ class DataTablePenjualanService
       public function getResultKode($data, $route)
       {
             $tipeClass = $data['tipe'] == 'kadaluwarsa' ? 'text-danger' : 'text-primary';
-            $tipeTitle = $data['tipe'] == 'kadaluwarsa' ? 'Detail Transaksi Kadaluwarsa' : 'Detail Transaksi';
             $result = '<a class="' . $tipeClass . '" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
-          data-bs-html="true" href="' . route($route, ['id' => Crypt::encrypt($data['id_transaksi']), 'detail' => $data['detail_tabel']]) . '"
-          title="<i class=\'bx bx-show bx-xs\'></i> <span>' . $tipeTitle . '</span>">' . $data['kode'] . '</a>';
+             data-bs-html="true" href="' . route($route, ['id' => Crypt::encrypt($data['id_transaksi']), 'detail' => $data['jenis_transaksi']]) . '
+             " title="Klik disini untuk melihat detail !">' . $data['kode'] . '</a>';
             return $result;
       }
 
@@ -30,7 +29,7 @@ class DataTablePenjualanService
        * @param mixed $unit
        * @return string
        **/
-      public function getResultStatus($data, $unit)
+      public function getResultStatus($data, $unit, $route)
       {
             if ($data['tipe'] == 'kadaluwarsa') {
                   $result = '<span class="text-danger">Kadaluwarsa</span>';
@@ -38,13 +37,13 @@ class DataTablePenjualanService
                   if ($data['status'] != 'lunas') {
                         $result = '<a class="text-warning text-capitalize" data-bs-toggle="tooltip"
                           data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                          href="' . route('ptk-penjualan.create-pelunasan', ['detail_tabel' => $data['detail_tabel'], 'unit' => $unit]) . '"
-                          title="<i class=\'bx bx-show bx-xs\' ></i> <span>Lunasi Piutang !</span>">' . $data['status'] . '</a>';
+                          href="' . route('ptk-penjualan.create-pelunasan', ['detail' => $data['jenis_transaksi'], 'unit' => $unit, 'route' => $route]) . '"
+                          title="Klik disini untuk lunasi tagihan !">' . $data['status'] . '</a>';
                   } else {
                         $result = '<a class="text-success text-capitalize" data-bs-toggle="tooltip"
                           data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                          href="' . route('ptk-penjualan.show', ['id' => Crypt::encrypt($data['id_transaksi']), 'detail' => $data['detail_tabel']]) . '"
-                          title="<i class=\'bx bx-show bx-xs\' ></i> <span>Detail Transaksi</span>">' . $data['status'] . '</a>';
+                          href="' . route('ptk-penjualan.show', ['id' => Crypt::encrypt($data['id_transaksi']), 'detail' => $data['jenis_transaksi']]) . '"
+                          title="Klik disini untuk melihat detail !">' . $data['status'] . '</a>';
                   }
             }
             return $result;
@@ -59,7 +58,7 @@ class DataTablePenjualanService
        * @return \Illuminate\Http\JsonResponse
        *
        **/
-      public function getDataTablePenjualan($data, $route, $unit)
+      public function getDataTablePenjualan($data, $route, $mainRoute, $unit)
       {
             return DataTables::of($data)
                   ->editColumn('kode', function ($data) use ($route) {
@@ -69,12 +68,12 @@ class DataTablePenjualanService
                   ->editColumn('tgl_transaksi', function ($data) {
                         return date('d-m-Y', strtotime($data['tgl_transaksi']));
                   })
-                  ->editColumn('status', function ($data) use ($unit) {
-                        $result = self::getResultStatus($data, $unit);
+                  ->editColumn('status', function ($data) use ($unit, $mainRoute) {
+                        $result = self::getResultStatus($data, $unit, $mainRoute);
                         return $result;
                   })
                   ->editColumn('total', function ($data) {
-                        return buatrp($data['total']);
+                        return '<div style="text-align:right;">' . buatrp($data['total']) . '</div>';
                   })
                   ->rawColumns(['kode', 'tgl_transaksi', 'status', 'total'])
                   ->make(true);

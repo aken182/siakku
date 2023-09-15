@@ -27,8 +27,9 @@
                     <x-button.master-data-button :routecreate="$routeCreate" />
                 </div>
                 <div class="card-body">
+                    <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered table-striped trs-table">
                             <thead>
                                 <th>No.Transaksi</th>
                                 <th>Tanggal</th>
@@ -36,37 +37,14 @@
                                 <th>Jumlah</th>
                             </thead>
                             <tbody>
-                                @forelse ($transaksi as $item)
-                                    <tr>
-                                        <td><a href="{{ route($routeShow, Crypt::encrypt($item->id_transaksi)) }}"
-                                                class="{{ $item->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
-                                                data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
-                                                data-bs-html="true"
-                                                title="<i class='bx bx-show bx-xs' ></i> <span>{{ $item->tipe == 'kadaluwarsa' ? 'Detail Transaksi Kadaluwarsa' : 'Detail Transaksi' }}</span>">{{ $item->kode }}</a>
-                                        </td>
-                                        <td>{{ date('d-m-Y', strtotime($item->tgl_transaksi)) }}</td>
-                                        <td>{{ $item->keterangan }}</td>
-                                        <td style="text-align: right">{{ buatrp($item->total) }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" style="text-align: center">Data Kosong.</td>
-                                    </tr>
-                                @endforelse
                             </tbody>
                         </table>
-                        <div class="row">
-                            <div class="col">
-                                <div class="demo-inline-spacing">
-                                    <nav aria-label="Page navigation">
-                                        {{ $transaksi->WithQueryString()->links() }}
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
+@endsection
+@section('pageScript')
+    <script src="{{ asset('assets/admin') }}/js/siakku-custom/datatable-transaksi.js"></script>
 @endsection

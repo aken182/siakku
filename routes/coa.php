@@ -61,12 +61,14 @@ Route::controller(SaldoAwalController::class)->group(function () {
 Route::controller(TransferSaldoController::class)->group(function () {
       //unit toko
       Route::get('/transfer-saldo-kas-bank/unit-pertokoan', 'index')->name('transfer-toko');
+      Route::get('/transfer-saldo-kas-bank/unit-pertokoan/list', 'dataTable')->name('transfer-toko.list');
       Route::get('/transfer-saldo-kas-bank/unit-pertokoan/create', 'create')->name('transfer-toko.create');
       Route::post('/transfer-saldo-kas-bank/unit-pertokoan/store', 'store')->name('transfer-toko.store');
       Route::get('/transfer-saldo-kas-bank/unit-pertokoan/detail', 'detail')->name('transfer-toko.detail');
       Route::get('/transfer-saldo-kas-bank/unit-pertokoan/show/{id}', 'show')->name('transfer-toko.show');
       //unit sp
       Route::get('/transfer-saldo-kas-bank/unit-sp', 'index')->name('transfer-sp');
+      Route::get('/transfer-saldo-kas-bank/unit-sp/list', 'dataTable')->name('transfer-sp.list');
       Route::get('/transfer-saldo-kas-bank/unit-sp/create', 'create')->name('transfer-sp.create');
       Route::post('/transfer-saldo-kas-bank/unit-sp/store', 'store')->name('transfer-sp.store');
       Route::get('/transfer-saldo-kas-bank/unit-sp/detail', 'detail')->name('transfer-sp.detail');

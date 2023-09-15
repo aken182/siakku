@@ -54,4 +54,72 @@ class CoaService
                   }
             }
       }
+
+      /**
+       * Mengambil akun-akun penjualan barang dalam
+       * tabel coa pada database.
+       *
+       * @return mixed
+       **/
+      public function getAkunPenjualanBarang()
+      {
+            return Coa::where('nama', 'LIKE', "%Penjualan Barang%")->get();
+      }
+
+      /**
+       * Mengambil akun-akun pendapatan selain penjualan 
+       * barang dalam tabel coa pada database.
+       *
+       * @return mixed
+       **/
+      public function getAkunPendapatan()
+      {
+            return Coa::whereNot('nama', 'LIKE', "%Penjualan Barang%")
+                  ->where('kategori', "Pendapatan")
+                  ->orWhere(function ($query) {
+                        $query->where('nama', "Ekuitas Saldo Awal");
+                  })->get();
+      }
+
+      /**
+       * ambil id_coa untuk akun debet jurnal
+       *
+       * @param mixed $request
+       * @return mixed
+       **/
+      public function getIdDebet($request)
+      {
+            if ($request['metode_transaksi'] == "Kas") {
+                  return $request['id_kas'];
+            } elseif ($request['metode_transaksi'] == "Bank") {
+                  return $request['id_bank'];
+            } else {
+                  return $request['id_piutang'];
+            }
+      }
+
+      public function getKasBank()
+      {
+            return [
+                  'akunKas' => self::getCoaKas(),
+                  'akunBank' => self::getCoaBank(),
+                  'akunPiutang' => self::getCoaPiutang(),
+            ];
+      }
+
+      public function getCoaKas()
+      {
+            return Coa::where('nama', 'Kas')->get();
+      }
+
+      public function getCoaBank()
+      {
+            return Coa::where('subkategori', 'Kas & Bank')
+                  ->whereNot('nama', 'Kas')->get();
+      }
+
+      public function getCoaPiutang()
+      {
+            return Coa::where('subkategori', 'Piutang')->get();
+      }
 }

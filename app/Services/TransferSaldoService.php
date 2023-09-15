@@ -71,6 +71,7 @@ class TransferSaldoService
             return [
                   'create' => route("{$route}.create"),
                   'show' => "{$route}.show",
+                  'list' => "{$route}.list",
             ];
       }
 
@@ -89,6 +90,23 @@ class TransferSaldoService
             $store = [
                   'transfer-toko.create' => 'transfer-toko.store',
                   'transfer-sp.create' => 'transfer-sp.store',
+            ];
+            return $store[$route];
+      }
+
+      /**
+       * Mengambil route show untuk fungsi
+       * untuk digunakan dalam list transaksi.
+       *
+       * @param mixed $route
+       * @return string
+       * 
+       **/
+      public function getRouteToTable($route)
+      {
+            $store = [
+                  'transfer-toko.list' => 'transfer-toko.show',
+                  'transfer-sp.list' => 'transfer-sp.show',
             ];
             return $store[$route];
       }
