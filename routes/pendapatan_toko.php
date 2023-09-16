@@ -27,4 +27,11 @@ Route::controller(PelunasanController::class)->group(function () {
       Route::post('/penjualan/unit-pertokoan/pelunasan/store', 'store')->name('ptk-penjualan.store-pelunasan');
       Route::get('/penjualan/unit-pertokoan/pelunasan/detail', 'detail')->name('ptk-penjualan.detail-pelunasan');
 });
-Route::get('/pendapatan/unit-pertokoan', [PendapatanController::class, 'index'])->name('ptk-pendapatan');
+Route::controller(PendapatanController::class)->group(function () {
+      Route::get('/pendapatan/unit-pertokoan', 'index')->name('ptk-pendapatan');
+      Route::get('/pendapatan/unit-pertokoan/list', 'dataTable')->name('ptk-pendapatan.list');
+      Route::get('/pendapatan/unit-pertokoan/create', 'create')->name('ptk-pendapatan.create');
+      Route::get('/pendapatan/unit-pertokoan/show/{id}', 'show')->name('ptk-pendapatan.show');
+      Route::post('/pendapatan/unit-pertokoan/store', 'store')->name('ptk-pendapatan.store');
+      Route::get('/pendapatan/unit-pertokoan/detail', 'detail')->name('ptk-pendapatan.detail');
+});

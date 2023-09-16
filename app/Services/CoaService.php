@@ -122,4 +122,9 @@ class CoaService
       {
             return Coa::where('subkategori', 'Piutang')->get();
       }
+
+      public function getJenisPendapatan($id)
+      {
+            return Coa::where('id_coa', $id)->value('nama');
+      }
 }

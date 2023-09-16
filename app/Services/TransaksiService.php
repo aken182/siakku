@@ -37,6 +37,10 @@ class TransaksiService
                         $penjualan = new PenjualanService;
                         $data = $penjualan->getDataPenjualan($unit, $route);
                         break;
+                  case 'ptk-pendapatan.list':
+                  case 'pendapatan-unit-sp.list':
+                        $data = self::getPendapatan($unit);
+                        break;
                   default:
                         $data = 'kosong';
                         break;
@@ -146,7 +150,6 @@ class TransaksiService
             }
       }
 
-
       /**
        * Dokumentasi transferSaldoKasBank
        *
@@ -160,6 +163,21 @@ class TransaksiService
       public function transferSaldoKasBank($unit)
       {
             return Transaksi::where('detail_tabel', 'detail_transfer_saldo')
+                  ->where('unit', $unit)->get();
+      }
+
+      /**
+       * Dokumentasi getPendapatan
+       *
+       * Mengambil data transaksi pendapatan
+       * berdasarkan unit.
+       *
+       * @param mixed $unit
+       * @return mixed
+       **/
+      public function getPendapatan($unit)
+      {
+            return Transaksi::where('detail_tabel', 'detail_pendapatan')
                   ->where('unit', $unit)->get();
       }
 }

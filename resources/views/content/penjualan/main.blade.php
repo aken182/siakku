@@ -56,10 +56,10 @@
                         <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover penjualan-table">
-                                <thead class="table-primary">
+                                <thead class="table-success">
                                     <tr>
-                                        <th>Nomor</th>
-                                        <th>Tanggal</th>
+                                        <th>Nomor Transaksi</th>
+                                        <th>Tgl. Transaksi</th>
                                         <th>Keterangan</th>
                                         <th>Status</th>
                                         <th>Total</th>

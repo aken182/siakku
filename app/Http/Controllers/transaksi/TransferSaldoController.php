@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Route;
 use App\Services\TransferSaldoService;
 use App\Http\Requests\TransferSaldoRequest;
-use App\Services\dataTable\DataTableTransferService;
+use App\Services\dataTable\DataTableTransaksiService;
 
 class TransferSaldoController extends Controller
 {
@@ -26,7 +26,7 @@ class TransferSaldoController extends Controller
       {
             $this->transaksiService = new TransaksiService;
             $this->transferSaldoService = new TransferSaldoService;
-            $this->dataTableService = new DataTableTransferService;
+            $this->dataTableService = new DataTableTransaksiService;
             $this->route = Route::currentRouteName();
             $this->unit = $this->transferSaldoService->getUnitTransaksi($this->route);
             $this->routeMain = $this->transferSaldoService->getRouteMain($this->unit);
@@ -46,7 +46,6 @@ class TransferSaldoController extends Controller
                   'routeList' => $route['list'],
                   'routeShow' => $route['show'],
                   'unit' => $this->unit,
-                  // 'transaksi' => $this->transaksiService->getHistoryTransaction($this->route, $this->unit),
             ];
             return view('content.transfer-saldo.main', $data);
       }

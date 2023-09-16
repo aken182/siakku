@@ -5,7 +5,7 @@ namespace App\Services\dataTable;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
 
-class DataTableTransferService
+class DataTableTransaksiService
 {
       /**
        * mengambil value kolom stok

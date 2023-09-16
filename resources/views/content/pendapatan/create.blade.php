@@ -6,8 +6,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
                     <h3>{{ $title }}</h3>
-                    <p class="text-subtitle text-muted">Form Transaksi Penjualan unit {{ $unit }} - TPK
-                        {{ $tpk }}</p>
+                    <p class="text-subtitle text-muted">Form Transaksi Pendapatan unit {{ $unit }}</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -23,7 +22,7 @@
     <div class="page-content">
         <section class="section">
             <div class="card">
-                <form action="{{ route('ptk-penjualan.store-lainnya') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($routeStore) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="card shadow-none bg-transparent border border-grey mb-3">
@@ -36,52 +35,55 @@
                                             Panduan</span>
                                     </button>
                                 </div>
-                                <x-panduan.panduan-penjualan-hasil-jasa :title="$title">
-                                </x-panduan.panduan-penjualan-hasil-jasa>
+                                <x-panduan.panduan-pendapatan :title="$title">
+                                </x-panduan.panduan-pendapatan>
                             </div>
                             <div class="card-body">
                                 <div class="row mb-3">
-                                    <label class="form-label text-primary"><b>Jenis Penjualan</b></label>
+                                    <label class="form-label text-primary"><b>Jenis Pendapatan</b></label>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-check mt-3">
-                                                <input class="form-check-input @error('cek_penjualan') is-invalid @enderror"
-                                                    name="cek_penjualan" type="radio" value="baru" id="penjualanBaru" />
-                                                <label class="form-check-label" for="penjualanBaru">
-                                                    Penjualan Baru
+                                                <input
+                                                    class="form-check-input @error('cek_pendapatan') is-invalid @enderror"
+                                                    name="cek_pendapatan" type="radio" value="baru"
+                                                    id="pendapatanBaru" />
+                                                <label class="form-check-label" for="pendapatanBaru">
+                                                    Pendapatan Baru
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-check mt-3">
-                                                <input class="form-check-input @error('cek_penjualan') is-invalid @enderror"
-                                                    name="cek_penjualan" type="radio" value="penyesuaian"
-                                                    id="penjualanPenyesuaian" />
-                                                <label class="form-check-label" for="penjualanPenyesuaian">
+                                                <input
+                                                    class="form-check-input @error('cek_pendapatan') is-invalid @enderror"
+                                                    name="cek_pendapatan" type="radio" value="penyesuaian"
+                                                    id="pendapatanPenyesuaian" />
+                                                <label class="form-check-label" for="pendapatanPenyesuaian">
                                                     Penyesuaian
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
-                                    @error('cek_penjualan')
+                                    @error('cek_pendapatan')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="row mb-3 detail-penyesuaian-penjualan">
-                                    <label class="form-label text-primary"><b>Penjualan yang Disesuaikan</b></label>
+                                <div class="row mb-3 detail-penyesuaian-pendapatan">
+                                    <label class="form-label text-primary"><b>Pendapatan yang Disesuaikan</b></label>
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <select name="id_penjualan_penyesuaian" id="invoicePenyesuaianPenjualan"
-                                                    class="form-select choices invoicePenyesuaianPenjualan @error('id_penjualan_penyesuaian') is-invalid @enderror">
+                                                <select name="id_pendapatan_penyesuaian" id="invoicePenyesuaianPendapatan"
+                                                    class="form-select choices invoicePenyesuaianPendapatan @error('id_pendapatan_penyesuaian') is-invalid @enderror">
                                                     <option value="">Pilih Nomor Transaksi..</option>
-                                                    @foreach ($pnypenjualan as $p)
+                                                    @foreach ($pnyPendapatan as $p)
                                                         <option value="{{ $p->id_transaksi }}">{{ $p->kode }}</option>
                                                     @endforeach
                                                 </select>
-                                                @error('id_penjualan_penyesuaian')
+                                                @error('id_pendapatan_penyesuaian')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
                                                     </div>
@@ -90,20 +92,20 @@
                                             <div class="col-md-6">
                                                 <button class="btn btn-outline-primary me-1" type="button"
                                                     data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseDetailPenyesuaianPenjualan"
+                                                    data-bs-target="#collapseDetailPenyesuaianPendapatan"
                                                     aria-expanded="false"
-                                                    aria-controls="collapseDetailPenyesuaianPenjualan"><i
-                                                        class='bx bx-show'></i>
+                                                    aria-controls="collapseDetailPenyesuaianPendapatan"><i
+                                                        class='bi bi-show'></i>
                                                     Lihat Detail
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="collapse mt-3" id="collapseDetailPenyesuaianPenjualan">
+                                    <div class="collapse mt-3" id="collapseDetailPenyesuaianPendapatan">
                                         <div class="row">
                                             <div class="d-flex p-3 border">
                                                 <span>
-                                                    <div class="detailPenjualan"></div>
+                                                    <div id="detailPendapatan"></div>
                                                 </span>
                                             </div>
                                         </div>
@@ -148,13 +150,14 @@
                                         <div class="row">
                                             <div class="col mb-3">
                                                 <label for="nameBackdrop" class="form-label text-primary">Nomor</label>
-                                                <input type="hidden" name="tpk" value="{{ $tpk }}">
+                                                <input type="hidden" id="routeUrl"
+                                                    data-route="{{ route($routeDetail) }}" />
                                                 <input type="hidden" name="unit" value="{{ $unit }}">
-                                                <input type="hidden" name="jenis_transaksi" value="Penjualan Lainnya">
+                                                <input type="hidden" name="jenis_transaksi" value="Pendapatan">
                                                 <input type="text" id="nameBackdrop" name="nomor"
                                                     value="{{ $nomor }}"
                                                     class="form-control @error('nomor') is-invalid @enderror"
-                                                    placeholder="Masukkan Nomor Tagihan">
+                                                    placeholder="Masukkan Nomor Transaksi">
                                                 @error('nomor')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
@@ -175,9 +178,6 @@
                                                     </div>
                                                 @enderror
                                             </div>
-                                        </div>
-                                        <div class="jns-pembeli">
-                                            <x-pendapatan.pembeli-atribut :pegawai="$pegawai" />
                                         </div>
                                         <div class="row">
                                             <div class="col mb-3">
@@ -226,9 +226,8 @@
                                         <thead class="table-dark text-light">
                                             <tr>
                                                 <th>Nama</th>
-                                                <th style="width:120px">Jenis</th>
                                                 <th style="width:100px">Qty</th>
-                                                <th style="width:230px">Satuan</th>
+                                                <th style="width:250px">Satuan</th>
                                                 <th style="width:180px">Harga Satuan</th>
                                                 <th style="width:180px">Total</th>
                                                 <th style="width:50px">Aksi</th>
@@ -243,13 +242,6 @@
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
-                                                </td>
-                                                <td>
-                                                    <select name="data[0][jenis]" class="form-select" required>
-                                                        <option value="" selected>Pilih</option>
-                                                        <option value="Hasil">Hasil</option>
-                                                        <option value="Jasa">Jasa</option>
-                                                    </select>
                                                 </td>
                                                 <td><input class="form-control" type="number" id="qty0"
                                                         step="0.25" name="data[0][kuantitas]" onKeyUp="hitung(0)"
@@ -279,8 +271,8 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="5" style="text-align:right">
-                                                    <h5 class="text-dark">Total Penjualan</h5>
+                                                <td colspan="4" style="text-align:right">
+                                                    <h5 class="text-dark">Total Pendapatan</h5>
                                                 </td>
                                                 <td style="text-align:right">
                                                     <h5 id="total_semua"></h5>
@@ -325,7 +317,7 @@
     <script>
         var satuanJson = @json($satuans);
     </script>
-    <script src="{{ asset('assets/admin') }}/js/siakku-custom/penjualan-lainnya.js"></script>
-    <script src="{{ asset('assets/admin') }}/js/siakku-custom/penyesuaian-penjualan-lainnya.js"></script>
+    <script src="{{ asset('assets/admin') }}/js/siakku-custom/pendapatan.js"></script>
+    <script src="{{ asset('assets/admin') }}/js/siakku-custom/penyesuaian-pendapatan.js"></script>
     <script src="{{ asset('assets/admin') }}/js/siakku-service/kafta-helpers-a.js"></script>
 @endsection

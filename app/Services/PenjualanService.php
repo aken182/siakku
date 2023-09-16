@@ -69,45 +69,6 @@ class PenjualanService
             }
       }
 
-      public function createTransaksi($request, $invoicepny, $imageName, $detailTransaksi)
-      {
-            //--input ke tabel transaksi--//
-            Transaksi::create([
-                  'kode' => $request->input('nomor'),
-                  'kode_pny' => $invoicepny,
-                  'no_bukti' => $request->input('no_bukti'),
-                  'tipe' => $request->input('cek_penjualan'),
-                  'tgl_transaksi' => $request->input('tgl_transaksi'),
-                  'detail_tabel' => $detailTransaksi,
-                  'jenis_transaksi' => $request->input('jenis_transaksi'),
-                  'metode_transaksi' => $request->input('metode_transaksi'),
-                  'nota_transaksi' => $imageName,
-                  'tpk' => $request->input('tpk'),
-                  'unit' => $request->input('unit'),
-                  'total' => $request['total_transaksi'],
-                  'keterangan' => self::getKeteranganTransaksi($request, $invoicepny)
-            ]);
-      }
-
-      public function getKeteranganTransaksi($request, $invoicepny)
-      {
-            if ($request->input('keterangan') == null) {
-                  if ($request->input('pembeli') === 'pegawai') {
-                        $pembeli = Anggota::where('id_anggota', $request->input('pegawai_id'))->value('nama');
-                  } else {
-                        $pembeli = $request->input('nama_bukan_pegawai');
-                  }
-                  if ($invoicepny == null) {
-                        $keterangan = 'Penjualan Barang TPK ' . $request->input('tpk') . ' kepada ' . $pembeli;
-                  } else {
-                        $keterangan = 'Penyesuaian Penjualan ' . $invoicepny . ' menjadi Penjualan Barang TPK ' . $request->input('tpk') . ' kepada ' . $pembeli;
-                  }
-                  return $keterangan;
-            } else {
-                  return $request->input('keterangan');
-            }
-      }
-
       public function validasiStokBarang($dataBarang, $id)
       {
             $data = json_decode($dataBarang, true);
@@ -414,28 +375,6 @@ class PenjualanService
             /*jurnal baru*/
             $this->jurnalService->jurnalPenjualanPersediaan($data, $id_debet, $id_transaksi);
             $this->jurnalService->jurnalPenjualanInventaris($data, $id_debet, $id_transaksi);
-      }
-
-      /**
-       * Deklarasi variabel untuk input jurnal penjualan lainnya
-       * untuk menginput jurnal pembalik dan jurnal baru
-       *
-       * @param mixed $request
-       * @param mixed $id_transaksi
-       * @param mixed $idTransPeny
-       * @return void
-       **/
-      public function createJurnal($request, $id_transaksi, $idTransPeny)
-      {
-            $id_debet = $this->coaService->getIdDebet($request);
-            $model = new Jurnal;
-            /*jurnal pembalik*/
-            if ($request['cek_penjualan'] === 'penyesuaian') {
-                  jurnalPembalik($model, $id_transaksi, $idTransPeny);
-            }
-            /*jurnal baru*/
-            jurnal($model, $id_debet, $id_transaksi, 'debet', $request["total_transaksi"]);
-            jurnal($model, $request['id_kredit'], $id_transaksi, 'kredit', $request["total_transaksi"]);
       }
 
       public function getDetailPenjualanBarang($id)

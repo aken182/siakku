@@ -32,18 +32,18 @@ class DataTablePenjualanService
       public function getResultStatus($data, $unit, $route)
       {
             if ($data['tipe'] == 'kadaluwarsa') {
-                  $result = '<span class="text-danger">Kadaluwarsa</span>';
+                  $result = '<span class="badge bg-danger">Kadaluwarsa</span>';
             } else {
                   if ($data['status'] != 'lunas') {
                         $result = '<a class="text-warning text-capitalize" data-bs-toggle="tooltip"
                           data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                           href="' . route('ptk-penjualan.create-pelunasan', ['detail' => $data['jenis_transaksi'], 'unit' => $unit, 'route' => $route]) . '"
-                          title="Klik disini untuk lunasi tagihan !">' . $data['status'] . '</a>';
+                          title="Klik disini untuk lunasi tagihan !"><span class="badge bg-warning">' . $data['status'] . '</span></a>';
                   } else {
                         $result = '<a class="text-success text-capitalize" data-bs-toggle="tooltip"
                           data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                           href="' . route('ptk-penjualan.show', ['id' => Crypt::encrypt($data['id_transaksi']), 'detail' => $data['jenis_transaksi']]) . '"
-                          title="Klik disini untuk melihat detail !">' . $data['status'] . '</a>';
+                          title="Klik disini untuk melihat detail !"><span class="badge bg-success">' . $data['status'] . '</span></a>';
                   }
             }
             return $result;
