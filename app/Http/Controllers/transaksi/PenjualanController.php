@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Route;
 use App\Http\Requests\PenjualanRequest;
 use App\Http\Requests\PenjualanBarangRequest;
-use App\Services\dataTable\DataTablePenjualanService;
+use App\Services\dataTable\DataTableMainTransaksiService;
 use App\Services\PendapatanService;
 
 class PenjualanController extends Controller
@@ -40,7 +40,7 @@ class PenjualanController extends Controller
         $this->penjualanService = new PenjualanService;
         $this->pendapatanService = new PendapatanService;
         $this->pelunasanService = new PelunasanService;
-        $this->dataTableService = new DataTablePenjualanService;
+        $this->dataTableService = new DataTableMainTransaksiService;
         $this->anggotaService = new AnggotaService(new ImageService);
         $this->coaService = new CoaService;
         $this->route = Route::currentRouteName();
@@ -81,7 +81,12 @@ class PenjualanController extends Controller
     {
         if ($request->ajax()) {
             $data = $this->transaksiService->getHistoryTransaction($this->route, $this->unit);
-            $dataTables = $this->dataTableService->getDataTablePenjualan($data, 'ptk-penjualan.show', $this->mainRoute, $this->unit);
+            $routeToTable = [
+                'show' => 'ptk-penjualan.show',
+                'create' => 'ptk-penjualan.create-pelunasan',
+                'main' => $this->mainRoute
+            ];
+            $dataTables = $this->dataTableService->getDataTableMain($data, $routeToTable, $this->unit);
             return $dataTables;
         }
     }
@@ -145,18 +150,17 @@ class PenjualanController extends Controller
         /*Konvert rupiah ke angka*/
         $request["total_transaksi"] = convertToNumber($request->input("total_transaksi"));
         /*Menentukan id dan invoice transaksi penyesuaian*/
-        $detailPenyesuaian = $this->penjualanService->getDetailPenyesuaian($request);
-        $idTransPeny = $detailPenyesuaian['idTransPeny'];
-        $invoicepny = $detailPenyesuaian['invoicepny'];
+        $id_penyesuaian = $request->input("id_penjualan_penyesuaian") ?? null;
+        $kodePenyesuaian = $this->transaksiService->getKodePenyesuaian($request->input('cek_penjualan'), $id_penyesuaian);
         /*Update barang sebelum transaksi kadaluwarsa*/
-        if ($idTransPeny != null) {
+        if ($request->input('cek_penjualan') === 'penyesuaian') {
             /*validasi stok barang*/
-            $stokTakCukup = $this->penjualanService->validasiStokBarang($request->input('data_barang'), $idTransPeny);
+            $stokTakCukup = $this->penjualanService->validasiStokBarang($request->input('data_barang'), $id_penyesuaian);
             if ($stokTakCukup > 0) {
                 alert()->error('Error', "Terdapat $stokTakCukup barang yang stoknya tidak cukup !");
                 return redirect()->back()->withInput();
             }
-            $this->penjualanService->updateBarangJualKadaluwarsa($idTransPeny);
+            $this->penjualanService->updateBarangJualKadaluwarsa($id_penyesuaian);
         }
         /*upload file nota transaksi dan get image*/
         $imageName = $this->transaksiService->addNotaTransaksi(
@@ -165,11 +169,11 @@ class PenjualanController extends Controller
             'nota-penjualan'
         );
         /*Buat transaksi*/
-        $this->pendapatanService->createTransaksi($request, $invoicepny, $imageName, 'detail_penjualan');
+        $this->pendapatanService->createTransaksi($request, $kodePenyesuaian, $imageName, 'detail_penjualan');
         $id_transaksi = $this->transaksiService->getIdTransaksiCreate($request->input('nomor'));
         $this->penjualanService->createDetailTransaksi($request->all(), $id_transaksi);
         /*Buat jurnal*/
-        $this->penjualanService->createJurnalBarang($request->all(), $id_transaksi, $idTransPeny);
+        $this->penjualanService->createJurnalBarang($request->all(), $id_transaksi, $id_penyesuaian);
         alert()->success('Sukses', "Berhasil menambahkan penjualan baru.");
         return redirect()->route($this->mainRoute);
     }
@@ -185,9 +189,8 @@ class PenjualanController extends Controller
         /*Konvert rupiah ke angka*/
         $request["total_transaksi"] = convertToNumber($request->input("total_transaksi"));
         /*Menentukan id dan invoice transaksi penyesuaian*/
-        $detailPenyesuaian = $this->penjualanService->getDetailPenyesuaian($request);
-        $idTransPeny = $detailPenyesuaian['idTransPeny'];
-        $invoicepny = $detailPenyesuaian['invoicepny'];
+        $idTransPeny = $request->input("id_penjualan_penyesuaian") ?? null;
+        $invoicepny = $this->transaksiService->getKodePenyesuaian($request->input('cek_penjualan'), $idTransPeny);
         /*upload file nota transaksi dan get image*/
         $imageName = $this->transaksiService->addNotaTransaksi(
             $request->file('nota_transaksi'),
@@ -268,8 +271,8 @@ class PenjualanController extends Controller
             'keterangan' => $transaksi->transaksi->keterangan,
             'jenis' => $transaksi->jenis_penjualan,
             'routeMain' => $this->mainRoute,
-            'pembayaran' => $this->pelunasanService->getInvoicePembayaran($transaksi->id_penjualan, $transaksi->jenis_penjualan),
-            'totalPembayaran' => $this->pelunasanService->getTotalPembayaran($transaksi->id_penjualan, $transaksi->jenis_penjualan),
+            'pembayaran' => $this->pelunasanService->getInvoicePembayaran($transaksi->id_penjualan, 'main_penjualan'),
+            'totalPembayaran' => $this->pelunasanService->getTotalPembayaran($transaksi->id_penjualan, 'main_penjualan'),
             'transaksis' => $penjualan
         ];
     }

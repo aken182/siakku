@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Transaksi;
 use App\Services\ImageService;
 use App\Models\Detail_saldo_awal;
+use App\Models\Main_belanja;
 use App\Models\Saldo_awal_barang;
 
 class TransaksiService
@@ -40,6 +41,10 @@ class TransaksiService
                   case 'ptk-pendapatan.list':
                   case 'pendapatan-unit-sp.list':
                         $data = self::getPendapatan($unit);
+                        break;
+                  case 'btk-belanja-barang.list':
+                  case 'bsp-belanja-barang.list':
+                        $data = self::getPengadaanBarang($unit);
                         break;
                   default:
                         $data = 'kosong';
@@ -118,6 +123,10 @@ class TransaksiService
             return $kode;
       }
 
+      /**
+       * Upload file nota transaksi dan ambil image
+       *
+       **/
       public function addNotaTransaksi($file, $kode, $folder)
       {
             if ($file != null) {
@@ -179,5 +188,59 @@ class TransaksiService
       {
             return Transaksi::where('detail_tabel', 'detail_pendapatan')
                   ->where('unit', $unit)->get();
+      }
+
+      /**
+       * Dokumentasi getPengadaanBarang
+       *
+       * Mengambil data transaksi pengadaan
+       * barang berdasarkan unit.
+       *
+       **/
+      public function getPengadaanBarang($unit)
+      {
+            $pengadaan = Transaksi::where('jenis_transaksi', 'Pengadaan Barang')
+                  ->where('unit', $unit)->get();
+            $result = self::getDataBelanja($pengadaan);
+            return $result;
+      }
+
+      /**
+       * Mengambil data transaksi pengadaan
+       * barang dalam bentuk array.
+       *
+       **/
+      public function getDataBelanja($belanja)
+      {
+            $result = [];
+            foreach ($belanja as $p) {
+                  $status = Main_belanja::where('id_transaksi', $p->id_transaksi)->value('status_belanja');
+                  $result[] = [
+                        'id_transaksi' => $p->id_transaksi,
+                        'detail_tabel' => $p->detail_tabel,
+                        'jenis_transaksi' => $p->jenis_transaksi,
+                        'kode' => $p->kode,
+                        'tipe' => $p->tipe,
+                        'tgl_transaksi' => $p->tgl_transaksi,
+                        'keterangan' => $p->keterangan,
+                        'total' => $p->total,
+                        'status' => $status
+                  ];
+            }
+            return $result;
+      }
+      /**
+       * Mengambil kode penyesuaian 
+       * berdasarkan data request.
+       *
+       **/
+      public function getKodePenyesuaian($tipe, $id_penyesuaian)
+      {
+            $invoicePny = null;
+            if ($tipe === 'penyesuaian') {
+                  $transaksiPenyesuaian = Transaksi::where('id_transaksi', $id_penyesuaian)->first();
+                  $invoicePny = $transaksiPenyesuaian->kode;
+            }
+            return $invoicePny;
       }
 }

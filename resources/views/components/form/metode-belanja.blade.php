@@ -1,13 +1,13 @@
 <div class="k-select-hide">
     <div class="row k-select-hide-main">
         <div class="col mb-3">
-            <label class="form-label text-primary pt-3" for="metode_transaksi">Metode Penerimaan</label>
+            <label class="form-label text-primary pt-3" for="metode_transaksi">Metode Belanja</label>
             <select class="form-select @error('metode_transaksi') is-invalid @enderror" id="metode_transaksi"
                 name="metode_transaksi">
-                <option value="">Pilih Metode Penerimaan</option>
+                <option value="">Pilih Metode Belanja</option>
                 <option id="kas-trigger" value="Kas">Kas</option>
                 <option id="bank-trigger" value="Bank">Bank</option>
-                <option id="piutang-trigger" value="Piutang">Piutang</option>
+                <option id="hutang-trigger" value="Hutang">Hutang</option>
             </select>
             @error('metode_transaksi')
                 <div class="invalid-feedback">
@@ -56,16 +56,16 @@
     </div>
     <div class="k-select-hide-child">
         <div class="col mb-3">
-            <label class="form-label text-primary" for="id_piutang">Rekening Piutang</label>
-            <select class="form-select @error('id_piutang') is-invalid @enderror" id="id_piutang" name="id_piutang">
+            <label class="form-label text-primary" for="id_hutang">Rekening Hutang</label>
+            <select class="form-select @error('id_hutang') is-invalid @enderror" id="id_hutang" name="id_hutang">
                 <option value="">Pilih Kode - Nama Akun</option>
-                @foreach ($akunPiutang as $key => $val)
+                @foreach ($akunHutang as $key => $val)
                     <option value="{{ $val['id_coa'] }}">
                         {{ $val['kode'] . ' - ' . $val['nama'] }}
                     </option>
                 @endforeach
             </select>
-            @error('id_piutang')
+            @error('id_hutang')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>

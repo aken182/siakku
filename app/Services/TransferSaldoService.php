@@ -123,20 +123,6 @@ class TransferSaldoService
             return $neraca['neraca'];
       }
 
-      public function getDetailPenyesuaian($request)
-      {
-            $data = [
-                  'idTransPeny' => null,
-                  'invoicepny' => null,
-            ];
-            if ($request->input('cek_penyesuaian') === 'penyesuaian') {
-                  $transaksiPenyesuaian = Transaksi::where('id_transaksi', $request->input("id_penyesuaian"))->first();
-                  $data['idTransPeny'] = $transaksiPenyesuaian->id_transaksi;
-                  $data['invoicepny'] = $transaksiPenyesuaian->kode;
-            }
-            return $data;
-      }
-
       public function createTransaksi($request, $invoice, $imageName, $unit)
       {
             Transaksi::create([

@@ -307,13 +307,22 @@ class BarangService
             return $posisi;
       }
 
-      public function getDataBarang($unit, $posisi)
+      public function getDataBarang($unit, $posisi, $tpk = null)
       {
-            return Barang::with(['satuan', 'unit'])
-                  ->where('posisi_pi', $posisi)
-                  ->whereHas('unit', function ($query) use ($unit) {
-                        $query->where('unit', $unit);
-                  })->get();
+            if ($tpk != null) {
+                  return Barang::with(['satuan', 'unit'])
+                        ->where('posisi_pi', $posisi)
+                        ->whereHas('unit', function ($query) use ($unit, $tpk) {
+                              $query->where('nama', 'LIKE', "%" . $tpk . "%")
+                                    ->where('unit', $unit);
+                        })->get();
+            } else {
+                  return Barang::with(['satuan', 'unit'])
+                        ->where('posisi_pi', $posisi)
+                        ->whereHas('unit', function ($query) use ($unit) {
+                              $query->where('unit', $unit);
+                        })->get();
+            }
       }
 
       public function getDataBarangEceran($unit, $posisi)
@@ -327,9 +336,15 @@ class BarangService
                   })->get();
       }
 
-      public function getDataUnit($unit)
+      public function getDataUnit($unit, $tpk = null)
       {
-            return Unit::where('unit', $unit)->get();
+            if ($tpk != null) {
+                  return Unit::where('unit', $unit)
+                        ->where('nama', 'LIKE', "%" . $tpk . "%")
+                        ->get();
+            } else {
+                  return Unit::where('unit', $unit)->get();
+            }
       }
 
       public function getBarang($id)

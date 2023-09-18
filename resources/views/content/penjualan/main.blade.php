@@ -55,11 +55,11 @@
                     <div class="row">
                         <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover penjualan-table">
+                            <table class="table table-bordered table-hover main-table">
                                 <thead class="table-success">
                                     <tr>
                                         <th>Nomor Transaksi</th>
-                                        <th>Tgl. Transaksi</th>
+                                        <th>Tanggal Transaksi</th>
                                         <th>Keterangan</th>
                                         <th>Status</th>
                                         <th>Total</th>
@@ -76,5 +76,5 @@
     </div>
 @endsection
 @section('pageScript')
-    <script src="{{ asset('assets/admin') }}/js/siakku-custom/datatable-penjualan.js"></script>
+    <script src="{{ asset('assets/admin') }}/js/siakku-custom/datatable-main-transaksi.js"></script>
 @endsection

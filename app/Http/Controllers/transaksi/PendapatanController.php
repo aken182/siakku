@@ -104,9 +104,8 @@ class PendapatanController extends Controller
         /*Konvert rupiah ke angka*/
         $request["total_transaksi"] = convertToNumber($request->input("total_transaksi"));
         /*Menentukan id dan invoice transaksi penyesuaian*/
-        $detailPenyesuaian = $this->pendapatanService->getDetailPenyesuaian($request);
-        $idTransPeny = $detailPenyesuaian['idTransPeny'];
-        $invoicepny = $detailPenyesuaian['invoicepny'];
+        $idTransPeny = $request->input("id_pendapatan_penyesuaian") ?? null;
+        $invoicepny = $this->transaksiService->getKodePenyesuaian($request->input('cek_pendapatan'), $idTransPeny);
         /*upload file nota transaksi dan get image*/
         $imageName = $this->transaksiService->addNotaTransaksi(
             $request->file('nota_transaksi'),

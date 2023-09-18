@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row mb-3">
-                                        <small class="mb-1">Metode Pembayaran</small>
+                                        <small class="mb-1">Metode Penerimaan</small>
                                         <label class="text-info">{{ $metode }}</label>
                                     </div>
                                     <div class="row mb-3">

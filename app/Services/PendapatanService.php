@@ -80,24 +80,6 @@ class PendapatanService
             return $penyesuaian;
       }
 
-      public function getDetailPenyesuaian($request)
-      {
-            if ($request->input('cek_pendapatan') === 'penyesuaian') {
-                  $transaksiPenyesuaian = Transaksi::where('id_transaksi', $request->input("id_pendapatan_penyesuaian"))->first();
-                  $data = [
-                        'idTransPeny' => $transaksiPenyesuaian->id_transaksi,
-                        'invoicepny' => $transaksiPenyesuaian->kode,
-                  ];
-                  return $data;
-            } else {
-                  $data = [
-                        'idTransPeny' => null,
-                        'invoicepny' => null,
-                  ];
-                  return $data;
-            }
-      }
-
       /**
        * Menginput transaksi ke dalam tabel
        * transaksi
@@ -138,7 +120,7 @@ class PendapatanService
                   if ($invoicepny == null) {
                         $keterangan = 'Penjualan Barang TPK ' . $request->input('tpk') . ' kepada ' . $pembeli;
                   } else {
-                        $keterangan = 'Penyesuaian Penjualan ' . $invoicepny . ' menjadi Penjualan Barang TPK ' . $request->input('tpk') . ' kepada ' . $pembeli;
+                        $keterangan = 'Penyesuaian Penjualan ' . $invoicepny . ' - Penjualan Barang TPK ' . $request->input('tpk') . ' kepada ' . $pembeli;
                   }
                   return $keterangan;
             } else {

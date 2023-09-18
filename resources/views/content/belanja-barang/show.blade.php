@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row mb-3">
-                                        <small class="mb-1">Metode Penerimaan</small>
+                                        <small class="mb-1">Metode Belanja</small>
                                         <label class="text-info">{{ $metode }}</label>
                                     </div>
                                     <div class="row mb-3">
@@ -135,13 +135,13 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <h5 class="text-success">Detail Penjualan</h5>
+                        <h5 class="text-success">Detail Belanja</h5>
                         <div class="table-responsive">
                             <table class="table table-flush-spacing-sm table-bordered">
                                 <thead class="table-secondary text-dark">
                                     <tr>
+                                        <th>Kode Barang</th>
                                         <th>Nama</th>
-                                        <th>Jenis</th>
                                         <th>Jumlah</th>
                                         <th>Harga</th>
                                         <th>Subtotal</th>
@@ -150,11 +150,11 @@
                                 <tbody>
                                     @foreach ($transaksis as $transaksi)
                                         <tr>
-                                            <td>{{ $transaksi['nama'] }}</td>
-                                            <td>{{ $transaksi['jenis'] }}</td>
-                                            <td>{{ $transaksi['qty'] }} {{ $transaksi['satuan'] }}</td>
-                                            <td style="text-align:right">{{ buatrp($transaksi['harga']) }}</td>
-                                            <td style="text-align:right">{{ buatrp($transaksi['subtotal']) }}</td>
+                                            <td>{{ $transaksi->barang->kode_barang }}</td>
+                                            <td>{{ $transaksi->barang->nama_barang }}</td>
+                                            <td>{{ $transaksi->qty }} {{ $transaksi->satuan->nama_satuan }}</td>
+                                            <td style="text-align:right">{{ buatrp($transaksi->harga) }}</td>
+                                            <td style="text-align:right">{{ buatrp($transaksi->subtotal) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -175,7 +175,7 @@
                                                 <h5 style="font-weight:bold">Belum Dibayar</h5>
                                             </td>
                                             <td style="text-align: right;">
-                                                <h5 style="font-weight:bold">{{ cek_uang($saldo_piutang) }}
+                                                <h5 style="font-weight:bold">{{ cek_uang($saldo_hutang) }}
                                                 </h5>
                                             </td>
                                         </tr>
@@ -200,7 +200,7 @@
                                     <tbody>
                                         @foreach ($pembayaran as $p)
                                             <tr>
-                                                <td><a href="/penjualan/unit-pertokoan/pelunasan/show/{{ Crypt::encrypt($p->transaksi->id_transaksi) }}"
+                                                <td><a href="{{ route($routeDetailPembayaran, Crypt::encrypt($p->transaksi->id_transaksi)) }}"
                                                         class="{{ $p->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
                                                         data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                         data-bs-placement="top" data-bs-html="true"
@@ -250,7 +250,7 @@
                 <div class="modal-body">
                     <div class="card-body">
                         <h6 class="card-subtitle text-muted">{{ $nota }}</h6>
-                        <img class="img-fluid d-flex mx-auto my-4" src="{{ asset('storage/nota-penjualan/' . $nota) }}"
+                        <img class="img-fluid d-flex mx-auto my-4" src="{{ asset('storage/nota-belanja/' . $nota) }}"
                             alt="Card image cap">
                         <p class="card-text">{{ $keterangan }}</p>
                     </div>

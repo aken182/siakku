@@ -36,7 +36,7 @@ $(document).ready(function () {
                             html += "<td class='text-capitalize text-dark' style='text-align: right'>#" + data.detail.no_bukti + "</td>";
                             html += "</tr>";
                             html += "<tr>";
-                            html += "<td>Nama Pembeli</td>";
+                            html += "<td>Nama Vendor</td>";
                             html += "<td class='text-capitalize text-dark' style='text-align: right'>" + data.detail.nama + "</td>";
                             html += "</tr>";
                             html += "<tr>";

@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
                     <h3>{{ $title }}</h3>
-                    <p class="text-subtitle text-muted">Form Pelunasan {{ $jenis }} Unit {{ $unit }}</p>
+                    <p class="text-subtitle text-muted">Form Pelunasan {{ $title }} Unit {{ $unit }}</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -134,64 +134,11 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col mb-3">
-                                                <label for="id_penjualan" class="text-primary">Tagihan</label>
-                                                <select
-                                                    class="form-select choices @error('id_penjualan') is-invalid @enderror"
-                                                    name="id_penjualan" id="id_penjualan">
-                                                    <option value="" selected>Pilih Tagihan</option>
-                                                    @foreach ($tagihan as $t)
-                                                        <option value="{{ $t['id_penjualan'] }}">{{ $t['kode'] }}
-                                                            - {{ $t['pembeli'] }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('id_penjualan')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 mb-3 table-info">
-                                                <table class="table table-condensed text-primary" style="font-width:bold">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td><small>Nomor Tagihan</small></td>
-                                                            <td><small>: </small><small id="invoiceTagihan"></small></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><small>Tanggal Beli</small></td>
-                                                            <td><small>: </small><small id="tanggal_beli"></small></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><small>Nama Pembeli</small></td>
-                                                            <td><small>: </small><small id="nama_pembeli"></small></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><small>Status Pembeli</small></td>
-                                                            <td><small>: </small><small id="status_pembeli"
-                                                                    class="text-capitalize"></small></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><small>Jumlah Pembelian</small></td>
-                                                            <td><small>: </small><small id="jumlah_beli"></small></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><small>Total Tagihan</small></td>
-                                                            <td><small>: </small><small id="total_tagihan"></small></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><small>Status</small></td>
-                                                            <td><small>: </small><small id="status"
-                                                                    class="text-capitalize"></small></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                        @if ($jenis === 'Pembayaran Piutang Penjualan')
+                                            <x-form.create-pelunasan-penjualan :tagihan="$tagihan" />
+                                        @else
+                                            <x-form.create-pelunasan-belanja :tagihan="$tagihan" />
+                                        @endif
                                         <div class="row">
                                             <div class="col mb-3">
                                                 <label for="jumlah_bayar" class="text-primary">Jumlah Pembayaran</label>
@@ -208,11 +155,11 @@
                                         </div>
                                         <div class="row">
                                             <div class="col mb-3">
-                                                <label for="saldo_piutang" class="text-primary">Sisa Tagihan</label>
+                                                <label for="saldo_tagihan" class="text-primary">Sisa Tagihan</label>
                                                 <input type="text"
-                                                    class="form-control @error('saldo_piutang') is-invalid @enderror"
-                                                    id="sisa_tagihan" name="saldo_piutang" readonly>
-                                                @error('saldo_piutang')
+                                                    class="form-control @error('saldo_tagihan') is-invalid @enderror"
+                                                    id="sisa_tagihan" name="saldo_tagihan" readonly>
+                                                @error('saldo_tagihan')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
                                                     </div>
@@ -221,7 +168,8 @@
                                         </div>
                                         <div class="row">
                                             <div class="col mb-3">
-                                                <label for="nota_transaksi" class="text-primary">Nota Pembayaran</label>
+                                                <label for="nota_transaksi" class="text-primary">Nota
+                                                    Pembayaran</label>
                                                 <div class="input-group">
                                                     <input type="file"
                                                         class="form-control @error('nota_transaksi') is-invalid @enderror"
@@ -240,9 +188,11 @@
                                         <div class="row">
                                             <div class="col mb-3">
                                                 <label for="no_pembayaran" class="text-primary">Nomor Pembayaran</label>
+                                                <input type="hidden" id="routeUrl"
+                                                    data-route="{{ route($routeDetail) }}" />
                                                 <input type="text"
                                                     class="form-control @error('no_pembayaran') is-invalid @enderror"
-                                                    name="no_pembayaran" value="{{ $nopembayaran }}">
+                                                    name="no_pembayaran" value="{{ $noPembayaran }}">
                                                 @error('no_pembayaran')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
@@ -251,7 +201,7 @@
                                                 <input type="hidden" name="unit" value="{{ $unit }}">
                                                 <input type="hidden" name="routemain" value="{{ $route }}">
                                                 <input type="hidden" name="jenis_transaksi"
-                                                    value="Pembayaran Piutang Penjualan">
+                                                    value="{{ $jenis }}">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -357,6 +307,11 @@
     <script>
         var tg = @json($tagihan);
     </script>
-    <script src="{{ asset('assets/admin') }}/js/siakku-custom/penyesuaian-pembayaran-tagihan-penjualan.js"></script>
-    <script src="{{ asset('assets/admin') }}/js/siakku-custom/pembayaran-tagihan-penjualan.js"></script>
+    @if ($jenis === 'Pembayaran Piutang Penjualan')
+        <script src="{{ asset('assets/admin') }}/js/siakku-custom/penyesuaian-pembayaran-tagihan-penjualan.js"></script>
+        <script src="{{ asset('assets/admin') }}/js/siakku-custom/pembayaran-tagihan-penjualan.js"></script>
+    @else
+        <script src="{{ asset('assets/admin') }}/js/siakku-custom/penyesuaian-pembayaran-tagihan-belanja.js"></script>
+        <script src="{{ asset('assets/admin') }}/js/siakku-custom/pembayaran-tagihan-belanja.js"></script>
+    @endif
 @endsection

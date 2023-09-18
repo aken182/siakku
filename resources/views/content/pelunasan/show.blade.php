@@ -118,7 +118,8 @@
                                         #{{ $no_bukti }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Nama Pembeli</td>
+                                    <td>{{ $title == 'Pembayaran Piutang Penjualan' ? 'Nama Pembeli' : 'Nama Vendor' }}
+                                    </td>
                                     <td class='text-capitalize text-dark' style='text-align: right'>
                                         {{ $namaPembeli }}</td>
                                 </tr>
@@ -132,7 +133,7 @@
                                 </tr>
                                 <tr>
                                     <td>Sisa Tagihan</td>
-                                    <td style='text-align: right' class='text-dark'>{{ cek_uang($saldo_piutang) }}
+                                    <td style='text-align: right' class='text-dark'>{{ cek_uang($saldo_tagihan) }}
                                     </td>
                                 </tr>
                                 <tr>

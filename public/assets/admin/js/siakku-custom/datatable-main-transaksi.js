@@ -1,6 +1,6 @@
 
 $(function () {
-      var table = $('.penjualan-table');
+      var table = $('.main-table');
       var routeUrl = $('#routeUrl').data('route');
       table.DataTable({
             processing: true,

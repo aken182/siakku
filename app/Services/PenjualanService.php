@@ -24,24 +24,6 @@ class PenjualanService
             $this->coaService = new CoaService;
       }
 
-      public function getDetailPenyesuaian($request)
-      {
-            if ($request->input('cek_penjualan') === 'penyesuaian') {
-                  $transaksiPenyesuaian = Transaksi::where('id_transaksi', $request->input("id_penjualan_penyesuaian"))->first();
-                  $data = [
-                        'idTransPeny' => $transaksiPenyesuaian->id_transaksi,
-                        'invoicepny' => $transaksiPenyesuaian->kode,
-                  ];
-                  return $data;
-            } else {
-                  $data = [
-                        'idTransPeny' => null,
-                        'invoicepny' => null,
-                  ];
-                  return $data;
-            }
-      }
-
       public function updateBarangJualKadaluwarsa($idTransPeny)
       {
             $id_penjualan = Main_penjualan::where('id_transaksi', $idTransPeny)->value('id_penjualan');

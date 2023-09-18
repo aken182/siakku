@@ -96,28 +96,20 @@ class TransferSaldoController extends Controller
        */
       public function store(TransferSaldoRequest $request)
       {
-            /*konvert rupiah ke angka*/
             $request["jumlah"] = convertToNumber($request->input("jumlah"));
-
-            /*upload file nota transaksi dan get image*/
             $imageName = $this->transaksiService->addNotaTransaksi(
                   $request->file('nota_transaksi'),
                   $request->input('nomor'),
                   'nota-transfer-saldo'
             );
-
-            /*Menentukan id dan kode transaksi penyesuaian*/
-            $detailPenyesuaian = $this->transferSaldoService->getDetailPenyesuaian($request);
-            $idTransPeny = $detailPenyesuaian['idTransPeny'];
-            $invoicepny = $detailPenyesuaian['invoicepny'];
-
+            $id_penyesuaian = $request->input("id_penyesuaian") ?? null;
+            $kodePenyesuaian = $this->transaksiService->getKodePenyesuaian($request->input('cek_penyesuaian'), $id_penyesuaian);
             /*Buat transaksi */
-            $this->transferSaldoService->createTransaksi($request, $invoicepny, $imageName, $this->unit);
+            $this->transferSaldoService->createTransaksi($request, $kodePenyesuaian, $imageName, $this->unit);
             $id_transaksi = $this->transaksiService->getIdTransaksiCreate($request->input('nomor'));
             $this->transferSaldoService->createDetailTransaksi($request, $id_transaksi);
-
             /*Buat jurnal*/
-            $this->transferSaldoService->createJurnal($request, $id_transaksi, $idTransPeny);
+            $this->transferSaldoService->createJurnal($request, $id_transaksi, $id_penyesuaian);
             alert()->success('Sukses', "Berhasil menambahkan transaksi pemindahan saldo.");
             return redirect()->route($this->routeMain);
       }

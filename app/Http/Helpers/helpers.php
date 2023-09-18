@@ -159,6 +159,10 @@ function getHeaders($table, $without_name)
       return $columns_names;
 }
 
+/**
+ * Konvert rupiah ke angka
+ *
+ **/
 function convertToNumber($nominal)
 {
       if ($nominal == null) {

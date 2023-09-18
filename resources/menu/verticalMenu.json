@@ -161,7 +161,7 @@
                   "submenu": [
                         {
                               "url": "/belanja-barang/unit-pertokoan",
-                              "name": "Belanja Barang",
+                              "name": "Pengadaan Barang",
                               "permission": "belanja-barang-unit-pertokoan-view",
                               "slug": "btk-belanja-barang"
                         },
@@ -386,7 +386,7 @@
                   "submenu": [
                         {
                               "url": "/belanja-barang/unit-sp",
-                              "name": "Belanja Barang",
+                              "name": "Pengadaan Barang",
                               "permission": "belanja-barang-unit-sp-view",
                               "slug": "bsp-belanja-barang"
                         },

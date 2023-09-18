@@ -5,10 +5,9 @@ $(document).ready(function () {
     var idBarang = $("#id_barang");
     var namaBarang = $("#nama_barang");
     var namaSatuan = $("#nama_satuan");
+    var stokPersediaan = $("#stok");
     var jenisBarang = $("#jenis_barang");
     var namaUnit = $("#nama_unit");
-    var umurEkonomis = $("#umur_ekonomis");
-    var tglBeli = $("#tgl_beli");
 
     /*Variabel Barang Baru */
     var namaBarangBaru = $("#nama_barang_baru");
@@ -16,8 +15,6 @@ $(document).ready(function () {
     var namaSatuanBaru = $("#nama_satuan_baru");
     var jenisBarangBaru = $("#jenis_barang_baru");
     var idUnitBaru = $("#id_unit_baru");
-    var umurEkonomisBaru = $("#umur_ekonomis_baru");
-    var tglBeliBaru = $("#tgl_beli_baru");
 
     /*Variabel Lainnya */
     var myElement = $(".field-barang-baru");
@@ -25,7 +22,6 @@ $(document).ready(function () {
     var jnB = $('input[name="cek_barang"]');
     var stokBarang = $("#qty");
     var hargaBeli = $("#harga_beli");
-    var nilaiBuku = $("#nilai_buku");
     var tambahKeranjang = $(".addToChartBtn");
     var keranjangTabel = $("#keranjangTabel");
     var jsonToRequest = [];
@@ -46,10 +42,11 @@ $(document).ready(function () {
                     idBarang.val("");
                     namaBarang.val("");
                     namaSatuan.val("");
+                    stokPersediaan.val("");
                     jenisBarang.val("");
                     namaUnit.val("");
-                    umurEkonomis.val("");
-                    tglBeli.val("");
+                    hargaBeli.val("");
+                    hargaBeli.attr("readonly", false);
                 } else {
                     myElement.fadeOut();
                     myElementTwo.fadeIn();
@@ -58,8 +55,8 @@ $(document).ready(function () {
                     idSatuanBaru.val("");
                     namaSatuanBaru.val("");
                     idUnitBaru.val("");
-                    umurEkonomisBaru.val("");
-                    tglBeliBaru.val("");
+                    hargaBeli.val("");
+                    hargaBeli.attr("readonly", true);
                 }
             });
         });
@@ -71,9 +68,8 @@ $(document).ready(function () {
             columns: [
                 { title: "Nama", data: "nama" },
                 { title: "Jenis", data: "jenis_barang" },
-                { title: "Tgl. Beli", data: "tgl_beli" },
                 { title: "Qty", data: "qty" },
-                { title: "Nilai Buku", data: "nilai_buku" },
+                { title: "Harga", data: "harga" },
                 { title: "Subtotal", data: "subtotal" },
                 { title: "Aksi", data: "aksi" },
             ]
@@ -85,13 +81,20 @@ $(document).ready(function () {
             let barangx = barang.find(p => p.id_barang == id_barang);
             if (barangx) {
                 namaBarang.val(barangx.nama_barang);
+                const stok = barangx.stok;
+                if (stok > 0) {
+                    stokPersediaan.val(stok + " " + barangx.satuan.nama_satuan);
+                    stokPersediaan.removeClass("text-danger");
+                    stokPersediaan.addClass("text-primary");
+                } else {
+                    stokPersediaan.val("Persediaan kosong !");
+                    stokPersediaan.removeClass("text-primary");
+                    stokPersediaan.addClass("text-danger");
+                }
                 namaSatuan.val(barangx.satuan.nama_satuan);
                 jenisBarang.val(barangx.jenis_barang);
                 namaUnit.val(barangx.unit.nama);
-                umurEkonomis.val(barangx.umur_ekonomis);
-                tglBeli.val(barangx.tgl_beli);
                 hargaBeli.val(currencyIdr(barangx.harga_barang, "Rp "));
-                nilaiBuku.val(currencyIdr(barangx.nilai_saat_ini, "Rp"));
             }
         });
 
@@ -110,28 +113,22 @@ $(document).ready(function () {
                 let totalSubtotal = 0;
                 const id_barang = jnBk === "barang baru" ? "" : idBarang.val();
                 const nama = jnBk === "barang baru" ? namaBarangBaru.val() : namaBarang.val();
-                const tgl_beli = jnBk === "barang baru" ? tglBeliBaru.val() : tglBeli.val();
                 const id_satuan = jnBk === "barang baru" ? idSatuanBaru.val() : "";
                 const id_unit = jnBk === "barang baru" ? idUnitBaru.val() : "";
                 const satuan = jnBk === "barang baru" ? namaSatuanBaru.val() : namaSatuan.val();
-                const umur_ekonomis = jnBk === "barang baru" ? umurEkonomisBaru.val() : umurEkonomis.val();
                 const getharga = hargaBeli.val();
-                const getNilaiBuku = nilaiBuku.val();
                 const hargax = getharga.split(".").join("").replace("Rp", "");
-                const nilaix = getNilaiBuku.split(".").join("").replace("Rp", "");
                 const qty = parseFloat(stokBarang.val());
                 const harga = parseFloat(hargax);
-                const nilai = parseFloat(nilaix);
-                const subtotal = qty * nilai;
+                const subtotal = qty * harga;
                 const jenis = jnBk;
                 const jenis_barang = jnBk === "barang baru" ? jenisBarangBaru.val() : jenisBarang.val();
 
                 let data = {
                     nama: nama,
                     jenis_barang: jenis_barang,
-                    tgl_beli: tgl_beli,
                     qty: qty + ' ' + satuan,
-                    nilai_buku: currencyIdr(nilai, 'Rp '),
+                    harga: currencyIdr(harga, 'Rp '),
                     subtotal: currencyIdr(subtotal, 'Rp '),
                     aksi: btAksi,
                 };
@@ -140,14 +137,11 @@ $(document).ready(function () {
                     jenis: jenis,
                     id_barang: id_barang,
                     nama: nama,
-                    tgl_beli: tgl_beli,
-                    umur_ekonomis: umur_ekonomis,
                     id_satuan: id_satuan,
                     id_unit: id_unit,
                     jenis_barang: jenis_barang,
                     qty: qty,
                     harga: harga,
-                    nilai_buku: nilai,
                     subtotal: subtotal,
                 };
 
@@ -155,7 +149,6 @@ $(document).ready(function () {
                 jsonToRequest.push(dataToRequest);
                 table.clear().draw();
                 table.rows.add(jsonToView).draw();
-                console.log(jsonToRequest);
                 const dataBarang = JSON.stringify(jsonToRequest);
                 $("#dataBarang").val(dataBarang);
 
@@ -165,21 +158,17 @@ $(document).ready(function () {
                     idSatuanBaru.val("");
                     namaSatuanBaru.val("");
                     idUnitBaru.val("");
-                    umurEkonomisBaru.val("");
-                    tglBeliBaru.val("");
                 } else {
                     idBarang.val("");
                     namaBarang.val("");
                     namaSatuan.val("");
                     jenisBarang.val("");
+                    stokPersediaan.val("");
                     namaUnit.val("");
-                    umurEkonomis.val("");
-                    tglBeli.val("");
                 }
 
                 stokBarang.val("");
                 hargaBeli.val("");
-                nilaiBuku.val("");
 
                 $.each(jsonToRequest, function (index, item) {
                     totalSubtotal += item.subtotal;
@@ -200,24 +189,18 @@ $(document).ready(function () {
                     // Validasi input untuk "Barang Baru"
                     const isNamaBarangBaruEmpty = namaBarangBaru.val().trim() === "";
                     const isJenisBarangBaruEmpty = jenisBarangBaru.val().trim() === "";
-                    const isUmurEkonomisBaruEmpty = umurEkonomisBaru.val().trim() === "";
-                    const isTglBeliBaruEmpty = tglBeliBaru.val().trim() === "";
                     const isIdSatuanBaruEmpty = idSatuanBaru.val() ? idSatuanBaru.val().trim() === "" : true;
                     const isIdUnitBaruEmpty = idUnitBaru.val().trim() === "";
                     const isStokBarangEmpty = stokBarang.val().trim() === "";
                     const isHargaBeliEmpty = hargaBeli.val().trim() === "";
-                    const isNilaiBukuEmpty = nilaiBuku.val().trim() === "";
 
                     const isAnyFieldEmpty =
                         isNamaBarangBaruEmpty ||
                         isJenisBarangBaruEmpty ||
-                        isTglBeliBaruEmpty ||
-                        isUmurEkonomisBaruEmpty ||
                         isIdSatuanBaruEmpty ||
                         isIdUnitBaruEmpty ||
                         isStokBarangEmpty ||
-                        isHargaBeliEmpty ||
-                        isNilaiBukuEmpty;
+                        isHargaBeliEmpty;
 
                     if (isAnyFieldEmpty) {
                         toastError.showToast();
@@ -228,16 +211,12 @@ $(document).ready(function () {
                     // Validasi input untuk "Dari Database"
                     const isIdBarangEmpty = idBarang.val() ? idBarang.val().trim() === "" : true;
                     const isHargaBeliEmpty = hargaBeli.val().trim() === "";
-                    const isTglBeliEmpty = tglBeli.val().trim() === "";
                     const isStokBarangEmpty = stokBarang.val().trim() === "";
-                    const isNilaiBukuEmpty = nilaiBuku.val().trim() === "";
 
                     const isAnyFieldEmpty =
                         isIdBarangEmpty ||
-                        isTglBeliEmpty ||
                         isStokBarangEmpty ||
-                        isHargaBeliEmpty ||
-                        isNilaiBukuEmpty;
+                        isHargaBeliEmpty;
 
                     if (isAnyFieldEmpty) {
                         toastError.showToast();

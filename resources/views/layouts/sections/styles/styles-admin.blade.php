@@ -1,7 +1,8 @@
 <link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/choices.js/choices.min.css" />
+<link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/bootstrap-select/bootstrap-select.css" />
+<link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/select2/select2.css " />
 <link rel="stylesheet" href="{{ asset('assets/admin') }}/css/bootstrap.css">
 <link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/iconly/bold.css">
-{{-- <link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/simple-datatables/style.css"> --}}
 <link rel="stylesheet"
     href="{{ asset('assets/admin') }}/vendors/datatables/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css" />
 <link rel="stylesheet" href="{{ asset('assets/admin') }}/vendors/datatables/compiled/css/table-datatable-jquery.css" />
