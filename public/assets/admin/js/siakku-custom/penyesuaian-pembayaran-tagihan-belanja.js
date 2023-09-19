@@ -52,6 +52,10 @@ $(document).ready(function () {
                             html += "<td style='text-align: right' class='text-dark'>" + data.detail.jumlah_bayar + "</td>";
                             html += "</tr>";
                             html += "<tr>";
+                            html += "<td>Bunga Hutang</td>";
+                            html += "<td style='text-align: right' class='text-dark'>" + data.detail.bunga + "</td>";
+                            html += "</tr>";
+                            html += "<tr>";
                             html += "<td>Sisa Tagihan</td>";
                             html += "<td style='text-align: right' class='text-dark'>" + data.detail.sisa_tagihan + "</td>";
                             html += "</tr>";

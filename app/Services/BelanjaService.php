@@ -25,6 +25,7 @@ class BelanjaService
             $this->accountingService = new AccountingService;
             $this->pelunasanService = new PelunasanService;
       }
+
       /**
        * Mengambil unit transaksi belanja
        * barang
@@ -42,6 +43,21 @@ class BelanjaService
       }
 
       /**
+       * Mengambil unit transaksi belanja
+       * 
+       **/
+      public function getUnitBelanja($route)
+      {
+            $unit = [
+                  'btk-belanja-lain' => 'Pertokoan',
+                  'bsp-belanja-lain' => 'Simpan Pinjam',
+            ];
+            // Menghapus bagian yang sama dalam kunci
+            $route = str_replace(['.list', '.store', '.create', '.show', '.detail'], '', $route);
+            return $unit[$route];
+      }
+
+      /**
        * Mengambil route utama transaksi belanja
        * barang
        * 
@@ -50,7 +66,21 @@ class BelanjaService
       {
             $route = [
                   'Pertokoan' => 'btk-belanja-barang',
-                  'Simpan Pinjam' => 'bsp-belanja-barang'
+                  'Simpan Pinjam' => 'bsp-belanja-barang',
+            ];
+            return $route[$unit];
+      }
+
+      /**
+       * Mengambil route utama transaksi belanja
+       * barang
+       * 
+       **/
+      public function getMainRouteBelanja($unit)
+      {
+            $route = [
+                  'Pertokoan' => 'btk-belanja-lain',
+                  'Simpan Pinjam' => 'bsp-belanja-lain',
             ];
             return $route[$unit];
       }
@@ -68,6 +98,8 @@ class BelanjaService
             $store = [
                   'btk-belanja-barang.list' => 'btk-belanja-barang.show',
                   'bsp-belanja-barang.list' => 'bsp-belanja-barang.show',
+                  'btk-belanja-lain.list' => 'btk-belanja-lain.show',
+                  'bsp-belanja-lain.list' => 'bsp-belanja-lain.show',
             ];
             return $store[$route];
       }
@@ -109,6 +141,17 @@ class BelanjaService
                         $query->where('unit', $unit)
                               ->where('detail_tabel', 'detail_belanja_' . $jenis)
                               ->where('jenis_transaksi', 'Pengadaan Barang');
+                  })->get();
+            return $penyesuaian;
+      }
+
+      public function getPenyesuaianBelanja($unit)
+      {
+            $penyesuaian = Transaksi::whereNot('tipe', 'kadaluwarsa')
+                  ->where(function ($query) use ($unit) {
+                        $query->where('unit', $unit)
+                              ->where('detail_tabel', 'detail_belanja_operasional')
+                              ->where('jenis_transaksi', 'Belanja');
                   })->get();
             return $penyesuaian;
       }
@@ -174,7 +217,7 @@ class BelanjaService
             $total = Transaksi::where('id_transaksi', $id_transaksi)->value('total') ?? 0;
             $data = [
                   'id_transaksi' => $id_transaksi,
-                  'id_penyedia' => $request['id_penyedia'],
+                  'id_penyedia' => $request['id_penyedia'] ?? null,
                   'jenis_belanja' => $jenis_transaksi,
                   'status_belanja' => $status_transaksi,
                   'jumlah_belanja' => $total,
@@ -310,6 +353,26 @@ class BelanjaService
             } else {
                   $this->accountingService->jurnalInventaris($data, $id_transaksi, $id_kredit);
             }
+      }
+
+      /**
+       * Memuat fungsi-fungsi untuk menyimpan jurnal
+       * belanja
+       *
+       **/
+      public function createJurnalBelanja($request, $id_transaksi, $idTransPeny)
+      {
+            $id_kredit = $this->coaService->getIdKredit($request);
+            $id_debet = $request['metode_transaksi'] === 'Hutang' ? $request['id_penerima'] : $request['id_belanja'];
+            $model = new Jurnal;
+
+            /*jurnal pembalik*/
+            if ($request['cek_belanja'] === 'penyesuaian') {
+                  jurnalPembalik($model, $id_transaksi, $idTransPeny);
+            }
+            /*jurnal baru*/
+            jurnal($model, $id_debet, $id_transaksi, 'debet', $request["total_transaksi"]);
+            jurnal($model, $id_kredit, $id_transaksi, 'kredit', $request["total_transaksi"]);
       }
 
       /**

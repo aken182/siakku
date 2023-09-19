@@ -48,6 +48,10 @@ class PelunasanRequest extends FormRequest
 
         if ($this->input('jenis_transaksi') === 'Pembayaran Hutang Belanja') {
             $rules['id_belanja'] = 'required';
+
+            if ($this->input('cek_bunga_hutang') == 'on') {
+                $rules['bunga_hutang'] = 'required';
+            }
         }
 
         return $rules;
@@ -60,6 +64,7 @@ class PelunasanRequest extends FormRequest
             'id_pny_pembayaran.required_if' => 'Invoice penyesuaian wajib dipilih!',
             'id_penjualan.required_if' => 'Kolom Tagihan wajib diisi!',
             'id_belanja.required_if' => 'Kolom Tagihan wajib diisi!',
+            'bunga_hutang.required_if' => 'Kolom bunga hutang wajib diisi!',
             'jumlah_bayar.required' => 'Kolom jumlah pembayaran wajib diisi!',
             'saldo_tagihan.required' => 'Kolom sisa tagihan tidak boleh kosong. Silakan isi kolom tagihan dan jumlah pembayaran!',
             'no_pembayaran.required' => 'Kolom nomor pembayaran wajib diisi!',

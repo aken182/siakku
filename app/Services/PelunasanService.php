@@ -109,14 +109,14 @@ class PelunasanService
                   } else {
                         $detailPenyesuaian = Detail_pelunasan_belanja::with(['main_belanja', 'transaksi'])
                               ->find($request->input('id_pny_pembayaran'));
-                        $saldo = $detailPenyesuaian->main_belanja->saldo_piutang;
+                        $saldo = $detailPenyesuaian->main_belanja->saldo_hutang;
                   }
 
                   $saldoPnyAwal =  $saldo + $detailPenyesuaian->jumlah_pelunasan;
-                  $saldoPiutangBaru = $saldoPnyAwal - $jumlahPembayaran;
+                  $saldoTagihanBaru = $saldoPnyAwal - $jumlahPembayaran;
 
                   $request->merge([
-                        'saldo_tagihan' => $saldoPiutangBaru,
+                        'saldo_tagihan' => $saldoTagihanBaru,
                         'jumlah_bayar' => $jumlahPembayaran
                   ]);
 
@@ -133,6 +133,18 @@ class PelunasanService
             }
       }
 
+      public function getTotalTransaksi($request)
+      {
+            if ($request['jenis_transaksi'] === 'Pembayaran Hutang Belanja') {
+                  $bunga = $request['bunga_hutang'] ?? null;
+                  $bungafix = convertToNumber($bunga);
+                  $total = $request['jumlah_bayar'] + ($bungafix);
+            } else {
+                  $total = $request['jumlah_bayar'];
+            }
+            return $total;
+      }
+
       public function createTransaksi($request, $imageName, $detail)
       {
             Transaksi::create([
@@ -145,7 +157,7 @@ class PelunasanService
                   'jenis_transaksi' => $request->input('jenis_transaksi'),
                   'metode_transaksi' => $request->input('metode_transaksi'),
                   'nota_transaksi' => $imageName,
-                  'total' => $request->input('jumlah_bayar'),
+                  'total' => self::getTotalTransaksi($request->all()),
                   'unit' => $request->input('unit'),
                   'keterangan' => $request->input('keterangan')
             ]);
@@ -189,10 +201,12 @@ class PelunasanService
        **/
       public function createDetailPelunasanBelanja($id_transaksi, $request)
       {
+            $bunga = $request->input('bunga_hutang') ?? null;
             Detail_pelunasan_belanja::create([
                   'id_transaksi' => $id_transaksi,
                   'id_belanja' => $request->input('id_belanja'),
-                  'jumlah_pelunasan' => $request->input('jumlah_bayar')
+                  'jumlah_pelunasan' => $request->input('jumlah_bayar'),
+                  'bunga' => convertToNumber($bunga)
             ]);
       }
 
@@ -278,10 +292,14 @@ class PelunasanService
             $id_transaksi_jurnal = self::getIdTransaksiJurnal(new Main_belanja, 'id_belanja', $request['id_belanja']);
             $id_debet = self::getIdHutang($id_transaksi_jurnal);
             $id_kredit = $this->coaService->getIdKredit($request);
-
+            $id_bunga = $this->coaService->getIdBungaHutang($request);
+            $bunga = $request['bunga_hutang'] ?? null;
+            $bungafix = convertToNumber($bunga);
+            $total = self::getTotalTransaksi($request);
             //--input tabel jurnal--//
             jurnal($model, $id_debet, $id_transaksi, 'debet', $request['jumlah_bayar']);
-            jurnal($model, $id_kredit, $id_transaksi, 'kredit', $request['jumlah_bayar']);
+            jurnal($model, $id_bunga, $id_transaksi, 'debet', $bungafix);
+            jurnal($model, $id_kredit, $id_transaksi, 'kredit', $total);
       }
 
       public function getIdTransaksiJurnal($model, $idKey, $id)
@@ -410,6 +428,7 @@ class PelunasanService
                   'nama' => $m->main_belanja->penyedia->nama ?? '-',
                   'tanggal_bayar' => date('d-m-Y', strtotime($m->transaksi->tgl_transaksi)),
                   'jumlah_bayar' => cek_uang($m->jumlah_pelunasan),
+                  'bunga' => cek_uang($m->bunga),
                   'via' => $m->transaksi->jenis_transaksi,
                   'sisa_tagihan' => cek_uang($m->main_belanja->saldo_hutang),
                   'status' => $m->main_belanja->status_belanja,

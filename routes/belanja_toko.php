@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\transaksi\HutangController;
 use App\Http\Controllers\transaksi\BelanjaController;
+use App\Http\Controllers\transaksi\PelunasanController;
 use App\Http\Controllers\transaksi\BelanjaBarangController;
 
 Route::controller(BelanjaBarangController::class)->group(function () {
@@ -16,5 +16,24 @@ Route::controller(BelanjaBarangController::class)->group(function () {
       Route::get('/belanja-barang/unit-pertokoan/detail', 'detail')->name('btk-belanja-barang.detail');
 });
 
-Route::get('/belanja-lain/unit-pertokoan', [BelanjaController::class, 'index'])->name('btk-belanja-lain');
-Route::get('/hutang/unit-pertokoan', [HutangController::class, 'index'])->name('btk-hutang');
+Route::controller(BelanjaController::class)->group(function () {
+      Route::get('/belanja-lain/unit-pertokoan', 'index')->name('btk-belanja-lain');
+      Route::get('/belanja-lain/unit-pertokoan/list', 'dataTable')->name('btk-belanja-lain.list');
+      Route::get('/belanja-lain/unit-pertokoan/create', 'create')->name('btk-belanja-lain.create');
+      Route::get('/belanja-lain/unit-pertokoan/show/{id}', 'show')->name('btk-belanja-lain.show');
+      Route::post('/belanja-lain/unit-pertokoan/store', 'store')->name('btk-belanja-lain.store');
+      Route::get('/belanja-lain/unit-pertokoan/detail', 'detail')->name('btk-belanja-lain.detail');
+});
+
+Route::controller(PelunasanController::class)->group(function () {
+      //pelunasan-belanja-barang
+      Route::get('/belanja-barang/unit-pertokoan/pelunasan/create', 'create')->name('btk-belanja-barang.create-pelunasan');
+      Route::get('/belanja-barang/unit-pertokoan/pelunasan/show/{id}', 'show')->name('btk-belanja-barang.show-pelunasan');
+      Route::post('/belanja-barang/unit-pertokoan/pelunasan/store', 'store')->name('btk-belanja-barang.store-pelunasan');
+      Route::get('/belanja-barang/unit-pertokoan/pelunasan/detail', 'detail')->name('btk-belanja-barang.detail-pelunasan');
+      //pelunasan-belanja-lain
+      Route::get('/belanja-lain/unit-pertokoan/pelunasan/create', 'create')->name('btk-belanja-lain.create-pelunasan');
+      Route::get('/belanja-lain/unit-pertokoan/pelunasan/show/{id}', 'show')->name('btk-belanja-lain.show-pelunasan');
+      Route::post('/belanja-lain/unit-pertokoan/pelunasan/store', 'store')->name('btk-belanja-lain.store-pelunasan');
+      Route::get('/belanja-lain/unit-pertokoan/pelunasan/detail', 'detail')->name('btk-belanja-lain.detail-pelunasan');
+});

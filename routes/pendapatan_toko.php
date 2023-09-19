@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\transaksi\PenjualanController;
 use App\Http\Controllers\transaksi\PendapatanController;
 
-
 Route::controller(PenjualanController::class)->group(function () {
       Route::get('/penjualan/unit-pertokoan', 'index')->name('ptk-penjualan');
       Route::get('/penjualan/unit-pertokoan/list', 'dataTablePenjualan')->name('ptk-penjualan.list');
@@ -21,18 +20,15 @@ Route::controller(PenjualanController::class)->group(function () {
       Route::post('/penjualan/unit-pertokoan/store-lainnya', 'storeLainnya')->name('ptk-penjualan.store-lainnya');
       Route::get('/penjualan/unit-pertokoan/show/{id}', 'show')->name('ptk-penjualan.show');
 });
+
 Route::controller(PelunasanController::class)->group(function () {
       //penjualan
       Route::get('/penjualan/unit-pertokoan/pelunasan/create', 'create')->name('ptk-penjualan.create-pelunasan');
       Route::get('/penjualan/unit-pertokoan/pelunasan/show/{id}', 'show')->name('ptk-penjualan.show-pelunasan');
       Route::post('/penjualan/unit-pertokoan/pelunasan/store', 'store')->name('ptk-penjualan.store-pelunasan');
       Route::get('/penjualan/unit-pertokoan/pelunasan/detail', 'detail')->name('ptk-penjualan.detail-pelunasan');
-      //pelunasan-belanja-barang
-      Route::get('/belanja-barang/unit-pertokoan/pelunasan/create', 'create')->name('btk-belanja-barang.create-pelunasan');
-      Route::get('/belanja-barang/unit-pertokoan/pelunasan/show/{id}', 'show')->name('btk-belanja-barang.show-pelunasan');
-      Route::post('/belanja-barang/unit-pertokoan/pelunasan/store', 'store')->name('btk-belanja-barang.store-pelunasan');
-      Route::get('/belanja-barang/unit-pertokoan/pelunasan/detail', 'detail')->name('btk-belanja-barang.detail-pelunasan');
 });
+
 Route::controller(PendapatanController::class)->group(function () {
       Route::get('/pendapatan/unit-pertokoan', 'index')->name('ptk-pendapatan');
       Route::get('/pendapatan/unit-pertokoan/list', 'dataTable')->name('ptk-pendapatan.list');

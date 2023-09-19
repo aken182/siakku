@@ -30,20 +30,7 @@
                     <x-button.button-group :buttonGroup="$dataButtonGroupInventaris" />
                 </div>
                 <div class="card-body">
-                    <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped main-table">
-                            <thead class="table-success">
-                                <th>Nomor Transaksi</th>
-                                <th>Tanggal Transaksi</th>
-                                <th>Keterangan</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
+                    <x-data-table.main-transaksi :route="$routeList" />
                 </div>
             </div>
         </section>

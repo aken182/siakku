@@ -198,6 +198,8 @@ class PelunasanController extends Controller
                   'tanggal' => $transaksi->transaksi->tgl_transaksi,
                   'metode_transaksi' => $transaksi->transaksi->metode_transaksi,
                   'total' => $transaksi->transaksi->total,
+                  'jumlah_bayar' => $transaksi->jumlah_pelunasan,
+                  'bunga' => $transaksi->bunga ?? null,
                   'nota' => $transaksi->transaksi->nota_transaksi,
                   'tipe' => $transaksi->transaksi->tipe,
                   'status' => $transaksi->main_penjualan->status_penjualan ?? $transaksi->main_belanja->status_belanja,

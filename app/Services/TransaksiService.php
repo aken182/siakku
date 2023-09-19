@@ -46,6 +46,10 @@ class TransaksiService
                   case 'bsp-belanja-barang.list':
                         $data = self::getPengadaanBarang($unit);
                         break;
+                  case 'btk-belanja-lain.list':
+                  case 'bsp-belanja-lain.list':
+                        $data = self::getBelanja($unit);
+                        break;
                   default:
                         $data = 'kosong';
                         break;
@@ -206,26 +210,41 @@ class TransaksiService
       }
 
       /**
+       * Mengambil data transaksi belanja
+       * berdasarkan unit.
+       *
+       **/
+      public function getBelanja($unit)
+      {
+            $belanja = Transaksi::where('jenis_transaksi', 'Belanja')
+                  ->where('unit', $unit)->get();
+            $result = self::getDataBelanja($belanja);
+            return $result;
+      }
+
+      /**
        * Mengambil data transaksi pengadaan
-       * barang dalam bentuk array.
+       * barang atau belanja dalam bentuk array.
        *
        **/
       public function getDataBelanja($belanja)
       {
             $result = [];
-            foreach ($belanja as $p) {
-                  $status = Main_belanja::where('id_transaksi', $p->id_transaksi)->value('status_belanja');
-                  $result[] = [
-                        'id_transaksi' => $p->id_transaksi,
-                        'detail_tabel' => $p->detail_tabel,
-                        'jenis_transaksi' => $p->jenis_transaksi,
-                        'kode' => $p->kode,
-                        'tipe' => $p->tipe,
-                        'tgl_transaksi' => $p->tgl_transaksi,
-                        'keterangan' => $p->keterangan,
-                        'total' => $p->total,
-                        'status' => $status
-                  ];
+            if ($belanja) {
+                  foreach ($belanja as $p) {
+                        $status = Main_belanja::where('id_transaksi', $p->id_transaksi)->value('status_belanja');
+                        $result[] = [
+                              'id_transaksi' => $p->id_transaksi,
+                              'detail_tabel' => $p->detail_tabel,
+                              'jenis_transaksi' => $p->jenis_transaksi,
+                              'kode' => $p->kode,
+                              'tipe' => $p->tipe,
+                              'tgl_transaksi' => $p->tgl_transaksi,
+                              'keterangan' => $p->keterangan,
+                              'total' => $p->total,
+                              'status' => $status
+                        ];
+                  }
             }
             return $result;
       }

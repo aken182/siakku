@@ -1,7 +1,19 @@
 "use-strict";
 $(document).ready(function () {
 
+      var hc = $("#bunga_hutang_common");
+      var ch = $("#cek_bunga_hutang");
       var toastErrorBelanja = toastInfoTopRight("Jumlah pembayaran melebihi total tagihan !", "#ed2710");
+      hc.hide();
+      ch.on("change", function () {
+            let cek_ya = this.checked;
+            if (cek_ya) {
+                  hc.fadeIn();
+            } else {
+                  hc.fadeOut();
+            }
+      });
+
       !(function jenisTrans() {
             var k = $("#rekening_kas");
             var b = $("#rekening_bank");

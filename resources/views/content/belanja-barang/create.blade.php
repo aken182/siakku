@@ -397,6 +397,8 @@
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
+                                                <small class="text-primary">Note: Jika nama vendor belum ada silakan
+                                                    mengisi datanya di master data vendor.</small>
                                             </div>
                                         </div>
                                         <div class="row">

@@ -170,12 +170,6 @@
                               "name": "Belanja Lainnya",
                               "permission": "belanja-lain-unit-pertokoan-view",
                               "slug": "btk-belanja-lain"
-                        },
-                        {
-                              "url": "/hutang/unit-pertokoan",
-                              "name": "Hutang",
-                              "permission": "hutang-unit-pertokoan-view",
-                              "slug": "btk-hutang"
                         }
                   ]
             },
@@ -395,12 +389,6 @@
                               "name": "Belanja Lainnya",
                               "permission": "belanja-lain-unit-sp-view",
                               "slug": "bsp-belanja-lain"
-                        },
-                        {
-                              "url": "/hutang/unit-sp",
-                              "name": "Hutang",
-                              "permission": "hutang-unit-sp-view",
-                              "slug": "bsp-hutang"
                         }
                   ]
             },

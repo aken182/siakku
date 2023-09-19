@@ -129,8 +129,14 @@
                                 </tr>
                                 <tr>
                                     <td>Jumlah Pembayaran</td>
-                                    <td style='text-align: right' class='text-dark'>{{ cek_uang($total) }}</td>
+                                    <td style='text-align: right' class='text-dark'>{{ cek_uang($jumlah_bayar) }}</td>
                                 </tr>
+                                @if (isset($bunga))
+                                    <tr>
+                                        <td>Bunga Hutang</td>
+                                        <td style='text-align: right' class='text-dark'>{{ cek_uang($bunga) }}</td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td>Sisa Tagihan</td>
                                     <td style='text-align: right' class='text-dark'>{{ cek_uang($saldo_tagihan) }}

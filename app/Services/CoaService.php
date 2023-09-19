@@ -93,6 +93,33 @@ class CoaService
       }
 
       /**
+       * Mengambil akun-akun biaya atau pengeluaran lainnya
+       * dalam tabel coa pada database.
+       *
+       * @return mixed
+       **/
+      public function getAkunBelanjaOperasionalLainnya()
+      {
+            return Coa::where('kategori', "Biaya")
+                  ->orWhere(function ($query) {
+                        $query->where('kategori', "Passiva Lancar")
+                              ->where('subkategori', "Hutang");
+                  })
+                  ->get();
+      }
+
+      /**
+       * Mengambil akun-akun penerimaan hutang 
+       * dalam tabel coa pada database.
+       *
+       * @return mixed
+       **/
+      public function getAkunPenerimaanHutang()
+      {
+            return Coa::where('subkategori', "Kas & Bank")->get();
+      }
+
+      /**
        * ambil id_coa untuk akun debet jurnal
        *
        * @param mixed $request
@@ -133,6 +160,14 @@ class CoaService
                   'akunBank' => self::getCoaBank(),
                   'akunPiutang' => self::getCoaPiutang(),
             ];
+      }
+
+      public function getIdBungaHutang()
+      {
+            return Coa::where('nama', 'Bunga Hutang')
+                  ->where('kategori', 'Biaya')
+                  ->where('subkategori', 'Biaya Langsung')
+                  ->value('id_coa');
       }
 
       public function getAkunBelanja()
