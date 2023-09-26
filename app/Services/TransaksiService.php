@@ -50,6 +50,14 @@ class TransaksiService
                   case 'bsp-belanja-lain.list':
                         $data = self::getBelanja($unit);
                         break;
+                  case 'stk-simpanan.list':
+                  case 'sp-simpanan.list':
+                        $data = self::getSimpanan($unit);
+                        break;
+                  case 'stk-penarikan.list':
+                  case 'sp-penarikan.list':
+                        $data = self::getPenarikanSimpanan($unit);
+                        break;
                   default:
                         $data = 'kosong';
                         break;
@@ -207,6 +215,30 @@ class TransaksiService
                   ->where('unit', $unit)->get();
             $result = self::getDataBelanja($pengadaan);
             return $result;
+      }
+
+      /**
+       * Mengambil data transaksi simpanan
+       * berdasarkan unit.
+       *
+       **/
+      public function getSimpanan($unit)
+      {
+            $simpanan = Transaksi::where('detail_tabel', 'detail_simpanan')
+                  ->where('unit', $unit)->get();
+            return $simpanan;
+      }
+
+      /**
+       * Mengambil data transaksi penarikan
+       * simpanan berdasarkan unit.
+       *
+       **/
+      public function getPenarikanSimpanan($unit)
+      {
+            $penarikan = Transaksi::where('detail_tabel', 'detail_penarikan')
+                  ->where('unit', $unit)->get();
+            return $penarikan;
       }
 
       /**

@@ -29,7 +29,7 @@
                 <div class="card-body">
                     <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped trs-table">
+                        <table class="table table-bordered table-hover trs-table">
                             <thead class="table-success">
                                 <th>Nomor Transaksi</th>
                                 <th>Tanggal</th>

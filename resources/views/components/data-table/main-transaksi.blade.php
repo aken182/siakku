@@ -1,7 +1,7 @@
 <div class="row">
     <input type="hidden" id="routeUrl" data-route="{{ route($route) }}" />
     <div class="table-responsive">
-        <table class="table table-bordered table-striped main-table">
+        <table class="table table-bordered table-hover main-table">
             <thead class="table-success">
                 <th>Nomor Transaksi</th>
                 <th>Tanggal Transaksi</th>

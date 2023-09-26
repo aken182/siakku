@@ -27,26 +27,28 @@
                 </div>
                 <div class="card-body">
                     <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
-                    <table class="table table-hover" id="yajra-datatable">
-                        <thead>
-                            <tr>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Jenis</th>
-                                <th>TPK</th>
-                                <th>Kuantitas</th>
-                                <th>Harga</th>
-                                @if ($posisi === 'inventaris')
-                                    <th>Nilai Buku</th>
-                                    <th>Umur Ekonomis</th>
-                                @endif
-                                <th>Harga Jual</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="yajra-datatable">
+                            <thead>
+                                <tr>
+                                    <th>Kode Barang</th>
+                                    <th>Nama</th>
+                                    <th>Jenis</th>
+                                    <th>TPK</th>
+                                    <th>Kuantitas</th>
+                                    <th>Harga Satuan</th>
+                                    @if ($posisi === 'inventaris')
+                                        <th>Nilai Buku</th>
+                                        <th>Umur Ekonomis</th>
+                                    @endif
+                                    <th>Harga Jual</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>

@@ -27,19 +27,7 @@
                     <x-button.master-data-button :routecreate="$routeCreate" />
                 </div>
                 <div class="card-body">
-                    <input type="hidden" id="routeUrl" data-route="{{ route($routeList) }}" />
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped trs-table">
-                            <thead>
-                                <th>No.Transaksi</th>
-                                <th>Tanggal</th>
-                                <th>Keterangan</th>
-                                <th>Jumlah</th>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
+                    <x-data-table.transaksi :route="$routeList" />
                 </div>
             </div>
         </section>

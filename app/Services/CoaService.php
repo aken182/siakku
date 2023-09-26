@@ -11,6 +11,13 @@ class CoaService
             return Coa::where('id_coa', $id)->first();
       }
 
+      public function getIdCoa($kolom, $nilaiKolom, $kolom2, $nilaiKolom2)
+      {
+            return Coa::where($kolom, 'LIKE', "%" . $nilaiKolom . "%")
+                  ->where($kolom2, 'LIKE', "%" . $nilaiKolom2 . "%")
+                  ->value('id_coa');
+      }
+
       /**
        * Dokumentasi createCoa
        *
@@ -134,6 +141,44 @@ class CoaService
             } else {
                   return $request['id_piutang'];
             }
+      }
+
+      /**
+       * ambil id_coa untuk akun simpanan
+       *
+       **/
+      public function getIdSimpanan($nama)
+      {
+            return Coa::where('nama', 'LIKE', "%" . $nama . "%")
+                  ->where('subkategori', 'Simpanan')
+                  ->value('id_coa');
+      }
+
+      /**
+       * ambil id_coa untuk akun simpanan sukarela
+       *
+       **/
+      public function getIdSimpananSukarela($nama)
+      {
+            return Coa::where('nama',  $nama)
+                  ->where('subkategori', 'Simpanan')
+                  ->value('id_coa');
+      }
+
+      /**
+       * undocumented function summary
+       *
+       **/
+      public function getSimpananSimpanPinjam()
+      {
+            return [
+                  'id_pokok' => self::getIdSimpanan('Simpanan Pokok'),
+                  'id_wajib' => self::getIdSimpanan('Simpanan Wajib'),
+                  'id_pthk' => self::getIdSimpanan('Simpanan PTHK'),
+                  'id_khusus' => self::getIdSimpanan('Simpanan Khusus'),
+                  'id_kapitalisasi' => self::getIdSimpanan('Simpanan Kapitalisasi'),
+                  'id_sukarela' => self::getIdSimpananSukarela('Simpanan Sukarela'),
+            ];
       }
 
       /**

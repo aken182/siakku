@@ -1,7 +1,7 @@
 <div class="k-select-hide">
     <div class="row k-select-hide-main">
         <div class="col mb-3">
-            <label class="form-label text-primary pt-3" for="metode_transaksi">Metode Penerimaan</label>
+            <label class="form-label text-primary pt-3" for="metode_transaksi">Penerimaan Melalui</label>
             <select class="form-select @error('metode_transaksi') is-invalid @enderror" id="metode_transaksi"
                 name="metode_transaksi">
                 <option value="">Pilih Metode Penerimaan</option>
