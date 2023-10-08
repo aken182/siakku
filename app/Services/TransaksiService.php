@@ -58,6 +58,13 @@ class TransaksiService
                   case 'sp-penarikan.list':
                         $data = self::getPenarikanSimpanan($unit);
                         break;
+                  case 'pp-pinjaman.list':
+                        $pinjaman = new PinjamanService;
+                        $data = $pinjaman->getDataPinjaman($unit, $route);
+                        break;
+                  case 'pp-angsuran.list':
+                        $data = self::getPembayaranPinjaman($unit);
+                        break;
                   default:
                         $data = 'kosong';
                         break;
@@ -199,6 +206,21 @@ class TransaksiService
       public function getPendapatan($unit)
       {
             return Transaksi::where('detail_tabel', 'detail_pendapatan')
+                  ->where('unit', $unit)->get();
+      }
+
+      /**
+       * Dokumentasi getPendapatan
+       *
+       * Mengambil data transaksi pendapatan
+       * berdasarkan unit.
+       *
+       * @param mixed $unit
+       * @return mixed
+       **/
+      public function getPembayaranPinjaman($unit)
+      {
+            return Transaksi::where('jenis_transaksi', 'Pembayaran Pinjaman Anggota')
                   ->where('unit', $unit)->get();
       }
 

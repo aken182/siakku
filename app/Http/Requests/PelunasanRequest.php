@@ -27,9 +27,7 @@ class PelunasanRequest extends FormRequest
     {
         $rules = [
             'cek_pembayaran' => 'required',
-            'jumlah_bayar' => 'required',
             'no_bukti' => 'required',
-            'saldo_tagihan' => 'required',
             'no_pembayaran' => 'required|unique:transaksi,kode',
             'tgl_transaksi' => 'required|date|before_or_equal:today',
             'jenis_transaksi' => 'required',
@@ -40,6 +38,11 @@ class PelunasanRequest extends FormRequest
 
         if ($this->input('cek_pembayaran') === 'penyesuaian') {
             $rules['id_pny_pembayaran'] = 'required';
+        }
+
+        if ($this->input('jenis_transaksi') === 'Pembayaran Piutang Penjualan' || $this->input('jenis_transaksi') === 'Pembayaran Hutang Belanja') {
+            $rules['jumlah_bayar'] = 'required';
+            $rules['saldo_tagihan'] = 'required';
         }
 
         if ($this->input('jenis_transaksi') === 'Pembayaran Piutang Penjualan') {
@@ -54,19 +57,20 @@ class PelunasanRequest extends FormRequest
             }
         }
 
+        if ($this->input('jenis_transaksi') === 'Pembayaran Pinjaman Anggota') {
+            $rules['id_pinjaman'] = 'required';
+            $rules['angsuran_pokok'] = 'required';
+            $rules['angsuran_bunga'] = 'required';
+            $rules['total_transaksi'] = 'required';
+        }
+
         return $rules;
     }
 
     public function messages()
     {
-        return [
+        $messages = [
             'cek_pembayaran.required' => 'Jenis pembayaran wajib dipilih!',
-            'id_pny_pembayaran.required_if' => 'Invoice penyesuaian wajib dipilih!',
-            'id_penjualan.required_if' => 'Kolom Tagihan wajib diisi!',
-            'id_belanja.required_if' => 'Kolom Tagihan wajib diisi!',
-            'bunga_hutang.required_if' => 'Kolom bunga hutang wajib diisi!',
-            'jumlah_bayar.required' => 'Kolom jumlah pembayaran wajib diisi!',
-            'saldo_tagihan.required' => 'Kolom sisa tagihan tidak boleh kosong. Silakan isi kolom tagihan dan jumlah pembayaran!',
             'no_pembayaran.required' => 'Kolom nomor pembayaran wajib diisi!',
             'no_pembayaran.unique' => 'Kolom nomor pembayaran harus unik!',
             'no_bukti.required' => 'Kolom nomor bukti wajib diisi!',
@@ -79,6 +83,36 @@ class PelunasanRequest extends FormRequest
             'nota_transaksi.max' => 'Ukuran file nota pembayaran tidak boleh lebih besar dari 1048 kb!',
             'keterangan.required' => 'Keterangan wajib diisi!'
         ];
+
+        if ($this->input('cek_pembayaran') === 'penyesuaian') {
+            $messages['id_pny_pembayaran.required'] = 'Invoice penyesuaian wajib diisi!';
+        }
+
+        if ($this->input('jenis_transaksi') === 'Pembayaran Piutang Penjualan' || $this->input('jenis_transaksi') === 'Pembayaran Hutang Belanja') {
+            $messages['jumlah_bayar.required'] = 'Kolom jumlah pembayaran wajib diisi!';
+            $messages['saldo_tagihan.required'] = 'Kolom sisa tagihan tidak boleh kosong. Silakan isi kolom tagihan dan jumlah pembayaran!';
+        }
+
+        if ($this->input('jenis_transaksi') === 'Pembayaran Piutang Penjualan') {
+            $messages['id_penjualan.required'] = 'Kolom tagihan wajib diisi!';
+        }
+
+        if ($this->input('jenis_transaksi') === 'Pembayaran Hutang Belanja') {
+            $messages['id_belanja.required'] = 'Kolom tagihan wajib diisi!';
+
+            if ($this->input('cek_bunga_hutang') == 'on') {
+                $messages['bunga_hutang.required'] = 'Kolom bunga hutang wajib diisi!';
+            }
+        }
+
+        if ($this->input('jenis_transaksi') === 'Pembayaran Pinjaman Anggota') {
+            $messages['id_pinjaman.required'] = 'Kolom tagihan pinjaman wajib diisi!';
+            $messages['angsuran_pokok.required'] = 'Jumlah angsuran pokok wajib diisi!';
+            $messages['angsuran_bunga.required'] = 'Jumlah angsuran bunga wajib diisi!';
+            $messages['total_transaksi.required'] = 'Total angsuran tidak boleh kosong!';
+        }
+
+        return $messages;
     }
 
     public function withValidator(Validator $validator)

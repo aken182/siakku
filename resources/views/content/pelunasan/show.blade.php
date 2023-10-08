@@ -104,51 +104,106 @@
                         </div>
                     @endif
                     <div class='row mb-2 pb-1'>
-                        <h5 class='text-capitalize text-success'>Detil Pembayaran</h5>
+                        <h5 class='text-capitalize text-success'>
+                            {{ $jenis === 'pinjam tindis' ? 'Detail Pinjam Tindis' : 'Detil Pembayaran' }}</h5>
                         <div class='col-lg-12 col-md-12'>
-                            <table class='table table-borderless'>
-                                <tr>
-                                    <td>Invoice Tagihan</td>
-                                    <td class='text-capitalize text-dark' style='text-align: right'>
-                                        #{{ $invoiceTagihan }}</td>
-                                </tr>
+                            <table class='table table-borderless table-hover'>
+                                @if (isset($invoiceTagihan))
+                                    <tr>
+                                        <td>Invoice Tagihan</td>
+                                        <td class='text-capitalize text-dark' style='text-align: right'>
+                                            #{{ $invoiceTagihan }}</td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td>Nomor Bukti</td>
                                     <td class='text-capitalize text-dark' style='text-align: right'>
                                         #{{ $no_bukti }}</td>
                                 </tr>
+                                @isset($namaPembeli)
+                                    <tr>
+                                        <td>{{ $title == 'Pembayaran Piutang Penjualan' ? 'Nama Pembeli' : 'Nama Vendor' }}
+                                        </td>
+                                        <td class='text-capitalize text-dark' style='text-align: right'>
+                                            {{ $namaPembeli }}</td>
+                                    </tr>
+                                @endisset
+                                @if (isset($namaAnggota))
+                                    <tr>
+                                        <td>Nama Anggota</td>
+                                        <td class='text-capitalize text-dark' style='text-align: right'>
+                                            {{ $namaAnggota }}</td>
+                                    </tr>
+                                @endif
+                                @if (isset($jumlahPinjaman))
+                                    <tr>
+                                        <td>Jumlah Pinjaman</td>
+                                        <td class='text-capitalize text-dark' style='text-align: right'>
+                                            {{ buatrp($jumlahPinjaman) }}</td>
+                                    </tr>
+                                    @if ($jenis === 'pinjam tindis')
+                                        <tr>
+                                            <td>Jumlah Penambahan Pinjaman</td>
+                                            <td class='text-capitalize text-dark' style='text-align: right'>
+                                                {{ buatrp($besarPenambahan) }}</td>
+                                        </tr>
+                                    @endif
+                                @endif
                                 <tr>
-                                    <td>{{ $title == 'Pembayaran Piutang Penjualan' ? 'Nama Pembeli' : 'Nama Vendor' }}
+                                    <td>{{ $jenis === 'pinjam tindis' ? 'Pengeluaran Melalui' : 'Via Pembayaran' }}
                                     </td>
-                                    <td class='text-capitalize text-dark' style='text-align: right'>
-                                        {{ $namaPembeli }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Via Pembayaran</td>
                                     <td style='text-align: right' class='text-dark'>{{ $metode_transaksi }}</td>
                                 </tr>
-                                <tr>
-                                    <td>Jumlah Pembayaran</td>
-                                    <td style='text-align: right' class='text-dark'>{{ cek_uang($jumlah_bayar) }}</td>
-                                </tr>
+                                @isset($angsuran_pokok)
+                                    <tr>
+                                        <td>Angsuran Pokok yang Dibayar</td>
+                                        <td style='text-align: right' class='text-dark'>{{ cek_uang($angsuran_pokok) }}</td>
+                                    </tr>
+                                @endisset
+                                @isset($angsuran_bunga)
+                                    <tr>
+                                        <td>Angsuran Bunga yang Dibayar</td>
+                                        <td style='text-align: right' class='text-dark'>{{ cek_uang($angsuran_bunga) }}</td>
+                                    </tr>
+                                @endisset
+                                @isset($saldo_pokok)
+                                    <tr>
+                                        <td>Saldo Pokok</td>
+                                        <td style='text-align: right' class='text-dark'>{{ cek_uang($saldo_pokok) }}</td>
+                                    </tr>
+                                @endisset
+                                @isset($saldo_bunga)
+                                    <tr>
+                                        <td>Saldo Bunga</td>
+                                        <td style='text-align: right' class='text-dark'>{{ cek_uang($saldo_bunga) }}</td>
+                                    </tr>
+                                @endisset
+                                @isset($jumlah_bayar)
+                                    <tr>
+                                        <td>Jumlah Pembayaran</td>
+                                        <td style='text-align: right' class='text-dark'>{{ cek_uang($jumlah_bayar) }}</td>
+                                    </tr>
+                                @endisset
                                 @if (isset($bunga))
                                     <tr>
                                         <td>Bunga Hutang</td>
                                         <td style='text-align: right' class='text-dark'>{{ cek_uang($bunga) }}</td>
                                     </tr>
                                 @endif
-                                <tr>
-                                    <td>Sisa Tagihan</td>
-                                    <td style='text-align: right' class='text-dark'>{{ cek_uang($saldo_tagihan) }}
-                                    </td>
-                                </tr>
+                                @isset($saldo_tagihan)
+                                    <tr>
+                                        <td>Sisa Tagihan</td>
+                                        <td style='text-align: right' class='text-dark'>{{ cek_uang($saldo_tagihan) }}
+                                        </td>
+                                    </tr>
+                                @endisset
                                 <tr>
                                     <td>Keterangan</td>
                                     <td class='text-capitalize text-dark' style='text-align: right'>
                                         {{ $keterangan }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Nota Pembayaran</td>
+                                    <td>{{ $jenis === 'pinjam tindis' ? 'Nota Pinjam Tindis' : 'Nota Pembayaran' }}</td>
                                     <td class='text-capitalize text-dark' style='text-align: right'><button type="button"
                                             class="btn btn-sm btn-outline-info" data-bs-toggle="modal"
                                             data-bs-target="#modalScrollable">Lihat Nota
@@ -157,8 +212,10 @@
                             </table>
                         </div>
                     </div>
-                    <p class='text-success'><strong>Jurnal Pembayaran:</strong></p>
-                    <table class='table table-striped table-bordered mb-1'>
+                    <p class='text-success'><strong>Jurnal
+                            {{ $jenis === 'pinjam tindis' ? 'Penambahan Pinjaman' : 'Pembayaran' }}:</strong>
+                    </p>
+                    <table class='table table-striped table-bordered'>
                         <thead class='table table-success'>
                             <tr>
                                 <td>Rekening</td>
@@ -208,7 +265,8 @@
                 <div class="modal-body">
                     <div class="card-body">
                         <h6 class="card-subtitle text-muted">{{ $nota }}</h6>
-                        <img class="img-fluid d-flex mx-auto my-4" src="{{ asset('storage/nota-pelunasan/' . $nota) }}"
+                        <img class="img-fluid d-flex mx-auto my-4"
+                            src="{{ $jenis === 'pinjam tindis' ? asset('storage/nota-pinjaman/' . $nota) : asset('storage/nota-pelunasan/' . $nota) }}"
                             alt="Card image cap">
                         <p class="card-text">{{ $keterangan }}</p>
                     </div>

@@ -9,6 +9,7 @@ use App\Models\Transaksi;
 use App\Services\CoaService;
 use App\Models\Main_simpanan;
 use App\Models\Detail_simpanan;
+use App\Models\Main_pinjaman;
 
 class SimpananService
 {
@@ -72,6 +73,10 @@ class SimpananService
                   if ($unit === 'Pertokoan') {
                         $dataTotal = self::getSimpananPertokoanAnggota($idAnggota, $unit);
                   } else {
+                        if ($jenis === 'Simpanan Kapitalisasi') {
+                              $kapitalisasi = self::getKapitalisasiFromPinjaman($idAnggota, $unit);
+                              $total += $kapitalisasi;
+                        }
                         $idSimpanan = self::getIdSimpananSimpanPinjam($jenis);
                         $dataTotal = self::getSimpananSimpanPinjamAnggota($idSimpanan, $idAnggota, $unit);
                   }
@@ -82,6 +87,27 @@ class SimpananService
                   }
             }
             return $total;
+      }
+
+      /**
+       * Mengambil simpanan kapitalisasi dari 
+       * potongan pinjaman baru anggota
+       *
+       **/
+      public function getKapitalisasiFromPinjaman($id_anggota, $unit)
+      {
+            $kapitalisasi = 0;
+            $data = Main_pinjaman::with('transaksi')
+                  ->where('id_anggota', $id_anggota)
+                  ->where('jenis', 'baru')
+                  ->whereHas('transaksi', function ($query) use ($unit) {
+                        $query->whereNot('tipe', 'kadaluwarsa')
+                              ->where('unit', $unit);
+                  })->get();
+            foreach ($data as $d) {
+                  $kapitalisasi += $d->kapitalisasi;
+            }
+            return $kapitalisasi;
       }
 
       /**

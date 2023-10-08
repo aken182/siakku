@@ -75,10 +75,13 @@ class DataTableMainTransaksiService
                         $result = self::getResultStatus($data, $unit, $mainRoute, $route, $routeBayar);
                         return $result;
                   })
+                  ->editColumn('keterangan', function ($data) {
+                        return '<div class="text-capitalize">' . $data['keterangan'] . '</div>';
+                  })
                   ->editColumn('total', function ($data) {
                         return '<div style="text-align:right;">' . buatrp($data['total']) . '</div>';
                   })
-                  ->rawColumns(['kode', 'tgl_transaksi', 'status', 'total'])
+                  ->rawColumns(['kode', 'tgl_transaksi', 'keterangan', 'status', 'total'])
                   ->make(true);
       }
 }

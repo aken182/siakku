@@ -7,7 +7,9 @@ use App\Models\Jurnal;
 use App\Models\Transaksi;
 use App\Models\Main_penjualan;
 use App\Models\Detail_pelunasan_penjualan;
+use App\Models\Detail_pelunasan_pinjaman;
 use App\Models\Main_belanja;
+use App\Models\Main_pinjaman;
 
 class PelunasanService
 {
@@ -36,8 +38,26 @@ class PelunasanService
                   'Belanja' => 'Pembayaran Hutang Belanja',
                   'Penjualan Barang' => 'Pembayaran Piutang Penjualan',
                   'Penjualan Lainnya' => 'Pembayaran Piutang Penjualan',
+                  'Pinjaman Anggota' => 'Pembayaran Pinjaman Anggota',
             ];
             return $jenis[$detail];
+      }
+
+      /**
+       * undocumented function summary
+       *
+       **/
+      public function getRouteStoreDetail($request)
+      {
+            $data = [];
+            if ($request->input('detail') === 'Pinjaman Anggota') {
+                  $data['storeRoute'] = route('pp-angsuran.store');
+                  $data['detailRoute'] = 'pp-angsuran.detail-pelunasan';
+            } else {
+                  $data['storeRoute'] = route($request->input('route') . '.store-pelunasan');
+                  $data['detailRoute'] = $request->input('route') . '.detail-pelunasan';
+            }
+            return $data;
       }
 
       public function getTagihanPenjualan($unit, $jenis)
@@ -96,6 +116,21 @@ class PelunasanService
             return $tagihan;
       }
 
+      /**
+       * Mengambil data tagihan pinjaman anggota
+       *
+       **/
+      public function getTagihanPinjaman($unit, $jenis)
+      {
+            return Main_pinjaman::with(['transaksi', 'anggota'])
+                  ->whereNot('status', 'lunas')
+                  ->whereHas('transaksi', function ($query) use ($unit, $jenis) {
+                        $query->whereNot('tipe', 'kadaluwarsa')
+                              ->where('unit', $unit)
+                              ->where('jenis_transaksi', $jenis);
+                  })
+                  ->get();
+      }
 
       public function validateCustomField($request)
       {
@@ -148,18 +183,18 @@ class PelunasanService
       public function createTransaksi($request, $imageName, $detail)
       {
             Transaksi::create([
-                  'kode' => $request->input('no_pembayaran'),
+                  'kode' => $request['no_pembayaran'],
                   'kode_pny' => $request['invoicepny'],
-                  'no_bukti' => $request->input('no_bukti'),
-                  'tipe' => $request->input('cek_pembayaran'),
-                  'tgl_transaksi' => $request->input('tgl_transaksi'),
+                  'no_bukti' => $request['no_bukti'],
+                  'tipe' => $request['cek_pembayaran'],
+                  'tgl_transaksi' => $request['tgl_transaksi'],
                   'detail_tabel' => $detail,
-                  'jenis_transaksi' => $request->input('jenis_transaksi'),
-                  'metode_transaksi' => $request->input('metode_transaksi'),
+                  'jenis_transaksi' => $request['jenis_transaksi'],
+                  'metode_transaksi' => $request['metode_transaksi'],
                   'nota_transaksi' => $imageName,
-                  'total' => self::getTotalTransaksi($request->all()),
-                  'unit' => $request->input('unit'),
-                  'keterangan' => $request->input('keterangan')
+                  'total' => $request['total_transaksi'] ?? self::getTotalTransaksi($request),
+                  'unit' => $request['unit'],
+                  'keterangan' => $request['keterangan']
             ]);
       }
 
@@ -177,6 +212,53 @@ class PelunasanService
                   default:
                         break;
             }
+      }
+
+      /**
+       * undocumented function summary
+       *
+       **/
+      public function createDetailAngsuran($id_transaksi, $request, $id_penyesuaian)
+      {
+            $angsuranBunga = convertToNumber($request['angsuran_bunga']);
+            $angsuranPokok = convertToNumber($request['angsuran_pokok']);
+            Detail_pelunasan_pinjaman::create([
+                  'id_pinjaman' => $request['id_pinjaman'],
+                  'id_transaksi' => $id_transaksi,
+                  'jenis_angsuran' => 'biasa',
+                  'angsuran_bunga' => $angsuranBunga,
+                  'angsuran_pokok' => $angsuranPokok,
+                  'total_angsuran' => $request['total_transaksi'],
+            ]);
+            self::updateDetailAngsuran($angsuranBunga, $angsuranPokok, $request, $id_penyesuaian);
+      }
+
+      public function updateDetailAngsuran($angsuranBunga, $angsuranPokok, $request, $id_penyesuaian)
+      {
+            $pinjaman = Main_pinjaman::where('id_pinjaman', $request['id_pinjaman'])->first();
+            $saldoPokok = $pinjaman->saldo_pokok;
+            $saldoBunga = $pinjaman->saldo_bunga;
+
+            if ($request['cek_pembayaran'] === 'penyesuaian') {
+                  $pny = Detail_pelunasan_pinjaman::where('id_detail', $id_penyesuaian)
+                        ->where('id_pinjaman', $request['id_pinjaman'])->first();
+
+                  if ($pny) {
+                        $saldoPokok += $pny->angsuran_pokok;
+                        $saldoBunga += $pny->angsuran_bunga;
+                  }
+            }
+
+            $saldoPokok -= $angsuranPokok;
+            $saldoBunga -= $angsuranBunga;
+
+            $data = [
+                  'saldo_pokok' => $saldoPokok,
+                  'saldo_bunga' => $saldoBunga,
+                  'status' => self::getStatusPembayaran($saldoPokok, $saldoBunga)
+            ];
+
+            $pinjaman->update($data);
       }
 
       /**
@@ -229,13 +311,21 @@ class PelunasanService
             Main_belanja::where('id_belanja', $id_belanja)->update($data);
       }
 
-      public function getStatusPembayaran($saldoTagihan)
+      public function getStatusPembayaran($saldoTagihan, $saldoBunga = null)
       {
             //--ambil status pembayaran--//
-            if ($saldoTagihan <= 0) {
-                  $status = 'lunas';
+            if ($saldoBunga != null) {
+                  if ($saldoTagihan <= 0 && $saldoBunga <= 0) {
+                        $status = 'lunas';
+                  } else {
+                        $status = 'belum lunas';
+                  }
             } else {
-                  $status = 'belum lunas';
+                  if ($saldoTagihan <= 0) {
+                        $status = 'lunas';
+                  } else {
+                        $status = 'belum lunas';
+                  }
             }
             return $status;
       }
@@ -260,6 +350,27 @@ class PelunasanService
                   default:
                         break;
             }
+      }
+
+      public function createJurnalAngsuranPinjaman($request, $id_transaksi, $id_penyesuaian)
+      {
+            /*jurnal pembalik*/
+            $model = new Jurnal;
+            if ($request['cek_pembayaran'] === 'penyesuaian') {
+                  jurnalPembalik($model, $id_transaksi, $id_penyesuaian);
+            }
+
+            //--ambil variabel input jurnal--//
+            $id_transaksi_jurnal = self::getIdTransaksiJurnal(new Main_pinjaman, 'id_pinjaman', $request['id_pinjaman']);
+            $id_debet = $this->coaService->getIdDebet($request);
+            $id_bunga = $this->coaService->getIdCoa('nama', 'Pendapatan Bunga Bank', 'subkategori', 'Pendapatan Bunga');
+            $id_piutang = self::getIdPiutang($id_transaksi_jurnal);
+            $angsuranBunga = convertToNumber($request['angsuran_bunga']);
+            $angsuranPokok = convertToNumber($request['angsuran_pokok']);
+            //--input tabel jurnal--//
+            jurnal($model, $id_debet, $id_transaksi, 'debet', $request['total_transaksi']);
+            jurnal($model, $id_bunga, $id_transaksi, 'kredit', $angsuranBunga);
+            jurnal($model, $id_piutang, $id_transaksi, 'kredit', $angsuranPokok);
       }
 
       public function createJurnalPiutangPenjualan($request, $id_transaksi)
@@ -383,8 +494,9 @@ class PelunasanService
                   'btk-belanja-lain' => 'Pembayaran Hutang Belanja',
                   'bsp-belanja-barang' => 'Pembayaran Hutang Belanja',
                   'bsp-belanja-lain' => 'Pembayaran Hutang Belanja',
+                  'pp-angsuran' => 'Pembayaran Pinjaman Anggota',
             ];
-            $route = str_replace(['.detail-pelunasan', '.show-pelunasan'], '', $route);
+            $route = str_replace(['.detail-pelunasan', '.detail-pelunasan', '.show-pelunasan'], '', $route);
             return $jenis[$route];
       }
 
@@ -433,6 +545,31 @@ class PelunasanService
                   'sisa_tagihan' => cek_uang($m->main_belanja->saldo_hutang),
                   'status' => $m->main_belanja->status_belanja,
                   'invoice_tagihan' => $m->main_belanja->transaksi->kode,
+                  'nota_transaksi' => $m->transaksi->nota_transaksi,
+                  'keterangan' => $m->transaksi->keterangan
+            ];
+
+            return $result;
+      }
+
+      public function getDetailPembayaranPinjaman($id)
+      {
+            $m = Detail_pelunasan_pinjaman::with(['transaksi', 'main_pinjaman', 'main_pinjaman.anggota', 'main_pinjaman.transaksi'])
+                  ->where('id_detail', $id)->first();
+
+            $result = [
+                  'id_transaksi' => $m->transaksi->id_transaksi,
+                  'invoice' => $m->transaksi->kode,
+                  'no_bukti' => $m->transaksi->no_bukti,
+                  'nama' => $m->main_pinjaman->anggota->nama ?? '-',
+                  'tanggal_bayar' => date('d-m-Y', strtotime($m->transaksi->tgl_transaksi)),
+                  'angsuran_pokok' => cek_uang($m->angsuran_pokok),
+                  'angsuran_bunga' => cek_uang($m->angsuran_bunga),
+                  'total_angsuran' => cek_uang($m->total_angsuran),
+                  'saldo_pokok' => cek_uang($m->main_pinjaman->saldo_pokok),
+                  'saldo_bunga' => cek_uang($m->main_pinjaman->saldo_bunga),
+                  'status' => $m->main_pinjaman->status,
+                  'invoice_tagihan' => $m->main_pinjaman->transaksi->kode,
                   'nota_transaksi' => $m->transaksi->nota_transaksi,
                   'keterangan' => $m->transaksi->keterangan
             ];
