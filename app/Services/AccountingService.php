@@ -847,4 +847,129 @@ class AccountingService
 
             return $totals;
       }
+
+      public function getDetailJurnalPenyusutan($data, $transaksi)
+      {
+            $totalPerlengkapan = $totalMesin = $totalPeralatan = $totalKendaraan = $totalGedung = 0;
+            foreach ($data as $d) {
+                  foreach ($transaksi as $t) {
+                        if ($t['id'] == $d['id_inventaris']) {
+                              $debet = self::cariAkunDebet($d['id_kredit_penyusutan']);
+                              $akunDebet = $debet['nama'];
+                              $subtotal = $t['subtotal'] + $t['subtotal_e'];
+                              switch ($akunDebet) {
+                                    case 'Akumulasi Penyusutan Gedung Kantor':
+                                          $totalGedung += $subtotal;
+                                          break;
+                                    case 'Akumulasi Penyusutan Mesin':
+                                          $totalMesin += $subtotal;
+                                          break;
+                                    case 'Akumulasi Penyusutan Kendaraan':
+                                          $totalKendaraan += $subtotal;
+                                          break;
+                                    case 'Akumulasi Penyusutan Perlengkapan Kantor':
+                                          $totalPerlengkapan += $subtotal;
+                                          break;
+                                    case 'Akumulasi Penyusutan Peralatan Kantor':
+                                          $totalPeralatan += $subtotal;
+                                          break;
+                              }
+                        }
+                  }
+            }
+
+            $dataSekarang = self::getDataSekarang($data);
+            $dataJurnal = [];
+            foreach ($dataSekarang as $ds) {
+                  $debet = self::cariAkunDebet($d['id_kredit_penyusutan']);
+                  $akunDebet = $debet['nama'];
+                  switch ($akunDebet) {
+                        case 'Akumulasi Penyusutan Gedung Kantor':
+                              $akunKredit = self::cariAkunKredit('%Gedung%');
+                              array_push($dataJurnal, [
+                                    'id' => $ds['id_inventaris'],
+                                    'kode_debet' => $debet['kode'],
+                                    'debet' => $akunDebet,
+                                    'kode_kredit' => $akunKredit['kode'],
+                                    'kredit' => $akunKredit['nama'],
+                                    'nominal' => $totalGedung
+                              ]);
+                              break;
+                        case 'Akumulasi Penyusutan Mesin':
+                              $akunKredit = self::cariAkunKredit('%Mesin%');
+                              array_push($dataJurnal, [
+                                    'id' => $ds['id_inventaris'],
+                                    'kode_debet' => $debet['kode'],
+                                    'debet' => $akunDebet,
+                                    'kode_kredit' => $akunKredit['kode'],
+                                    'kredit' => $akunKredit['nama'],
+                                    'nominal' => $totalMesin
+                              ]);
+                              break;
+                        case 'Akumulasi Penyusutan Kendaraan':
+                              $akunKredit = self::cariAkunKredit('%Kendaraan%');
+                              array_push($dataJurnal, [
+                                    'id' => $ds['id_inventaris'],
+                                    'kode_debet' => $debet['kode'],
+                                    'debet' => $akunDebet,
+                                    'kode_kredit' => $akunKredit['kode'],
+                                    'kredit' => $akunKredit['nama'],
+                                    'nominal' => $totalKendaraan
+                              ]);
+                              break;
+                        case 'Akumulasi Penyusutan Peralatan Kantor':
+                              $akunKredit = self::cariAkunKredit('%Peralatan%');
+                              array_push($dataJurnal, [
+                                    'id' => $ds['id_inventaris'],
+                                    'kode_debet' => $debet['kode'],
+                                    'debet' => $akunDebet,
+                                    'kode_kredit' => $akunKredit['kode'],
+                                    'kredit' => $akunKredit['nama'],
+                                    'nominal' => $totalPeralatan
+                              ]);
+                              break;
+                        case 'Akumulasi Penyusutan Perlengkapan Kantor':
+                              $akunKredit = self::cariAkunKredit('%Perlengkapan Kantor%');
+                              array_push($dataJurnal, [
+                                    'id' => $ds['id_inventaris'],
+                                    'kode_debet' => $debet['kode'],
+                                    'debet' => $akunDebet,
+                                    'kode_kredit' => $akunKredit['kode'],
+                                    'kredit' => $akunKredit['nama'],
+                                    'nominal' => $totalPerlengkapan
+                              ]);
+                              break;
+                  }
+            }
+
+            return $dataJurnal;
+      }
+
+      public function cariAkunDebet($id_kredit)
+      {
+            $akun = Coa::where('id_coa', $id_kredit)->first();
+            return [
+                  'kode' => $akun->kode,
+                  'nama' => $akun->nama
+            ];
+      }
+
+      public function cariAkunKredit($nama)
+      {
+            $akun = Coa::where('nama', 'LIKE', '%' . $nama . '%')
+                  ->where('kategori', 'Aktiva Tetap')
+                  ->first();
+            return [
+                  'kode' => $akun->kode,
+                  'nama' => $akun->nama
+            ];
+      }
+
+      public function getDataSekarang($data)
+      {
+            $collection = collect($data);
+            $unique = $collection->unique('id_kredit_penyusutan');
+            return $unique->values()->all();
+      }
+      /*ending penyusutan asset*/
 }

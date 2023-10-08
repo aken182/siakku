@@ -198,7 +198,7 @@
                   "name": "Penyusutan",
                   "icon": "bi bi-reception-3",
                   "permission": "penyusutan-unit-pertokoan-view",
-                  "slug": "penyusutan-unit-pertokoan"
+                  "slug": "penyusutan-toko"
             },
             {
                   "url": "/shu/unit-pertokoan",
@@ -404,7 +404,7 @@
                   "name": "Penyusutan",
                   "icon": "bi bi-reception-3",
                   "permission": "penyusutan-unit-sp-view",
-                  "slug": "penyusutan-unit-sp"
+                  "slug": "penyusutan-sp"
             },
             {
                   "url": "/shu/unit-sp",

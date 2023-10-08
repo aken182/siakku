@@ -1,12 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\dashboard\AdminDashboard;
 use App\Http\Controllers\user\UserSettingController;
-use App\Http\Controllers\transaksi\PenyusutanController;
 use App\Http\Controllers\master_data\ProfilKpriController;
 use App\Http\Controllers\authentications\PermissionController;
 
@@ -67,7 +64,7 @@ Route::middleware(['auth'])->group((function () {
       //simpanan
       require __DIR__ . '/simpanan_toko.php';
       //penyusutan
-      Route::get('/penyusutan/unit-pertokoan', [PenyusutanController::class, 'index'])->name('penyusutan-unit-pertokoan');
+      require __DIR__ . '/penyusutan_toko.php';
 
       //7.transaksi unit simpan pinjam
       //simpanan
@@ -79,7 +76,7 @@ Route::middleware(['auth'])->group((function () {
       //pendapatan
       require __DIR__ . '/pendapatan_sp.php';
       //penyusutan
-      Route::get('/penyusutan/unit-sp', [PenyusutanController::class, 'index'])->name('penyusutan-unit-sp');
+      require __DIR__ . '/penyusutan_sp.php';
 
       //8.laporan unit pertokoan
       require __DIR__ . '/laporan_toko.php';

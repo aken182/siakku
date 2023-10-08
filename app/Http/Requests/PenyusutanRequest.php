@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class PenyusutanRequest extends FormRequest
 {
@@ -23,8 +24,30 @@ class PenyusutanRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
+        $rules = [
+            'inventaris' => 'required',
+            'cek_penyusutan' => 'required',
         ];
+
+        if ($this->input('cek_penyusutan') === 'penyesuaian') {
+            $rules['id_penyusutan_penyesuaian'] = 'required';
+        }
+        return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'inventaris.required' => 'Data inventaris wajib dipilih!',
+            'cek_penyusutan.required' => 'Jenis penyusutan wajib dipilih!',
+            'id_penyusutan_penyesuaian.required_if' => 'Nomor transaksi penyesuaian penyusutan wajib dipilih!'
+        ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        if ($validator->fails()) {
+            alert()->error('Error', 'Data belum diisi dengan benar.');
+        }
     }
 }

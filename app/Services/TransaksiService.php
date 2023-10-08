@@ -58,6 +58,10 @@ class TransaksiService
                   case 'sp-penarikan.list':
                         $data = self::getPenarikanSimpanan($unit);
                         break;
+                  case 'penyusutan-toko.list':
+                  case 'penyusutan-sp.list':
+                        $data = self::getPenyusutan($unit);
+                        break;
                   case 'pp-pinjaman.list':
                         $pinjaman = new PinjamanService;
                         $data = $pinjaman->getDataPinjaman($unit, $route);
@@ -261,6 +265,18 @@ class TransaksiService
             $penarikan = Transaksi::where('detail_tabel', 'detail_penarikan')
                   ->where('unit', $unit)->get();
             return $penarikan;
+      }
+
+      /**
+       * Mengambil data transaksi penyusutan
+       * inventaris berdasarkan unit.
+       *
+       **/
+      public function getPenyusutan($unit)
+      {
+            $penyusutan = Transaksi::where('jenis_transaksi', 'Penyusutan')
+                  ->where('unit', $unit)->get();
+            return $penyusutan;
       }
 
       /**
