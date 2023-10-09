@@ -14,6 +14,8 @@ use App\Http\Controllers\laporan\LaporanTransaksiController;
 Route::get('/laporan-gudang/unit-pertokoan', [LaporanGudangController::class, 'index'])->name('lut-gudang');
 Route::get('/laporan-penjualan/unit-pertokoan', [LaporanPenjualanController::class, 'index'])->name('lut-penjualan');
 Route::get('/laporan-transaksi/unit-pertokoan', [LaporanTransaksiController::class, 'index'])->name('lut-transaksi');
+// Route::get('/laporan-transaksi/unit-pertokoan/list', [LaporanTransaksiController::class, 'list'])->name('lut-transaksi.list');
+Route::get('/laporan-transaksi/unit-pertokoan/detail/{id}/{detail}/{unit}', [DetailTransaksiController::class, 'index'])->name('lut-transaksi.detail');
 Route::get('/kartu-toko', [LaporanSimpananController::class, 'index'])->name('lut-kartu-toko');
 Route::get('/jurnal/unit-pertokoan', [JurnalController::class, 'index'])->name('lut-jurnal');
 Route::get('/jurnal/unit-pertokoan/detail/{id}/{detail}/{unit}', [DetailTransaksiController::class, 'index'])->name('lut-jurnal.detail');

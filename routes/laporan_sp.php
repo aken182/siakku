@@ -12,6 +12,8 @@ use App\Http\Controllers\laporan\LaporanTransaksiController;
 
 //9.laporan unit simpan pinjam
 Route::get('/laporan-transaksi/unit-sp', [LaporanTransaksiController::class, 'index'])->name('lus-transaksi');
+// Route::get('/laporan-transaksi/unit-sp/list', [LaporanTransaksiController::class, 'list'])->name('lus-transaksi.list');
+Route::get('/laporan-transaksi/unit-sp/detail/{id}/{detail}/{unit}', [DetailTransaksiController::class, 'index'])->name('lus-transaksi.detail');
 Route::get('/laporan-simpanan/unit-sp', [LaporanSimpananController::class, 'index'])->name('lus-simpanan');
 Route::get('/laporan-simpanan-sukarela-berbunga/unit-sp', [LaporanSimpananController::class, 'index'])->name('lus-simpanan-sb');
 Route::get('/laporan-pinjaman/unit-sp', [LaporanPinjamanController::class, 'index'])->name('lus-pinjaman');

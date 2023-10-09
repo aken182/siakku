@@ -16,6 +16,71 @@ class TransaksiService
             $this->imageService = new ImageService;
       }
 
+      /**
+       * Mengambil unit berdasarkan 
+       * nama route sekarang
+       *
+       * @param mixed $route
+       * @return string
+       **/
+      public function getUnit($route)
+      {
+            $unit = [
+                  'lut' => 'Pertokoan',
+                  'lus' => 'Simpan Pinjam',
+            ];
+
+            // Menghapus bagian yang sama dalam kunci
+            $route = str_replace([
+                  '-transaksi', '-simpanan', '-simpanan-sb', '-pinjaman', '-penjualan', '-gudang', '-kartu-toko',
+                  '-jurnal', '-jurnal.detail', '-jurnal.pdf', '-buku-besar', '-buku-besar.detail',
+                  '-buku-besar.pdf', '-laba-rugi', '-neraca'
+            ], '', $route);
+
+            return $unit[$route];
+      }
+
+      /**
+       * Mengambil route utama dari laporan
+       * transaksi
+       *
+       * @param mixed $unit
+       * @return string
+       **/
+      public function getMainRouteLapTransaksi($unit)
+      {
+            $route = [
+                  'Pertokoan' => 'lut-transaksi',
+                  'Simpan Pinjam' => 'lus-transaksi'
+            ];
+            return $route[$unit];
+      }
+
+      /**
+       * undocumented function summary
+       *
+       **/
+      public function getDataLapTransaksi($request, $unit)
+      {
+            $bulan = $request['bulan'] ?? date('m');
+            $tahun = $request['tahun'] ?? date('Y');
+            $keywords = $request['keywords'] ?? '';
+            $data = [];
+            $data['transaksi'] = Transaksi::whereMonth('tgl_transaksi', $bulan)
+                  ->whereYear('tgl_transaksi', $tahun)
+                  ->where('unit', $unit)
+                  ->where(function ($query) use ($keywords) {
+                        $query->where('kode', 'LIKE', '%' . $keywords . '%')
+                              ->orWhere('tgl_transaksi', 'LIKE', '%' . $keywords . '%')
+                              ->orWhere('keterangan', 'LIKE', '%' . $keywords . '%')
+                              ->orWhere('total', 'LIKE', '%' . $keywords . '%');
+                  })->get();
+            $data['nama_bulan'] = bulan_indonesia($bulan);
+            $data['bulan'] = $bulan;
+            $data['tahun'] = $tahun;
+            return $data;
+      }
+
       public function getHistoryTransaction($route = null, $unit = null)
       {
             switch ($route) {

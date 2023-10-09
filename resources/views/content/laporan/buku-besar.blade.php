@@ -153,7 +153,7 @@
                                                     <td style="text-align:center">
                                                         {{ date('d/m/Y', strtotime($value->transaksi->tgl_transaksi)) }}
                                                     </td>
-                                                    <td><a href="{{ route($route_detail, ['id' => Crypt::encrypt($value->transaksi->id_transaksi), 'detail' => $value->transaksi->detail_tabel, 'unit' => $value->transaksi->unit]) }}"class="{{ $value->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
+                                                    <td><a href="{{ route($route_detail, ['id' => Crypt::encrypt($value->transaksi->id_transaksi), 'detail' => $value->transaksi->jenis_transaksi, 'unit' => $value->transaksi->unit]) }}"class="{{ $value->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
                                                             data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                             data-bs-placement="top" data-bs-html="true"
                                                             title="<i class='bx bx-show bx-xs' ></i> <span>{{ $value->transaksi->tipe == 'kadaluwarsa' ? 'Detail Transaksi Kadaluwarsa' : 'Detail Transaksi' }}</span>">{{ $value->transaksi->keterangan }}</a>

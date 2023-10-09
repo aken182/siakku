@@ -100,7 +100,7 @@
                                                     </td>
                                                     @if ($jurnal->posisi_dr_cr == 'debet')
                                                         <td>
-                                                            <a href="{{ route($route_detail, ['id' => Crypt::encrypt($jurnal->transaksi->id_transaksi), 'detail' => $jurnal->transaksi->detail_tabel, 'unit' => $jurnal->transaksi->unit]) }}"
+                                                            <a href="{{ route($route_detail, ['id' => Crypt::encrypt($jurnal->transaksi->id_transaksi), 'detail' => $jurnal->transaksi->jenis_transaksi, 'unit' => $jurnal->transaksi->unit]) }}"
                                                                 class="{{ $jurnal->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="top" data-bs-html="true"
@@ -112,7 +112,7 @@
                                                         <td style="text-align:right">{{ buatrp($jurnal->nominal) }}</td>
                                                         <td>-</td>
                                                     @else
-                                                        <td><a href="{{ route($route_detail, ['id' => Crypt::encrypt($jurnal->transaksi->id_transaksi), 'detail' => $jurnal->transaksi->detail_tabel, 'unit' => $jurnal->transaksi->unit]) }}"
+                                                        <td><a href="{{ route($route_detail, ['id' => Crypt::encrypt($jurnal->transaksi->id_transaksi), 'detail' => $jurnal->transaksi->jenis_transaksi, 'unit' => $jurnal->transaksi->unit]) }}"
                                                                 class="{{ $jurnal->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="top" data-bs-html="true"
