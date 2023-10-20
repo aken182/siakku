@@ -259,6 +259,12 @@
                               "url": "/neraca-saldo/unit-pertokoan",
                               "name": "Neraca Saldo",
                               "permission": "neraca-saldo-unit-pertokoan",
+                              "slug": "lut-neraca-saldo"
+                        },
+                        {
+                              "url": "/neraca/unit-pertokoan",
+                              "name": "Neraca",
+                              "permission": "neraca-unit-pertokoan",
                               "slug": "lut-neraca"
                         }
                   ]
@@ -465,6 +471,12 @@
                               "url": "/neraca-saldo/unit-sp",
                               "name": "Neraca Saldo",
                               "permission": "neraca-saldo-unit-sp",
+                              "slug": "lut-neraca-saldo"
+                        },
+                        {
+                              "url": "/neraca/unit-sp",
+                              "name": "Neraca",
+                              "permission": "neraca-unit-sp",
                               "slug": "lus-neraca"
                         }
                   ]

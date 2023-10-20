@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
                     <h3>{{ $title }}</h3>
-                    <p class="text-subtitle text-muted">{{ $title }}</p>
+                    <p class="text-subtitle text-muted text-capitalize">{{ $title }} unit {{ $unit }}</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -63,38 +63,12 @@
                             style="position: absolute; top: 0; right: 0;"><span
                                 class="tf-icons bx bxs-file-pdf"></span>&nbsp;Download PDF</a>
                     </div> --}}
-                    <h6 class="text-center">{{ $title }}</h6>
-                    <h6 class="text-center">{{ $title2 }}</h6>
-                    <h6 class="text-center">{{ $title3 }}</h6>
+                    <h6 class="text-center text-uppercase">{{ $title }}</h6>
+                    <h6 class="text-center text-uppercase">{{ $title2 }}</h6>
+                    <h6 class="text-center text-uppercase">Unit {{ $unit }}</h6>
+                    <h6 class="text-center text-uppercase">{{ $title3 }}</h6>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered dataTable">
-                            <thead class="table-success">
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th>Nomor</th>
-                                    <th>Keterangan</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($transaksis as $transaksi)
-                                    <tr>
-                                        <td>{{ date('d/m/Y', strtotime($transaksi->tgl_transaksi)) }}</td>
-                                        <td><a class="{{ $transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : 'text-primary' }}"
-                                                data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
-                                                data-bs-html="true"
-                                                href="{{ route($route_detail, ['id' => Crypt::encrypt($transaksi->id_transaksi), 'detail' => $transaksi->jenis_transaksi, 'unit' => $transaksi->unit]) }}"
-                                                title="{{ $transaksi->tipe == 'kadaluwarsa' ? 'Detail Transaksi Kadaluwarsa' : 'Detail Transaksi' }}">{{ $transaksi->kode }}</a>
-                                        </td>
-                                        <td>{{ $transaksi->keterangan }}</td>
-                                        <td style="text-align: right">{{ buatrp($transaksi->total) }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
         </section>

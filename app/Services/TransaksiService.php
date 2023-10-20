@@ -27,14 +27,17 @@ class TransaksiService
       {
             $unit = [
                   'lut' => 'Pertokoan',
+                  'lut-saldo' => 'Pertokoan',
                   'lus' => 'Simpan Pinjam',
+                  'lus-sb' => 'Simpan Pinjam',
+                  'lus-saldo' => 'Simpan Pinjam',
             ];
 
             // Menghapus bagian yang sama dalam kunci
             $route = str_replace([
                   '-transaksi', '-simpanan', '-simpanan-sb', '-pinjaman', '-penjualan', '-gudang', '-kartu-toko',
                   '-jurnal', '-jurnal.detail', '-jurnal.pdf', '-buku-besar', '-buku-besar.detail',
-                  '-buku-besar.pdf', '-laba-rugi', '-neraca'
+                  '-buku-besar.pdf', '-laba-rugi', '-neraca', '-neraca-saldo'
             ], '', $route);
 
             return $unit[$route];
@@ -57,16 +60,47 @@ class TransaksiService
       }
 
       /**
+       * Mengambil route utama dari laporan
+       * laba rugi
+       *
+       * @param mixed $unit
+       * @return string
+       **/
+      public function getMainRouteLabaRugi($unit)
+      {
+            $route = [
+                  'Pertokoan' => 'lut-laba-rugi',
+                  'Simpan Pinjam' => 'lus-laba-rugi'
+            ];
+            return $route[$unit];
+      }
+
+      /**
        * undocumented function summary
        *
        **/
-      public function getDataLapTransaksi($request, $unit)
+      public function getDataTanggalTransaksi($request)
+      {
+            $data = [];
+            $bulan = $request['bulan'] ?? date('m');
+            $tahun = $request['tahun'] ?? date('Y');
+            $data['nama_bulan'] = bulan_indonesia($bulan);
+            $data['bulan'] = $bulan;
+            $data['tahun'] = $tahun;
+            $data['hari'] = getHariNow($bulan, $tahun);
+            return $data;
+      }
+
+      /**
+       * undocumented function summary
+       *
+       **/
+      public function getDataTransaksiToLaporan($request, $unit)
       {
             $bulan = $request['bulan'] ?? date('m');
             $tahun = $request['tahun'] ?? date('Y');
             $keywords = $request['keywords'] ?? '';
-            $data = [];
-            $data['transaksi'] = Transaksi::whereMonth('tgl_transaksi', $bulan)
+            return Transaksi::whereMonth('tgl_transaksi', $bulan)
                   ->whereYear('tgl_transaksi', $tahun)
                   ->where('unit', $unit)
                   ->where(function ($query) use ($keywords) {
@@ -75,10 +109,6 @@ class TransaksiService
                               ->orWhere('keterangan', 'LIKE', '%' . $keywords . '%')
                               ->orWhere('total', 'LIKE', '%' . $keywords . '%');
                   })->get();
-            $data['nama_bulan'] = bulan_indonesia($bulan);
-            $data['bulan'] = $bulan;
-            $data['tahun'] = $tahun;
-            return $data;
       }
 
       public function getHistoryTransaction($route = null, $unit = null)
@@ -133,6 +163,10 @@ class TransaksiService
                         break;
                   case 'pp-angsuran.list':
                         $data = self::getPembayaranPinjaman($unit);
+                        break;
+                  case 'shu-unit-pertokoan.transaksi-list':
+                  case 'shu-unit-sp.transaksi-list':
+                        $data = self::getPembagianShu($unit);
                         break;
                   default:
                         $data = 'kosong';
@@ -290,6 +324,21 @@ class TransaksiService
       public function getPembayaranPinjaman($unit)
       {
             return Transaksi::where('jenis_transaksi', 'Pembayaran Pinjaman Anggota')
+                  ->where('unit', $unit)->get();
+      }
+
+      /**
+       * Dokumentasi getPendapatan
+       *
+       * Mengambil data transaksi pendapatan
+       * berdasarkan unit.
+       *
+       * @param mixed $unit
+       * @return mixed
+       **/
+      public function getPembagianShu($unit)
+      {
+            return Transaksi::where('jenis_transaksi', 'Pembagian SHU')
                   ->where('unit', $unit)->get();
       }
 

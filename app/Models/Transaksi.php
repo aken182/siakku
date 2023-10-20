@@ -23,6 +23,7 @@ class Transaksi extends Model
         'keterangan',
         'tpk',
         'unit',
+        'tahun_buku',
         'created_at',
         'updated_at'
     ];

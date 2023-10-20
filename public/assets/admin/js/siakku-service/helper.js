@@ -89,6 +89,13 @@ function currencyIdr(angka, prefix) {
       }
 };
 
+function currencyIdrDecimal(angka) {
+      const formattedAngka = typeof angka === 'number' ? angka.toFixed(2) : parseFloat(angka).toFixed(2);
+      const angkaRp = formattedAngka.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      const formattedAngkaReversed = angkaRp.replace(/[.,]/g, m => (m === ',' ? '.' : ','));
+      return 'Rp ' + formattedAngkaReversed;
+}
+
 function toastInfoTopRight(info, color) {
       const result = Toastify({
             text: info,

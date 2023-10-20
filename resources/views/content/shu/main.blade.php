@@ -40,6 +40,9 @@
                         <div class="tab-pane fade {{ $tipe == 'master' ? 'show active' : '' }}" role="tabpanel">
                             @if ($tipe === 'master')
                                 <div class="row mt-3 mb-3">
+                                    <h6>Manajemen Master SHU</h6>
+                                </div>
+                                <div class="row mt-3 mb-3">
                                     <x-button.master-data-button :routecreate="$routeCreate" :routeimport="$routeImport" />
                                 </div>
                                 <div class="row">
@@ -49,24 +52,31 @@
                             @endif
                         </div>
                         <div class="tab-pane fade {{ $tipe == 'transaksi' ? 'show active' : '' }}" role="tabpanel">
-                            Integer interdum diam eleifend metus lacinia, quis
-                            gravida eros mollis. Fusce non sapien sit amet magna
-                            dapibus ultrices. Morbi tincidunt magna ex, eget
-                            faucibus sapien bibendum non. Duis a mauris ex. Ut
-                            finibus risus sed massa mattis porta. Aliquam sagittis
-                            massa et purus efficitur ultricies. Integer pretium
-                            dolor at sapien laoreet ultricies. Fusce congue et lorem
-                            id convallis. Nulla volutpat tellus nec molestie
-                            finibus. In nec odio tincidunt eros finibus ullamcorper.
-                            Ut sodales, dui nec posuere finibus, nisl sem aliquam
-                            metus, eu accumsan lacus felis at odio. Sed lacus quam,
-                            convallis quis condimentum ut, accumsan congue massa.
-                            Pellentesque et quam vel massa pretium ullamcorper vitae
-                            eu tortor.
+                            @if ($tipe === 'transaksi')
+                                <div class="row mt-3 mb-3">
+                                    <h6>Manajemen Pembagian SHU</h6>
+                                </div>
+                                <div class="row mt-3 mb-3">
+                                    <x-button.master-data-button :routecreate="$routeCreate" :createtitle="$createTitle" :modal="$modal" />
+                                </div>
+                                <div class="row">
+                                    <x-data-table.transaksi :route="$routeList" />
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
+    @if ($tipe === 'transaksi')
+        <x-shu.modal-info-shu :estimasi="$estimasi" :route="$routeGrafik" :unit="$unit" />
+    @endif
+@endsection
+@section('pageScript')
+    @if ($tipe === 'transaksi')
+        <script src="{{ asset('assets/admin') }}/js/siakku-custom/datatable-transaksi.js"></script>
+        <script src="{{ asset('assets/admin') }}/vendors/apexcharts/apexcharts.js"></script>
+        <script src="{{ asset('assets/admin') }}/js/siakku-custom/grafik-estimasi-shu.js"></script>
+    @endif
 @endsection

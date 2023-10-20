@@ -24,13 +24,13 @@ class LaporanTransaksiController extends Controller
 
       public function index(Request $request)
       {
-            $other = $this->transaksiService->getDataLapTransaksi($request->all(), $this->unit);
+            $other = $this->transaksiService->getDataTanggalTransaksi($request->all());
             $data = [
                   'title' => 'Laporan Transaksi Unit ' . $this->unit,
                   'unit' => $this->unit,
                   "title2" => "KPRI Usaha Jaya - Larantuka",
                   "title3" => "Periode " . $other['nama_bulan'] . ' - ' . $other['tahun'],
-                  "transaksis" => $other['transaksi'],
+                  "transaksis" => $this->transaksiService->getDataTransaksiToLaporan($request->all(), $this->unit),
                   "route_detail" => $this->mainRoute . '.detail',
                   "bulan" => $other['bulan'],
                   "tahun" => $other['tahun'],

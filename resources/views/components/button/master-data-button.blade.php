@@ -20,5 +20,11 @@
             <a class="btn btn-sm btn-outline-success" type="button" href="{{ $routeimport }}">Import
                 Excel</a>
         @endif
+        @if (isset($modal))
+            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#modalScrollable">
+                {{ $modal }}
+            </button>
+        @endif
     </div>
 </div>

@@ -3,7 +3,11 @@
 $(document).ready(function () {
       let jquery_datatable = $(".dataTable");
       let customized_datatable = $(".dataTable2");
+      let tabelLaporan = $(".tabelLaporan");
 
+      tabelLaporan.DataTable({
+            "ordering": false
+      });
       // Fungsi untuk mengatur warna pagination
       const setTableColor = () => {
             document.querySelectorAll('.dataTables_paginate .pagination').forEach(dt => {

@@ -972,4 +972,65 @@ class AccountingService
             return $unique->values()->all();
       }
       /*ending penyusutan asset*/
+
+      public function getSaldo($bulan, $tahun, $header, $unit, $fullYear = true, $kolom = null, $isiKolom = null, $kolom2 = null, $isiKolom2 = null)
+      {
+            $hari = getHariNow($bulan, $tahun);
+            $totalSaldoType = ($header != 1 && $header != 4) ? 'kredit' : 'debet';
+            $getTotalFungsiRekap = getTotalFungsiRekap($header, $tahun, $bulan, $hari, $unit, $totalSaldoType, $fullYear);
+            $totalSaldo = $getTotalFungsiRekap['totalSaldo'];
+            $fungsiA = $getTotalFungsiRekap['fungsiA'];
+            $fungsi = getFungsiRekap($kolom, $isiKolom, $header, $kolom2, $isiKolom2);
+
+            $saldo = Jurnal::with(['coa', 'transaksi'])
+                  ->select('coa.header', $totalSaldo)
+                  ->join('coa', 'jurnal.id_coa', '=', 'coa.id_coa')
+                  ->whereHas('transaksi', $fungsiA)
+                  ->whereHas('coa', $fungsi)
+                  ->groupBy('coa.header')
+                  ->get();
+            $saldoGet = $saldo->value('total_saldo');
+            return $saldoGet;
+      }
+
+      public function getSaldoKodeNama($bulan, $tahun, $header, $unit, $fullYear = true, $kolom = null, $isiKolom = null, $kolom2 = null, $isiKolom2 = null)
+      {
+            $hari = getHariNow($bulan, $tahun);
+            $totalSaldoType = ($header != 1 && $header != 4) ? 'kredit' : 'debet';
+            $getTotalFungsiRekap = getTotalFungsiRekap($header, $tahun, $bulan, $hari, $unit, $totalSaldoType, $fullYear);
+            $totalSaldo = $getTotalFungsiRekap['totalSaldo'];
+            $fungsiA = $getTotalFungsiRekap['fungsiA'];
+            $fungsi = getFungsiRekap($kolom, $isiKolom, $header, $kolom2, $isiKolom2);
+
+            $detail = Jurnal::with(['coa', 'transaksi'])
+                  ->select('coa.header', 'coa.nama', 'coa.kode', $totalSaldo)
+                  ->join('coa', 'jurnal.id_coa', '=', 'coa.id_coa')
+                  ->whereHas('transaksi', $fungsiA)
+                  ->whereHas('coa', $fungsi)
+                  ->groupBy('coa.header', 'coa.nama', 'coa.kode')
+                  ->get();
+            return $detail;
+      }
+
+      public function getPerulangan($bulan, $tahun, $header,  $unit, $fullYear = true, $kolom, $isiKolom, $kolom2 = null, $isiKolom2 = null)
+      {
+            $hari = getHariNow($bulan, $tahun);
+            $totalSaldoType = ($header != 1 && $header != 4) ? 'kredit' : 'debet';
+            $getTotalFungsiRekap = getTotalFungsiRekap($header, $tahun, $bulan, $hari, $unit, $totalSaldoType, $fullYear);
+            $totalSaldo = $getTotalFungsiRekap['totalSaldo'];
+            $fungsiA = $getTotalFungsiRekap['fungsiA'];
+            $fungsi = getFungsiRekap($kolom, $isiKolom, $header, $kolom2, $isiKolom2);
+
+            $perulangan = Jurnal::with(['coa', 'transaksi'])
+                  ->select('coa.kode', 'coa.nama', 'jurnal.id_coa', $totalSaldo)
+                  ->join('coa', 'jurnal.id_coa', '=', 'coa.id_coa')
+                  ->whereHas('transaksi', $fungsiA)
+                  ->whereHas('coa', $fungsi)
+                  ->groupBy('jurnal.id_coa', 'coa.kode', 'coa.nama')
+                  ->get();
+            $collection = collect($perulangan);
+            $unique = $collection->unique('id_coa');
+            $perulangans = $unique->values()->all();
+            return $perulangans;
+      }
 }

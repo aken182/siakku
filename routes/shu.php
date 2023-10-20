@@ -24,12 +24,20 @@ Route::controller(MasterShuController::class)->group(function () {
 //2. Transaksi
 Route::controller(TransaksiShuController::class)->group(function () {
       Route::get('/shu/unit-pertokoan/transaksi', 'index')->name('shu-unit-pertokoan.transaksi');
+      Route::get('/shu/unit-pertokoan/transaksi/list', 'list')->name('shu-unit-pertokoan.transaksi-list');
       Route::get('/shu/unit-pertokoan/transaksi/create', 'create')->name('shu-unit-pertokoan.transaksi-create');
+      Route::get('/shu/unit-pertokoan/transaksi/chart', 'chart')->name('shu-unit-pertokoan.transaksi-chart');
+      Route::get('/shu/unit-pertokoan/transaksi/jurnal', 'getJurnalTransaksi')->name('shu-unit-pertokoan.transaksi-jurnal');
       Route::post('/shu/unit-pertokoan/transaksi/store', 'store')->name('shu-unit-pertokoan.transaksi-store');
       Route::get('/shu/unit-pertokoan/transaksi/show/{id}', 'show')->name('shu-unit-pertokoan.transaksi-show');
+      Route::get('/shu/unit-pertokoan/transaksi/detail-penyesuaian', 'detail')->name('shu-unit-pertokoan.transaksi-detail');
 
       Route::get('/shu/unit-sp/transaksi', 'index')->name('shu-unit-sp.transaksi');
+      Route::get('/shu/unit-sp/transaksi/list', 'list')->name('shu-unit-sp.transaksi-list');
       Route::get('/shu/unit-sp/transaksi/create', 'create')->name('shu-unit-sp.transaksi-create');
+      Route::get('/shu/unit-sp/transaksi/chart', 'chart')->name('shu-unit-sp.transaksi-chart');
+      Route::get('/shu/unit-sp/transaksi/jurnal', 'getJurnalTransaksi')->name('shu-unit-sp.transaksi-jurnal');
       Route::post('/shu/unit-sp/transaksi/store', 'store')->name('shu-unit-sp.transaksi-store');
       Route::get('/shu/unit-sp/transaksi/show/{id}', 'show')->name('shu-unit-sp.transaksi-show');
+      Route::get('/shu/unit-sp/transaksi/detail-penyesuaian', 'detail')->name('shu-unit-sp.transaksi-detail');
 });

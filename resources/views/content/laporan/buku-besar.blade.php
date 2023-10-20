@@ -138,7 +138,7 @@
                                                 <td></td>
                                                 @php
                                                     foreach ($saldo_awal as $saldo) {
-                                                        if ($saldo->header == 1 or $saldo->header == 5) {
+                                                        if ($saldo->header == 1 or $saldo->header == 4) {
                                                             $xsaldo = $saldo->total_debet - $saldo->total_kredit;
                                                         } else {
                                                             $xsaldo = $saldo->total_kredit - $saldo->total_debet;
@@ -167,7 +167,7 @@
                                                         <td style="text-align:right">{{ buatrp($value->nominal) }}</td>
                                                     @endif
                                                     @if ($value->posisi_dr_cr == 'debet')
-                                                        @if ($value->coa->header == 1 or $value->coa->header == 5)
+                                                        @if ($value->coa->header == 1 or $value->coa->header == 4)
                                                             @php
                                                                 $total = $total + $value->nominal;
                                                             @endphp
@@ -179,7 +179,7 @@
                                                             <td style="text-align:right">{{ buatrp($total) }}</td>
                                                         @endif
                                                     @else
-                                                        @if ($value->coa->header == 1 or $value->coa->header == 5)
+                                                        @if ($value->coa->header == 1 or $value->coa->header == 4)
                                                             @php
                                                                 $total = $total - $value->nominal;
                                                             @endphp

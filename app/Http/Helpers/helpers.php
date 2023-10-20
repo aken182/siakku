@@ -41,6 +41,18 @@ function formatIdr($angka, $non = null)
       }
 }
 
+function buatrpDecimal($angka)
+{
+      if ($angka < 0) {
+            $angkas = $angka * -1;
+            $jadi = "(Rp " . number_format($angkas, 2, ',', '.') . ")";
+      } else {
+            $jadi = "Rp " . number_format($angka, 2, ',', '.');
+      }
+
+      return $jadi;
+}
+
 function buatrp($angka)
 {
       if ($angka < 0) {
@@ -64,6 +76,21 @@ function cek_uang($angka)
             return $uang;
       } else {
             $uang = buatrp($angka);
+            return $uang;
+      }
+}
+
+function cekUangDecimal($angka)
+{
+      if ($angka == null || $angka <= 0) {
+            if ($angka < 0) {
+                  $uang = buatrpDecimal($angka);
+            } else {
+                  $uang = '-';
+            }
+            return $uang;
+      } else {
+            $uang = buatrpDecimal($angka);
             return $uang;
       }
 }
@@ -129,12 +156,16 @@ function getTglHari($bulan, $tahun)
 
 function bulan_indonesia($no_bulan)
 {
-      $nama_bulan = array(
-            1 =>
-            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-      );
-      $bulan   = $nama_bulan[(int) $no_bulan];
-      return $bulan;
+      if ($no_bulan) {
+            $nama_bulan = array(
+                  1 =>
+                  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            );
+            $bulan   = $nama_bulan[(int) $no_bulan];
+            return $bulan;
+      } else {
+            return null;
+      }
 }
 
 function tambah_nol_didepan($value, $threshold = null)
@@ -160,7 +191,7 @@ function getHeaders($table, $without_name)
 }
 
 /**
- * Konvert rupiah ke angka
+ * Konvert rupiah ke bilangan bulat
  *
  **/
 function convertToNumber($nominal)
@@ -169,6 +200,24 @@ function convertToNumber($nominal)
             $nom = 0;
       } else {
             $nom = preg_replace('/[^0-9]/', '', $nominal);
+      }
+      return $nom;
+}
+
+
+/**
+ * Konvert rupiah ke bilangan desimal
+ *
+ **/
+function convertToDecimal($nominal)
+{
+      if ($nominal == null) {
+            $nom = 0;
+      } else {
+            $nominal = str_replace('Rp ', '', $nominal); // Hapus "Rp "
+            $nominal = str_replace('.', '', $nominal); // Hapus tanda titik sebagai pemisah ribuan
+            $nominal = str_replace(',', '.', $nominal); // Ganti tanda koma dengan titik sebagai pemisah desimal
+            $nom = (float)$nominal;
       }
       return $nom;
 }
@@ -225,103 +274,55 @@ function getHariNow($bulan, $tahun)
 }
 
 /*accounting fungsi rekapitulasi*/
-function getTotalFUngsiRekap($header, $tahun, $bulan, $hari)
+function getTotalFungsiRekap($header, $tahun, $bulan, $hari, $unit, $totalSaldoType, $fullYear = true)
 {
-      if ($header == 1 or $header == 5) {
-            $totalSaldo = DB::raw('(SUM(IF(posisi_dr_cr = "debet", nominal, 0)) - SUM(IF(posisi_dr_cr = "kredit", nominal, 0))) as total_saldo');
-            if ($header == 1) {
-                  $fungsiA = function ($query) use ($tahun, $bulan, $hari) {
+      $totalSaldo = ($totalSaldoType === "kredit")
+            ? DB::raw('(SUM(IF(posisi_dr_cr = "kredit", nominal, 0)) - SUM(IF(posisi_dr_cr = "debet", nominal, 0))) as total_saldo')
+            : DB::raw('(SUM(IF(posisi_dr_cr = "debet", nominal, 0)) - SUM(IF(posisi_dr_cr = "kredit", nominal, 0))) as total_saldo');
+
+      $fungsiA = function ($query) use ($tahun, $bulan, $hari, $unit, $header, $fullYear) {
+            $query->where('unit', $unit);
+
+            if ($fullYear) {
+                  if ($header != 1 && $header != 2) {
+                        $query->whereDate('tgl_transaksi', '>=', "$tahun-01-01");
+                        $query->whereDate('tgl_transaksi', '<=', "$tahun-$bulan-$hari");
+                  } else {
                         $query->where(function ($query) use ($tahun, $bulan, $hari) {
-                              $query->whereDate('tgl_transaksi', '<=', $tahun . '-' . $bulan . '-' . $hari);
+                              $query->whereDate('tgl_transaksi', '<=', "$tahun-$bulan-$hari");
                         });
-                  };
+                  }
             } else {
-                  $fungsiA = function ($query) use ($tahun, $bulan, $hari) {
-                        $query->where(function ($query) use ($tahun) {
-                              $query->whereDate('tgl_transaksi', '>=', $tahun . '-01-01');
-                        })->where(function ($query) use ($tahun, $bulan, $hari) {
-                              $query->whereDate('tgl_transaksi', '<=', $tahun . '-' . $bulan . '-' . $hari);
-                        });
-                  };
+                  $query->whereDate('tgl_transaksi', '>=', "$tahun-$bulan-01");
+                  $query->whereDate('tgl_transaksi', '<=', "$tahun-$bulan-$hari");
             }
-      } else {
-            $totalSaldo = DB::raw('(SUM(IF(posisi_dr_cr = "kredit", nominal, 0)) - SUM(IF(posisi_dr_cr = "debet", nominal, 0))) as total_saldo');
-            $fungsiA = function ($query) use ($tahun, $bulan, $hari) {
-                  $query->where(function ($query) use ($tahun) {
-                        $query->whereDate('tgl_transaksi', '>=', $tahun . '-01-01');
-                  })->where(function ($query) use ($tahun, $bulan, $hari) {
-                        $query->whereDate('tgl_transaksi', '<=', $tahun . '-' . $bulan . '-' . $hari);
-                  });
-            };
-      }
+      };
+
       $data = [
             'totalSaldo' => $totalSaldo,
             'fungsiA' => $fungsiA,
       ];
+
       return $data;
 }
 
-function getFungsiRekap($kolom, $isiKolom, $header, $unit, $kolom2, $isiKolom2)
+function getFungsiRekap($kolom, $isiKolom, $header, $kolom2, $isiKolom2)
 {
-      if ($kolom == null or $isiKolom == null) {
-            if ($kolom2 == null or $isiKolom2 == null) {
-                  if ($unit == 'Gabungan') {
-                        $fungsi = function ($query) use ($header) {
-                              $query->where('header', $header);
-                        };
-                  } else {
-                        $fungsi = function ($query) use ($header, $unit) {
-                              $query->where('header', $header)
-                                    ->where('unit', $unit);
-                        };
-                  }
-            } else {
-                  if ($unit == 'Gabungan') {
-                        $fungsi = function ($query) use ($header, $kolom2, $isiKolom2) {
-                              $query->where('header', $header)
-                                    ->where($kolom2, 'LIKE', $isiKolom2);
-                        };
-                  } else {
-                        $fungsi = function ($query) use ($header, $unit, $kolom2, $isiKolom2) {
-                              $query->where('header', $header)
-                                    ->where('unit', $unit)
-                                    ->where($kolom2, 'LIKE', $isiKolom2);
-                        };
-                  }
+      $fungsi = function ($query) use ($header, $kolom, $isiKolom, $kolom2, $isiKolom2) {
+            $query->where('header', $header);
+
+            if ($kolom !== null && $isiKolom !== null) {
+                  $query->where($kolom, 'LIKE', $isiKolom);
             }
-      } else {
-            if ($kolom2 == null or $isiKolom2 == null) {
-                  if ($unit == 'Gabungan') {
-                        $fungsi = function ($query) use ($header, $kolom, $isiKolom) {
-                              $query->where('header', $header)
-                                    ->where($kolom, 'LIKE', $isiKolom);
-                        };
-                  } else {
-                        $fungsi = function ($query) use ($header, $unit, $kolom, $isiKolom) {
-                              $query->where('header', $header)
-                                    ->where('unit', $unit)
-                                    ->where($kolom, 'LIKE', $isiKolom);
-                        };
-                  }
-            } else {
-                  if ($unit == 'Gabungan') {
-                        $fungsi = function ($query) use ($header, $kolom, $isiKolom, $kolom2, $isiKolom2) {
-                              $query->where('header', $header)
-                                    ->where($kolom, 'LIKE', $isiKolom)
-                                    ->where($kolom2, 'LIKE', $isiKolom2);
-                        };
-                  } else {
-                        $fungsi = function ($query) use ($header, $unit, $kolom, $isiKolom, $kolom2, $isiKolom2) {
-                              $query->where('header', $header)
-                                    ->where('unit', $unit)
-                                    ->where($kolom, 'LIKE', $isiKolom)
-                                    ->where($kolom2, 'LIKE', $isiKolom2);
-                        };
-                  }
+
+            if ($kolom2 !== null && $isiKolom2 !== null) {
+                  $query->where($kolom2, 'LIKE', $isiKolom2);
             }
-      }
+      };
+
       return $fungsi;
 }
+
 /*ending accounting fungsi rekapitulasi*/
 
 /*penyusutan aset*/

@@ -24,4 +24,5 @@ Route::get('/buku-besar/unit-pertokoan', [BukuBesarController::class, 'index'])-
 Route::get('/buku-besar/unit-pertokoan/detail/{id}/{detail}/{unit}', [DetailTransaksiController::class, 'index'])->name('lut-buku-besar.detail');
 Route::get('/buku-besar/unit-pertokoan/pdf/{bulan}/{tahun}/{id_coa}', [BukuBesarController::class, 'pdf'])->name('lut-buku-besar.pdf');
 Route::get('/laba-rugi/unit-pertokoan', [LabaRugiController::class, 'index'])->name('lut-laba-rugi');
-Route::get('/neraca-saldo/unit-pertokoan', [NeracaSaldoController::class, 'index'])->name('lut-neraca');
+Route::get('/neraca/unit-pertokoan', [NeracaSaldoController::class, 'index'])->name('lut-neraca');
+Route::get('/neraca-saldo/unit-pertokoan', [NeracaSaldoController::class, 'neracaSaldo'])->name('lut-neraca-saldo');

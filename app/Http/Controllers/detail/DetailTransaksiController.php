@@ -50,7 +50,7 @@ class DetailTransaksiController extends Controller
             case 'Penjualan Barang':
             case 'Penjualan Lainnya':
                 $route = 'ptk-penjualan.show';
-                return redirect()->route($route, Crypt::encrypt($id));
+                return redirect()->route($route, ['id' => Crypt::encrypt($id), 'detail' => $detail]);
             case 'Penyusutan':
                 $route = $unit === 'Pertokoan' ? 'penyusutan-toko.show' : 'penyusutan-sp.show';
                 return redirect()->route($route, Crypt::encrypt($id));
@@ -72,6 +72,9 @@ class DetailTransaksiController extends Controller
                 return redirect()->route($route, Crypt::encrypt($id));
             case 'Transfer Saldo Kas & Bank':
                 $route = $unit === 'Pertokoan' ? 'transfer-toko.show' : 'transfer-sp.show';
+                return redirect()->route($route, Crypt::encrypt($id));
+            case 'Pembagian SHU':
+                $route = $unit === 'Pertokoan' ? 'shu-unit-pertokoan.transaksi-show' : 'shu-unit-sp.transaksi-show';
                 return redirect()->route($route, Crypt::encrypt($id));
             default:
                 break;
