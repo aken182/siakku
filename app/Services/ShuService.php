@@ -198,13 +198,14 @@ class ShuService
             ];
       }
 
-      public function getJurnalToCreate($unit, $tahun, $id_pny = null)
+      public function getJurnalToCreate($unit, $tahun, $cek, $id_pny = null)
       {
             if ($tahun === date('Y')) {
                   $bulan = date('m');
             } else {
                   $bulan = 12;
             }
+
             $jurnal = [];
             $no = 0;
             if ($id_pny) {
@@ -227,35 +228,39 @@ class ShuService
             }
 
             $estimasi = $this->getEstimasi($unit, $tahun, $bulan);
-            $id_shu = $this->coaService->getIdCoa('nama', 'SHU', 'subkategori', 'Dana SHU');
-            $coaShu = $this->coaService->getDataCoa($id_shu);
-            $no += 1;
-            $jurnal[] = [
-                  'id' => $no,
-                  'nama' => $coaShu->nama,
-                  'kode' => $coaShu->kode,
-                  'posisi_dr_cr' => 'debet',
-                  'nominal' => $estimasi['shu'],
-            ];
-            foreach ($estimasi['dana'] as $key) {
-                  $id_coa = $this->coaService->getIdCoa('nama', $key['nama'], 'subkategori', 'Dana SHU');
-                  $coa = $this->coaService->getDataCoa($id_coa);
+
+            if ($cek === 'off') {
+                  $id_shu = $this->coaService->getIdCoa('nama', 'SHU', 'subkategori', 'Dana SHU');
+                  $coaShu = $this->coaService->getDataCoa($id_shu);
                   $no += 1;
                   $jurnal[] = [
                         'id' => $no,
-                        'nama' => $coa->nama,
-                        'kode' => $coa->kode,
-                        'posisi_dr_cr' => 'kredit',
-                        'nominal' => $key['jumlah_alokasi'],
+                        'nama' => $coaShu->nama,
+                        'kode' => $coaShu->kode,
+                        'posisi_dr_cr' => 'debet',
+                        'nominal' => $cek === 'off' ? $estimasi['shu'] : 0,
                   ];
+                  foreach ($estimasi['dana'] as $key) {
+                        $id_coa = $this->coaService->getIdCoa('nama', $key['nama'], 'subkategori', 'Dana SHU');
+                        $coa = $this->coaService->getDataCoa($id_coa);
+                        $no += 1;
+                        $jurnal[] = [
+                              'id' => $no,
+                              'nama' => $coa->nama,
+                              'kode' => $coa->kode,
+                              'posisi_dr_cr' => 'kredit',
+                              'nominal' => $cek === 'off' ? $key['jumlah_alokasi'] : 0,
+                        ];
+                  }
             }
+
             return [
                   'jurnal' => $jurnal,
-                  'total' => $estimasi['shu']
+                  'total' => $cek === 'off' ? $estimasi['shu'] : 0
             ];
       }
 
-      public function getTotalTransaksi($tahun, $unit)
+      public function getTotalTransaksi($tahun, $unit, $cek)
       {
             if ($tahun === date('Y')) {
                   $bulan = date('m');
@@ -263,7 +268,8 @@ class ShuService
                   $bulan = 12;
             }
             $estimasi = $this->getEstimasi($unit, $tahun, $bulan);
-            return $estimasi['shu'];
+            $total = $cek === 'off' ? $estimasi['shu'] : 0;
+            return $total;
       }
 
       public function createTransaksi($request, $kodePenyesuaian, $unit)
@@ -283,13 +289,14 @@ class ShuService
             ]);
       }
 
-      public function createDetailTransaksi($id_transaksi, $request, $unit)
+      public function createDetailTransaksi($id_transaksi, $request, $unit, $cek)
       {
             if ($request['tahun_shu'] === date('Y')) {
                   $bulan = date('m');
             } else {
                   $bulan = 12;
             }
+
             $estimasi = $this->getEstimasi($unit, $request['tahun_shu'], $bulan);
             $detail = new Detail_transaksi_shu;
             foreach ($estimasi['dana'] as $key) {
@@ -297,12 +304,12 @@ class ShuService
                         'id_transaksi' => $id_transaksi,
                         'id_shu' => $key['id_shu'],
                         'jenis_pembagian' => 'Pembagian SHU tahun ' . $request['tahun_shu'],
-                        'total' => $key['jumlah_alokasi'],
+                        'total' => $cek === 'off' ? $key['jumlah_alokasi'] : 0,
                   ]);
             }
       }
 
-      public function createJurnal($id_transaksi, $request, $id_penyesuaian, $unit)
+      public function createJurnal($id_transaksi, $request, $id_penyesuaian, $unit, $cek)
       {
             if ($request['tahun_shu'] === date('Y')) {
                   $bulan = date('m');
@@ -330,7 +337,8 @@ class ShuService
             foreach ($estimasi['dana'] as $key) {
                   $id_kredit = $this->coaService->getIdCoa('nama', $key['nama'], 'subkategori', 'Dana SHU');
                   if ($id_kredit) {
-                        jurnal($model, $id_kredit, $id_transaksi, 'kredit', $key['jumlah_alokasi']);
+                        $total = $cek === 'off' ? $key['jumlah_alokasi'] : 0;
+                        jurnal($model, $id_kredit, $id_transaksi, 'kredit', $total);
                   }
             }
       }

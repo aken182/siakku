@@ -114,18 +114,6 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            {{-- <div class="col-md-6 col-sm-6 col-lg-6">
-                                <label for="tgl_transaksi" class="form-label text-capitalize text-primary">Tanggal
-                                    Transaksi</label>
-                                <input type="date" id="tgl_transaksi" name="tgl_transaksi"
-                                    class="form-control @error('tgl_transaksi') is-invalid @enderror"
-                                    placeholder="Masukkan Tanggal Transaksi.." />
-                                @error('tgl_transaksi')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div> --}}
                             <div class="col-md-6 col-sm-6 col-lg-6">
                                 <label for="tahun_shu" class="form-label text-capitalize text-primary">Tahun Buku</label>
                                 <select name="tahun_shu" id="tahun_shu"
@@ -140,6 +128,15 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-lg-6" id="main-cek-shu">
+                                <label for="tgl_transaksi" class="form-label text-capitalize text-primary">Penyesuaian
+                                    SHU</label>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="cek-shu" name="pny_nilai_shu">
+                                    <label class="form-check-label" for="cek-shu">Ubah Nilai SHU Menjadi 0.
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">

@@ -92,7 +92,8 @@ class TransaksiShuController extends Controller
       {
             $id = $request->input('id_penyesuaian') ?? null;
             $tahun = $request->input('tahun');
-            $data = $this->shuService->getJurnalToCreate($this->unit, $tahun, $id);
+            $cek = $request->input('pny_shu') ?? 'off';
+            $data = $this->shuService->getJurnalToCreate($this->unit, $tahun, $cek, $id);
             $jenis = $id !== null ? 'penyesuaian' : '';
             $jurnals = $data['jurnal'];
             $total = $data['total'];
@@ -129,18 +130,18 @@ class TransaksiShuController extends Controller
        */
       public function store(TransaksiShuRequest $request)
       {
-            // dd($request->all());
+            $cek = $request->input('cek_penyesuaian') === 'baru' ? 'off' : ($request->input('pny_nilai_shu') ?? 'off');
             if ($request->input("total_transaksi")) {
                   $request['total_transaksi'] = convertToNumber($request->input("total_transaksi"));
             }
-            $request['total_transaksi'] = $request['total_transaksi'] ?? $this->shuService->getTotalTransaksi($request->input('tahun_shu'), $this->unit);
+            $request['total_transaksi'] = $request['total_transaksi'] ?? $this->shuService->getTotalTransaksi($request->input('tahun_shu'), $this->unit, $cek);
             $id_penyesuaian = $request->input("id_penyesuaian") ?? null;
             $kodePenyesuaian = $this->transaksiService->getKodePenyesuaian($request->input('cek_penyesuaian'), $id_penyesuaian);
             /*Buat transaksi */
             $this->shuService->createTransaksi($request->all(), $kodePenyesuaian, $this->unit);
             $id_transaksi = $this->transaksiService->getIdTransaksiCreate($request->input('nomor'));
-            $this->shuService->createDetailTransaksi($id_transaksi, $request->all(), $this->unit);
-            $this->shuService->createJurnal($id_transaksi, $request->all(), $id_penyesuaian, $this->unit);
+            $this->shuService->createDetailTransaksi($id_transaksi, $request->all(), $this->unit, $cek);
+            $this->shuService->createJurnal($id_transaksi, $request->all(), $id_penyesuaian, $this->unit, $cek);
             alert()->success('Sukses', "Berhasil menambahkan transaksi pemindahan saldo.");
             return redirect()->route($this->mainRoute);
       }

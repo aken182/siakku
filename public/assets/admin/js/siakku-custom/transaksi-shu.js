@@ -7,7 +7,8 @@ $(document).ready(function () {
             e = $('.detail-penyesuaian'),
             dj = $('#detailJurnal'),
             j = $('.show-jurnal'),
-            // tg = $('#tgl_transaksi'),
+            mainCekSHU = $('#main-cek-shu'),
+            cs = $('#cek-shu'),
             ts = $('#tahun_shu'),
             t = $('#total-transaksi'),
             urlJurnal = $('#jurnal-route').data('route'),
@@ -15,16 +16,19 @@ $(document).ready(function () {
 
       e.hide();
       j.hide();
+      mainCekSHU.hide();
       c.forEach(function (radio) {
             radio.addEventListener('change', function () {
                   if (this.value === 'penyesuaian') {
                         e.fadeIn();
+                        mainCekSHU.fadeIn();
                         j.fadeOut();
                         t.val("");
                         dj.hide().empty();
 
                   } else {
                         e.fadeOut();
+                        mainCekSHU.fadeOut();
                         j.fadeOut();
                         t.val("");
                         dj.hide().empty();
@@ -42,7 +46,7 @@ $(document).ready(function () {
             }
 
             if (ts.val() === '') {
-                  const toastError = toastInfoTopRight("Anda wajib memasukkan tahun SHU !", "#ed2710");
+                  const toastError = toastInfoTopRight("Anda wajib memasukkan tahun pembukuan !", "#ed2710");
                   toastError.showToast();
                   t.val("");
                   j.fadeOut();
@@ -60,6 +64,7 @@ $(document).ready(function () {
                         toastError.showToast();
                         return;
                   }
+                  request.pny_shu = cs.is(':checked') ? 'on' : 'off';
                   request.id_penyesuaian = id_pny.val();
             }
             console.log(request);
