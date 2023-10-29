@@ -184,6 +184,12 @@
                                         <td style='text-align: right' class='text-dark'>{{ cek_uang($jumlah_bayar) }}</td>
                                     </tr>
                                 @endisset
+                                @isset($pot_bendahara)
+                                    <tr>
+                                        <td>Potongan dari Bendahara</td>
+                                        <td style='text-align: right' class='text-dark'>{{ cek_uang($pot_bendahara) }}</td>
+                                    </tr>
+                                @endisset
                                 @if (isset($bunga))
                                     <tr>
                                         <td>Bunga Hutang</td>

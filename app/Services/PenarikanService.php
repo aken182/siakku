@@ -285,13 +285,13 @@ class PenarikanService
        * Mengambil total simpanan anggota
        *
        **/
-      public function getTotalPenarikanAnggota($idAnggota, $jenis, $unit, $sukarela = null)
+      public function getTotalPenarikanAnggota($idAnggota, $jenis, $unit, $sukarela = null, $tahun = null, $type = null)
       {
             $total = 0;
             if ($jenis == 'Simpanan Sukarela Berbunga') {
-                  $dataTotal = self::getPenarikanSukarelaBerbungaAnggota($idAnggota, $jenis, $unit, $sukarela);
+                  $dataTotal = self::getPenarikanSukarelaBerbungaAnggota($idAnggota, $jenis, $unit, $sukarela, $tahun, $type);
             } else {
-                  $dataTotal = self::getPenarikanAnggota($idAnggota, $jenis, $unit);
+                  $dataTotal = self::getPenarikanAnggota($idAnggota, $jenis, $unit, $tahun, $type);
             }
             if ($dataTotal) {
                   foreach ($dataTotal as $data) {
@@ -306,17 +306,14 @@ class PenarikanService
        * berdasarkan id_anggota
        *
        **/
-      public function getPenarikanSukarelaBerbungaAnggota($idAnggota, $jenis, $unit, $sukarela)
+      public function getPenarikanSukarelaBerbungaAnggota($idAnggota, $jenis, $unit, $sukarela, $tahun = null, $type = null)
       {
+            $transaksi = $this->getWhereTransaksiPenarikan($unit, 'Penarikan Simpanan Sukarela Berbunga', $tahun, $type);
             return Detail_penarikan::with('transaksi', 'anggota')
                   ->where('id_anggota', $idAnggota)
                   ->where('jenis_penarikan', $sukarela)
                   ->where('nama_penarikan', $jenis)
-                  ->whereHas('transaksi', function ($query) use ($unit) {
-                        $query->where('unit', $unit)
-                              ->where('jenis_transaksi', 'Penarikan Simpanan Sukarela Berbunga')
-                              ->whereNot('tipe', 'kadaluwarsa');
-                  })->get();
+                  ->whereHas('transaksi', $transaksi)->get();
       }
 
       /**
@@ -324,16 +321,43 @@ class PenarikanService
        * berdasarkan id_anggota
        *
        **/
-      public function getPenarikanAnggota($idAnggota, $jenis, $unit)
+      public function getPenarikanAnggota($idAnggota, $jenis, $unit, $tahun = null, $type = null)
       {
+            $transaksi = $this->getWhereTransaksiPenarikan($unit, 'Penarikan Simpanan', $tahun, $type);
             return Detail_penarikan::with('transaksi', 'anggota')
                   ->where('id_anggota', $idAnggota)
                   ->where('jenis_penarikan', 'umum')
                   ->where('nama_penarikan', $jenis)
-                  ->whereHas('transaksi', function ($query) use ($unit) {
-                        $query->where('unit', $unit)
-                              ->where('jenis_transaksi', 'Penarikan Simpanan')
-                              ->whereNot('tipe', 'kadaluwarsa');
-                  })->get();
+                  ->whereHas('transaksi', $transaksi)->get();
+      }
+
+      private function getWhereTransaksiPenarikan($unit, $jenis, $tahun = null, $type = null)
+      {
+            $transaksi = function ($query) use ($unit, $jenis) {
+                  $query->where('unit', $unit)
+                        ->where('jenis_transaksi', $jenis)
+                        ->whereNot('tipe', 'kadaluwarsa');
+            };
+
+            if ($tahun != null && $type != null) {
+                  if ($type === 'saldo awal') {
+                        $transaksi = function ($query) use ($unit, $jenis, $tahun) {
+                              $query->where('unit', $unit)
+                                    ->where('jenis_transaksi', $jenis)
+                                    ->whereDate('tgl_transaksi', '<', "$tahun-01-01")
+                                    ->whereNot('tipe', 'kadaluwarsa');
+                        };
+                  } else {
+                        $transaksi = function ($query) use ($unit, $jenis, $tahun) {
+                              $query->where('unit', $unit)
+                                    ->where('jenis_transaksi', $jenis)
+                                    ->whereDate('tgl_transaksi', '>=', "$tahun-01-01")
+                                    ->whereDate('tgl_transaksi', '<=', "$tahun-12-31")
+                                    ->whereNot('tipe', 'kadaluwarsa');
+                        };
+                  }
+            }
+
+            return $transaksi;
       }
 }

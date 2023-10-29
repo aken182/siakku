@@ -10,7 +10,20 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 function formatAccounting($angka)
 {
+      if ($angka < 0) {
+            $angkas = $angka * -1;
+            return "(" . number_format($angkas, 0, ',', '.') . ")";
+      }
       return number_format($angka, 0, ',', '.');
+}
+
+function formatAccountingDecimal($angka)
+{
+      if ($angka < 0) {
+            $angkas = $angka * -1;
+            return "(" . number_format($angkas, 2, ',', '.') . ")";
+      }
+      return number_format($angka, 2, ',', '.');
 }
 
 function formatIdr($angka, $non = null)
@@ -76,6 +89,36 @@ function cek_uang($angka)
             return $uang;
       } else {
             $uang = buatrp($angka);
+            return $uang;
+      }
+}
+
+function cekAccounting($angka)
+{
+      if ($angka == null || $angka <= 0) {
+            if ($angka < 0) {
+                  $uang = formatAccounting($angka);
+            } else {
+                  $uang = '-';
+            }
+            return $uang;
+      } else {
+            $uang = formatAccounting($angka);
+            return $uang;
+      }
+}
+
+function cekAccountingDecimal($angka)
+{
+      if ($angka == null || $angka <= 0) {
+            if ($angka < 0) {
+                  $uang = formatAccountingDecimal($angka);
+            } else {
+                  $uang = '-';
+            }
+            return $uang;
+      } else {
+            $uang = formatAccountingDecimal($angka);
             return $uang;
       }
 }
@@ -274,15 +317,17 @@ function getHariNow($bulan, $tahun)
 }
 
 /*accounting fungsi rekapitulasi*/
-function getTotalFungsiRekap($header, $tahun, $bulan, $hari, $unit, $totalSaldoType, $fullYear = true)
+function getTotalFungsiRekap($header, $tahun, $bulan, $hari, $unit, $totalSaldoType, $fullYear = true, $tpk = null)
 {
       $totalSaldo = ($totalSaldoType === "kredit")
             ? DB::raw('(SUM(IF(posisi_dr_cr = "kredit", nominal, 0)) - SUM(IF(posisi_dr_cr = "debet", nominal, 0))) as total_saldo')
             : DB::raw('(SUM(IF(posisi_dr_cr = "debet", nominal, 0)) - SUM(IF(posisi_dr_cr = "kredit", nominal, 0))) as total_saldo');
 
-      $fungsiA = function ($query) use ($tahun, $bulan, $hari, $unit, $header, $fullYear) {
+      $fungsiA = function ($query) use ($tahun, $bulan, $hari, $unit, $header, $fullYear, $tpk) {
             $query->where('unit', $unit);
-
+            if ($tpk) {
+                  $query->where('tpk', $tpk);
+            }
             if ($fullYear) {
                   if ($header != 1 && $header != 2) {
                         $query->whereDate('tgl_transaksi', '>=', "$tahun-01-01");
@@ -304,6 +349,13 @@ function getTotalFungsiRekap($header, $tahun, $bulan, $hari, $unit, $totalSaldoT
       ];
 
       return $data;
+}
+
+function sumDataArray($data, $colum)
+{
+      $values = array_column($data, $colum);
+      $total = array_sum($values);
+      return $total;
 }
 
 function getFungsiRekap($kolom, $isiKolom, $header, $kolom2, $isiKolom2)
@@ -373,4 +425,27 @@ function paginate($items, $perPage = 15, $page = null, $options = [])
       $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
       $items = $items instanceof Collection ? $items : Collection::make($items);
       return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+}
+
+
+// function unique_multi_array($array, $key)
+// {
+//       $temp_array = array();
+//       $i = 0;
+//       $key_array = array();
+
+//       foreach ($array as $val) {
+//             if (!in_array($val[$key], $key_array)) {
+//                   $key_array[$i] = $val[$key];
+//                   $temp_array[$i] = $val;
+//             }
+//             $i++;
+//       }
+//       return $temp_array;
+// }
+
+function unique_multi_array($array, $key)
+{
+      $temp_array = array_values(array_intersect_key($array, array_unique(array_column($array, $key))));
+      return $temp_array;
 }

@@ -319,6 +319,7 @@ class PelunasanController extends Controller
                   'metode_transaksi' => $transaksi->transaksi->metode_transaksi,
                   'total' => $transaksi->transaksi->total,
                   'jumlah_bayar' => $transaksi->jumlah_pelunasan ?? null,
+                  'pot_bendahara' => $transaksi->pot_bendahara ?? null,
                   'angsuran_pokok' => $transaksi->angsuran_pokok ?? null,
                   'angsuran_bunga' => $transaksi->angsuran_bunga ?? null,
                   'bunga' => $transaksi->bunga ?? null,

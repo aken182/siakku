@@ -8,6 +8,7 @@ use App\Models\Jurnal;
 use App\Models\Anggota;
 use App\Models\Transaksi;
 use App\Models\Barang_eceran;
+use App\Models\Detail_pelunasan_penjualan;
 use App\Models\Main_penjualan;
 use App\Models\Detail_penjualan;
 use App\Models\Detail_penjualan_lain;
@@ -407,5 +408,81 @@ class PenjualanService
             }
 
             return $penjualan;
+      }
+
+      public function getSaldoPiutangPenjualan($unit, $tahun, $id_anggota)
+      {
+            $penjualan = Main_penjualan::with(['transaksi'])
+                  ->where('id_anggota', $id_anggota)
+                  ->where('jenis_penjualan', 'kredit')
+                  ->whereNot('status_penjualan', 'lunas')
+                  ->whereHas('transaksi', function ($query) use ($unit, $tahun) {
+                        $query->whereDate('tgl_transaksi', '<', "$tahun-01-01")
+                              ->whereNot('tipe', 'kadaluwarsa')
+                              ->where('unit', $unit);
+                  })->get();
+            $total = 0;
+            foreach ($penjualan as $pnj) {
+                  $total += $pnj->saldo_piutang;
+            }
+            return $total;
+      }
+
+      public function getPiutangPenjualan($unit, $tahun, $id_anggota)
+      {
+            $penjualan = Main_penjualan::with(['transaksi'])
+                  ->where('id_anggota', $id_anggota)
+                  ->where('jenis_penjualan', 'kredit')
+                  ->whereHas('transaksi', function ($query) use ($unit, $tahun) {
+                        $query->whereDate('tgl_transaksi', '>=', "$tahun-01-01")
+                              ->whereDate('tgl_transaksi', '<=', "$tahun-12-31")
+                              ->whereNot('tipe', 'kadaluwarsa')
+                              ->where('jenis_transaksi', 'LIKE', "%Penjualan%")
+                              ->where('unit', $unit);
+                  })->get();
+            $piutang = [];
+            foreach ($penjualan as $pnj) {
+                  $larantuka = null;
+                  $pasarBaru = null;
+                  $waiwerang = null;
+                  if ($pnj->transaksi->tpk === 'Larantuka') {
+                        $larantuka = $pnj->jumlah_penjualan;
+                  }
+                  if ($pnj->transaksi->tpk === 'Pasar Baru') {
+                        $pasarBaru = $pnj->jumlah_penjualan;
+                  }
+                  if ($pnj->transaksi->tpk === 'Waiwerang') {
+                        $waiwerang = $pnj->jumlah_penjualan;
+                  }
+                  $piutang[] = [
+                        'tgl_transaksi' => $pnj->transaksi->tgl_transaksi,
+                        'no_bukti' => $pnj->transaksi->no_bukti,
+                        'penambahan_lrtk' => $larantuka,
+                        'penambahan_psr' => $pasarBaru,
+                        'penambahan_wrg' => $waiwerang,
+                  ];
+            }
+            // dd($piutang);
+            return $piutang;
+      }
+
+      public function getPembayaranPiutangPenjualan($unit, $tahun, $id_anggota)
+      {
+            $pembayaran = Detail_pelunasan_penjualan::with(['transaksi', 'main_penjualan', 'main_penjualan.transaksi', 'main_penjualan.anggota'])
+                  ->whereHas('main_penjualan', function ($query) use ($unit, $id_anggota) {
+                        $query->where('id_anggota', $id_anggota)
+                              ->where('jenis_penjualan', 'kredit')
+                              ->whereHas('transaksi', function ($query) use ($unit) {
+                                    $query->whereNot('tipe', 'kadaluwarsa')
+                                          ->where('unit', $unit);
+                              });
+                  })
+                  ->whereHas('transaksi', function ($query) use ($unit, $tahun) {
+                        $query->whereDate('tgl_transaksi', '>=', "$tahun-01-01")
+                              ->whereDate('tgl_transaksi', '<=', "$tahun-12-31")
+                              ->where('unit', $unit)
+                              ->whereNot('tipe', 'kadaluwarsa');
+                  })->get();
+            return $pembayaran;
       }
 }

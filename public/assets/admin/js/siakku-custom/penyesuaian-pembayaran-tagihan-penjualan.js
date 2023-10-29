@@ -52,6 +52,10 @@ $(document).ready(function () {
                             html += "<td style='text-align: right' class='text-dark'>" + data.detail.jumlah_bayar + "</td>";
                             html += "</tr>";
                             html += "<tr>";
+                            html += "<td>Potongan dari Bendahara</td>";
+                            html += "<td style='text-align: right' class='text-dark'>" + data.detail.pot_bendahara + "</td>";
+                            html += "</tr>";
+                            html += "<tr>";
                             html += "<td>Sisa Tagihan</td>";
                             html += "<td style='text-align: right' class='text-dark'>" + data.detail.sisa_tagihan + "</td>";
                             html += "</tr>";

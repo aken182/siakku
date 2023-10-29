@@ -28,16 +28,18 @@ class TransaksiService
             $unit = [
                   'lut' => 'Pertokoan',
                   'lut-saldo' => 'Pertokoan',
+                  'lut.list' => 'Pertokoan',
                   'lus' => 'Simpan Pinjam',
                   'lus-sb' => 'Simpan Pinjam',
                   'lus-saldo' => 'Simpan Pinjam',
+                  'lus.list' => 'Simpan Pinjam',
             ];
 
             // Menghapus bagian yang sama dalam kunci
             $route = str_replace([
-                  '-transaksi', '-simpanan', '-simpanan-sb', '-pinjaman', '-penjualan', '-gudang', '-kartu-toko',
+                  '-transaksi', '-simpanan', '-simpanan-sb', '-pinjaman', '-penjualan', '-gudang', '-gudang.list', '-kartu-toko',
                   '-jurnal', '-jurnal.detail', '-jurnal.pdf', '-buku-besar', '-buku-besar.detail',
-                  '-buku-besar.pdf', '-laba-rugi', '-neraca', '-neraca-saldo'
+                  '-buku-besar.pdf', '-laba-rugi', '-neraca', '-neraca-saldo', '-aktivatetap', '-aktivatetap.list'
             ], '', $route);
 
             return $unit[$route];
@@ -71,6 +73,22 @@ class TransaksiService
             $route = [
                   'Pertokoan' => 'lut-laba-rugi',
                   'Simpan Pinjam' => 'lus-laba-rugi'
+            ];
+            return $route[$unit];
+      }
+
+      /**
+       * Mengambil route list dari laporan
+       * aktiva tetap
+       *
+       * @param mixed $unit
+       * @return string
+       **/
+      public function getRouteListAktivaTetap($unit)
+      {
+            $route = [
+                  'Pertokoan' => 'lut-aktivatetap.list',
+                  'Simpan Pinjam' => 'lus-aktivatetap.list'
             ];
             return $route[$unit];
       }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\laporan\JurnalController;
 use App\Http\Controllers\laporan\LabaRugiController;
 use App\Http\Controllers\laporan\BukuBesarController;
+use App\Http\Controllers\laporan\LaporanAktivaTetapController;
 use App\Http\Controllers\laporan\NeracaSaldoController;
 use App\Http\Controllers\laporan\LaporanPinjamanController;
 use App\Http\Controllers\laporan\LaporanSimpananController;
@@ -17,6 +18,8 @@ Route::get('/laporan-transaksi/unit-sp/detail/{id}/{detail}/{unit}', [DetailTran
 Route::get('/laporan-simpanan/unit-sp', [LaporanSimpananController::class, 'index'])->name('lus-simpanan');
 Route::get('/laporan-simpanan-sukarela-berbunga/unit-sp', [LaporanSimpananController::class, 'index'])->name('lus-simpanan-sb');
 Route::get('/laporan-pinjaman/unit-sp', [LaporanPinjamanController::class, 'index'])->name('lus-pinjaman');
+Route::get('/laporan-aktiva-tetap/unit-sp', [LaporanAktivaTetapController::class, 'index'])->name('lus-aktivatetap');
+Route::get('/laporan-aktiva-tetap/unit-sp/list', [LaporanAktivaTetapController::class, 'list'])->name('lus-aktivatetap.list');
 Route::get('/jurnal/unit-sp', [JurnalController::class, 'index'])->name('lus-jurnal');
 Route::get('/jurnal/unit-sp/detail/{id}/{detail}/{unit}', [DetailTransaksiController::class, 'index'])->name('lus-jurnal.detail');
 Route::get('/jurnal/unit-sp/pdf/{bulan}/{tahun}', [JurnalController::class, 'pdf'])->name('lus-jurnal.pdf');

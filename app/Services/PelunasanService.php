@@ -134,6 +134,8 @@ class PelunasanService
 
       public function validateCustomField($request)
       {
+            $pot = $request->input('pot_bendahara') ?? 0;
+            $potongan = convertToNumber($pot);
             $jumlahPembayaran = convertToNumber($request->input('jumlah_bayar'));
             if ($request->input('cek_pembayaran') === 'penyesuaian') {
 
@@ -141,18 +143,21 @@ class PelunasanService
                         $detailPenyesuaian = Detail_pelunasan_penjualan::with(['main_penjualan', 'transaksi'])
                               ->find($request->input('id_pny_pembayaran'));
                         $saldo = $detailPenyesuaian->main_penjualan->saldo_piutang;
+                        $saldoPnyAwal =  $saldo + ($detailPenyesuaian->jumlah_pelunasan + $detailPenyesuaian->pot_bendahara ?? 0);
+                        $saldoTagihanBaru = $saldoPnyAwal - ($jumlahPembayaran + $potongan);
                   } else {
                         $detailPenyesuaian = Detail_pelunasan_belanja::with(['main_belanja', 'transaksi'])
                               ->find($request->input('id_pny_pembayaran'));
                         $saldo = $detailPenyesuaian->main_belanja->saldo_hutang;
+                        $saldoPnyAwal =  $saldo + $detailPenyesuaian->jumlah_pelunasan;
+                        $saldoTagihanBaru = $saldoPnyAwal - $jumlahPembayaran;
                   }
 
-                  $saldoPnyAwal =  $saldo + $detailPenyesuaian->jumlah_pelunasan;
-                  $saldoTagihanBaru = $saldoPnyAwal - $jumlahPembayaran;
 
                   $request->merge([
                         'saldo_tagihan' => $saldoTagihanBaru,
-                        'jumlah_bayar' => $jumlahPembayaran
+                        'jumlah_bayar' => $jumlahPembayaran,
+                        'pot_bendahara' => $potongan
                   ]);
 
                   $request['invoicepny'] = $detailPenyesuaian->transaksi->kode;
@@ -160,7 +165,8 @@ class PelunasanService
             } else {
                   $request->merge([
                         'saldo_tagihan' => convertToNumber($request->input('saldo_tagihan')),
-                        'jumlah_bayar' => $jumlahPembayaran
+                        'jumlah_bayar' => $jumlahPembayaran,
+                        'pot_bendahara' => $potongan
                   ]);
 
                   $request['invoicepny'] = null;
@@ -175,7 +181,7 @@ class PelunasanService
                   $bungafix = convertToNumber($bunga);
                   $total = $request['jumlah_bayar'] + ($bungafix);
             } else {
-                  $total = $request['jumlah_bayar'];
+                  $total = $request['jumlah_bayar'] + $request['pot_bendahara'];
             }
             return $total;
       }
@@ -273,7 +279,8 @@ class PelunasanService
             Detail_pelunasan_penjualan::create([
                   'id_transaksi' => $id_transaksi,
                   'id_penjualan' => $request->input('id_penjualan'),
-                  'jumlah_pelunasan' => $request->input('jumlah_bayar')
+                  'jumlah_pelunasan' => $request->input('jumlah_bayar'),
+                  'pot_bendahara' => $request->input('pot_bendahara'),
             ]);
       }
 
@@ -385,10 +392,10 @@ class PelunasanService
             $id_transaksi_jurnal = self::getIdTransaksiJurnal(new Main_penjualan, 'id_penjualan', $request['id_penjualan']);
             $id_debet = $this->coaService->getIdDebet($request);
             $id_kredit = self::getIdPiutang($id_transaksi_jurnal);
-
+            $total = self::getTotalTransaksi($request);
             //--input tabel jurnal--//
-            jurnal($model, $id_debet, $id_transaksi, 'debet', $request['jumlah_bayar']);
-            jurnal($model, $id_kredit, $id_transaksi, 'kredit', $request['jumlah_bayar']);
+            jurnal($model, $id_debet, $id_transaksi, 'debet', $total);
+            jurnal($model, $id_kredit, $id_transaksi, 'kredit', $total);
       }
 
       public function createJurnalHutangBelanja($request, $id_transaksi)
@@ -465,6 +472,10 @@ class PelunasanService
                               ->whereHas('transaksi', function ($query) {
                                     $query->whereNot('tipe', 'kadaluwarsa');
                               })->get();
+                        $collection = collect($m);
+                        $jumlah = $collection->sum('jumlah_pelunasan');
+                        $potongan = $collection->sum('pot_bendahara');
+                        $totalSum = $jumlah + $potongan;
                         break;
                   case 'main_belanja':
                         $m = Detail_pelunasan_belanja::with('transaksi')
@@ -472,12 +483,13 @@ class PelunasanService
                               ->whereHas('transaksi', function ($query) {
                                     $query->whereNot('tipe', 'kadaluwarsa');
                               })->get();
+                        $collection = collect($m);
+                        $totalSum = $collection->sum('jumlah_pelunasan');
                         break;
                   default:
+                        $totalSum = 0;
                         break;
             }
-            $collection = collect($m);
-            $totalSum = $collection->sum('jumlah_pelunasan');
             return $totalSum;
       }
 
@@ -517,6 +529,7 @@ class PelunasanService
                   'nama' => $nama,
                   'tanggal_bayar' => date('d-m-Y', strtotime($m->transaksi->tgl_transaksi)),
                   'jumlah_bayar' => cek_uang($m->jumlah_pelunasan),
+                  'pot_bendahara' => cek_uang($m->pot_bendahara),
                   'via' => $m->transaksi->jenis_transaksi,
                   'sisa_tagihan' => cek_uang($m->main_penjualan->saldo_piutang),
                   'status' => $m->main_penjualan->status_penjualan,

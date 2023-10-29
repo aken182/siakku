@@ -47,6 +47,8 @@ class PelunasanRequest extends FormRequest
 
         if ($this->input('jenis_transaksi') === 'Pembayaran Piutang Penjualan') {
             $rules['id_penjualan'] = 'required';
+            $rules['pot_bendahara'] = 'required';
+            $rules['tpk'] = 'required';
         }
 
         if ($this->input('jenis_transaksi') === 'Pembayaran Hutang Belanja') {
@@ -95,6 +97,8 @@ class PelunasanRequest extends FormRequest
 
         if ($this->input('jenis_transaksi') === 'Pembayaran Piutang Penjualan') {
             $messages['id_penjualan.required'] = 'Kolom tagihan wajib diisi!';
+            $messages['pot_bendahara.required'] = 'Kolom potongan dari bendahara wajib diisi !';
+            $messages['tpk.required'] = 'Kolom TPK wajib diisi !';
         }
 
         if ($this->input('jenis_transaksi') === 'Pembayaran Hutang Belanja') {

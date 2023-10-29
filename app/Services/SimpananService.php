@@ -64,21 +64,25 @@ class SimpananService
        * Mengambil total simpanan anggota
        *
        **/
-      public function getTotalSimpananAnggota($idAnggota, $jenis, $unit)
+      public function getTotalSimpananAnggota($idAnggota, $jenis, $unit, $tahun = null, $type = null)
       {
             $total = 0;
             if ($jenis == 'Simpanan Sukarela Berbunga') {
-                  $dataTotal = self::getSimpananSukarelaBerbungaAnggota($idAnggota, $jenis, $unit);
+                  $dataTotal = self::getSimpananSukarelaBerbungaAnggota($idAnggota, $jenis, $unit, $tahun, $type);
             } else {
                   if ($unit === 'Pertokoan') {
-                        $dataTotal = self::getSimpananPertokoanAnggota($idAnggota, $unit);
+                        $dataTotal = self::getSimpananPertokoanAnggota($idAnggota, $unit, $tahun, $type);
                   } else {
                         if ($jenis === 'Simpanan Kapitalisasi') {
-                              $kapitalisasi = self::getKapitalisasiFromPinjaman($idAnggota, $unit);
-                              $total += $kapitalisasi;
+                              $kapitalisasi = self::getKapitalisasiFromPinjaman($idAnggota, $unit, $tahun, $type);
+                              $totalKapitalisasi = 0;
+                              foreach ($kapitalisasi as $d) {
+                                    $totalKapitalisasi += $d->kapitalisasi;
+                              }
+                              $total += $totalKapitalisasi;
                         }
                         $idSimpanan = self::getIdSimpananSimpanPinjam($jenis);
-                        $dataTotal = self::getSimpananSimpanPinjamAnggota($idSimpanan, $idAnggota, $unit);
+                        $dataTotal = self::getSimpananSimpanPinjamAnggota($idSimpanan, $idAnggota, $unit, $tahun, $type);
                   }
             }
             if ($dataTotal) {
@@ -94,20 +98,14 @@ class SimpananService
        * potongan pinjaman baru anggota
        *
        **/
-      public function getKapitalisasiFromPinjaman($id_anggota, $unit)
+      public function getKapitalisasiFromPinjaman($id_anggota, $unit, $tahun = null, $type = null)
       {
-            $kapitalisasi = 0;
+            $transaksi = $this->getWhereTransaksiSimpanan($unit, $tahun, $type);
             $data = Main_pinjaman::with('transaksi')
                   ->where('id_anggota', $id_anggota)
                   ->where('jenis', 'baru')
-                  ->whereHas('transaksi', function ($query) use ($unit) {
-                        $query->whereNot('tipe', 'kadaluwarsa')
-                              ->where('unit', $unit);
-                  })->get();
-            foreach ($data as $d) {
-                  $kapitalisasi += $d->kapitalisasi;
-            }
-            return $kapitalisasi;
+                  ->whereHas('transaksi', $transaksi)->get();
+            return $data;
       }
 
       /**
@@ -123,17 +121,14 @@ class SimpananService
        * berdasarkan id_anggota
        *
        **/
-      public function getSimpananSukarelaBerbungaAnggota($idAnggota, $jenis, $unit)
+      public function getSimpananSukarelaBerbungaAnggota($idAnggota, $jenis, $unit, $tahun = null, $type = null)
       {
+            $transaksi = $this->getWhereTransaksiSimpananSr($unit, $jenis, $tahun, $type);
             return Detail_simpanan::with('main_simpanan.transaksi', 'main_simpanan', 'main_simpanan.anggota')
-                  ->whereHas('main_simpanan', function ($query) use ($idAnggota, $jenis, $unit) {
+                  ->whereHas('main_simpanan', function ($query) use ($idAnggota, $transaksi) {
                         $query->where('id_anggota', $idAnggota)
                               ->where('jenis_simpanan', 'sukarela berbunga')
-                              ->whereHas('transaksi', function ($query) use ($jenis, $unit) {
-                                    $query->where('unit', $unit)
-                                          ->where('jenis_transaksi', $jenis)
-                                          ->whereNot('tipe', 'kadaluwarsa');
-                              });
+                              ->whereHas('transaksi', $transaksi);
                   })->get();
       }
 
@@ -142,17 +137,15 @@ class SimpananService
        * simpan pinjam berdasarkan id_anggota
        *
        **/
-      public function getSimpananSimpanPinjamAnggota($idSimpanan, $idAnggota, $unit)
+      public function getSimpananSimpanPinjamAnggota($idSimpanan, $idAnggota, $unit, $tahun = null, $type = null)
       {
+            $transaksi = $this->getWhereTransaksiSimpanan($unit, $tahun, $type);
             return Detail_simpanan::with('main_simpanan.transaksi', 'main_simpanan', 'main_simpanan.anggota')
                   ->where('id_simpanan', $idSimpanan)
-                  ->whereHas('main_simpanan', function ($query) use ($idAnggota, $unit) {
+                  ->whereHas('main_simpanan', function ($query) use ($idAnggota, $transaksi) {
                         $query->where('id_anggota', $idAnggota)
                               ->where('jenis_simpanan', 'umum')
-                              ->whereHas('transaksi', function ($query) use ($unit) {
-                                    $query->where('unit', $unit)
-                                          ->whereNot('tipe', 'kadaluwarsa');
-                              });
+                              ->whereHas('transaksi', $transaksi);
                   })->get();
       }
 
@@ -161,17 +154,80 @@ class SimpananService
        * pertokoan berdasarkan id_anggota
        *
        **/
-      public function getSimpananPertokoanAnggota($idAnggota, $unit)
+      public function getSimpananPertokoanAnggota($idAnggota, $unit, $tahun = null, $type = null)
       {
+            $transaksi = $this->getWhereTransaksiSimpanan($unit, $tahun, $type);
             return Detail_simpanan::with('main_simpanan.transaksi', 'main_simpanan', 'main_simpanan.anggota')
-                  ->whereHas('main_simpanan', function ($query) use ($idAnggota, $unit) {
+                  ->whereHas('main_simpanan', function ($query) use ($idAnggota, $transaksi) {
                         $query->where('id_anggota', $idAnggota)
                               ->where('jenis_simpanan', 'umum')
-                              ->whereHas('transaksi', function ($query) use ($unit) {
-                                    $query->where('unit', $unit)
-                                          ->whereNot('tipe', 'kadaluwarsa');
-                              });
+                              ->whereHas('transaksi', $transaksi);
                   })->get();
+      }
+
+      /**
+       * Mengambil kondisi transaksi berdasarkan
+       * unit, tahun, tipe transaksi
+       *
+       **/
+      private function getWhereTransaksiSimpanan($unit, $tahun = null, $type = null)
+      {
+            $transaksi = function ($query) use ($unit) {
+                  $query->where('unit', $unit)
+                        ->whereNot('tipe', 'kadaluwarsa');
+            };
+
+            if ($tahun != null && $type != null) {
+                  if ($type === 'saldo awal') {
+                        $transaksi = function ($query) use ($unit, $tahun) {
+                              $query->where('unit', $unit)
+                                    ->whereDate('tgl_transaksi', '<', "$tahun-01-01")
+                                    ->whereNot('tipe', 'kadaluwarsa');
+                        };
+                  } else {
+                        $transaksi = function ($query) use ($unit, $tahun) {
+                              $query->where('unit', $unit)
+                                    ->whereDate('tgl_transaksi', '>=', "$tahun-01-01")
+                                    ->whereDate('tgl_transaksi', '<=', "$tahun-12-31")
+                                    ->whereNot('tipe', 'kadaluwarsa');
+                        };
+                  }
+            }
+            return $transaksi;
+      }
+
+      /**
+       * Mengambil kondisi transaksi simpanan sukarela berbunga
+       * berdasarkan unit, tahun, tipe transaksi
+       *
+       **/
+      private function getWhereTransaksiSimpananSr($unit, $jenis, $tahun = null, $type = null)
+      {
+            $transaksi = function ($query) use ($jenis, $unit) {
+                  $query->where('unit', $unit)
+                        ->where('jenis_transaksi', $jenis)
+                        ->whereNot('tipe', 'kadaluwarsa');
+            };
+
+            if ($tahun != null && $type != null) {
+                  if ($type === 'saldo awal') {
+                        $transaksi = function ($query) use ($unit, $jenis, $tahun) {
+                              $query->where('unit', $unit)
+                                    ->where('jenis_transaksi', $jenis)
+                                    ->whereDate('tgl_transaksi', '<', "$tahun-01-01")
+                                    ->whereNot('tipe', 'kadaluwarsa');
+                        };
+                  } else {
+                        $transaksi = function ($query) use ($unit, $jenis, $tahun) {
+                              $query->where('unit', $unit)
+                                    ->where('jenis_transaksi', $jenis)
+                                    ->whereDate('tgl_transaksi', '>=', "$tahun-01-01")
+                                    ->whereDate('tgl_transaksi', '<=', "$tahun-12-31")
+                                    ->whereNot('tipe', 'kadaluwarsa');
+                        };
+                  }
+            }
+            return $transaksi;
       }
 
       /**

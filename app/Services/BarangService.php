@@ -325,15 +325,44 @@ class BarangService
             }
       }
 
-      public function getDataBarangEceran($unit, $posisi)
+      // public function getDataBarang($unit, $posisi, $tpk = null)
+      // {
+      //       $barangQuery = Barang::with(['satuan', 'unit'])
+      //             ->where('posisi_pi', $posisi)
+      //             ->whereHas('unit', function ($query) use ($unit) {
+      //                   $query->where('unit', $unit);
+      //             });
+
+      //       if ($tpk !== null) {
+      //             $barangQuery->whereHas('unit', function ($query) use ($unit, $tpk) {
+      //                   $query->where('nama', 'LIKE', "%" . $tpk . "%");
+      //             });
+      //       }
+
+      //       return $barangQuery->get();
+      // }
+
+
+      public function getDataBarangEceran($unit, $posisi, $tpk = null)
       {
-            return Barang_eceran::with(['satuan', 'barang.unit', 'barang.satuan', 'barang'])
-                  ->whereHas('barang', function ($query) use ($unit, $posisi) {
-                        $query->where('posisi_pi', $posisi)
-                              ->whereHas('unit', function ($query) use ($unit) {
-                                    $query->where('unit', $unit);
-                              });
-                  })->get();
+            if ($tpk != null) {
+                  return Barang_eceran::with(['satuan', 'barang.unit', 'barang.satuan', 'barang'])
+                        ->whereHas('barang', function ($query) use ($unit, $posisi, $tpk) {
+                              $query->where('posisi_pi', $posisi)
+                                    ->whereHas('unit', function ($query) use ($unit, $tpk) {
+                                          $query->where('nama', 'LIKE', "%" . $tpk . "%")
+                                                ->where('unit', $unit);
+                                    });
+                        })->get();
+            } else {
+                  return Barang_eceran::with(['satuan', 'barang.unit', 'barang.satuan', 'barang'])
+                        ->whereHas('barang', function ($query) use ($unit, $posisi) {
+                              $query->where('posisi_pi', $posisi)
+                                    ->whereHas('unit', function ($query) use ($unit) {
+                                          $query->where('unit', $unit);
+                                    });
+                        })->get();
+            }
       }
 
       public function getDataUnit($unit, $tpk = null)

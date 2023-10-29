@@ -9,7 +9,7 @@ class Detail_pelunasan_penjualan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id_transaksi', 'id_penjualan', 'jumlah_pelunasan', 'created_at', 'updated_at'];
+    protected $fillable = ['id_transaksi', 'id_penjualan', 'jumlah_pelunasan', 'pot_bendahara', 'created_at', 'updated_at'];
     protected $table = 'detail_pelunasan_penjualan';
     protected $primaryKey = 'id_detail';
 

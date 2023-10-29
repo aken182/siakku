@@ -238,6 +238,12 @@
                               "slug": "lut-kartu-toko"
                         },
                         {
+                              "url": "/laporan-aktiva-tetap/unit-pertokoan",
+                              "name": "Aktiva Tetap",
+                              "permission": "laporan-aktiva-tetap-unit-pertokoan",
+                              "slug": "lut-aktivatetap"
+                        },
+                        {
                               "url": "/jurnal/unit-pertokoan",
                               "name": "Jurnal Umum",
                               "permission": "jurnal-umum-unit-pertokoan",
@@ -439,7 +445,7 @@
                         },
                         {
                               "url": "/laporan-simpanan-sukarela-berbunga/unit-sp",
-                              "name": "Simpanan Sukarela Berbunga",
+                              "name": "Simpanan SRB",
                               "permission": "laporan-simpanan-sukarela-berbunga-unit-sp",
                               "slug": "lus-simpanan-sb"
                         },
@@ -448,6 +454,12 @@
                               "name": "Pinjaman",
                               "permission": "laporan-pinjaman-unit-sp",
                               "slug": "lus-pinjaman"
+                        },
+                        {
+                              "url": "/laporan-aktiva-tetap/unit-sp",
+                              "name": "Aktiva Tetap",
+                              "permission": "laporan-aktiva-tetap-unit-sp",
+                              "slug": "lus-aktivatetap"
                         },
                         {
                               "url": "/jurnal/unit-sp",

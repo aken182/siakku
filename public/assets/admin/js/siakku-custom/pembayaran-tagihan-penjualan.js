@@ -2,6 +2,7 @@
 $(document).ready(function () {
 
       var toastError = toastInfoTopRight("Jumlah pembayaran melebihi total tagihan !", "#ed2710");
+      var toastError2 = toastInfoTopRight("Isi terlebih dahulu potongan dari bendaraha sebelum mengisi jumlah pembayaran !", "#ed2710");
       !(function jenisTrans() {
             var k = $("#rekening_kas");
             var b = $("#rekening_bank");
@@ -27,6 +28,7 @@ $(document).ready(function () {
             var n = $("#nama_pembeli");
             var sp = $("#status_pembeli");
             var tb = $("#tanggal_beli");
+            var pb = $("#pot-bendahara");
             var jp = $("#jumlah_beli");
             var jb = $("#jumlah_bayar");
             var tt = $("#total_tagihan");
@@ -69,44 +71,53 @@ $(document).ready(function () {
 
             jb.on('keyup', function () {
                   let getJumlah = $(this).val();
-                  let getTotalTagihan = tt.html();
-                  let total = getTotalTagihan.split(".").join("").split("Rp").join("");
-                  let jumlah = getJumlah.split(".").join("").split("Rp").join("");
-                  let jf = parseInt(jumlah);
-                  let tf = parseInt(total);
-                  if (jf === 0) {
+                  let getPotongan = pb.val();
+                  if (getPotongan === '') {
                         st.val("");
                         st.removeClass("text-info");
+                        toastError2.showToast();
                         saveBtn.prop("disabled", true);
-                  } else if (jf > tf) {
-                        if (jnP.is(':checked')) {
-                              let jnPk = $('input[name="cek_pembayaran"]:checked').val();
-                              if (jnPk === "penyesuaian") {
-                                    st.val("Disesuaikan setelah disimpan !");
-                                    st.addClass("text-info");
-                                    saveBtn.prop("disabled", false);
-                              } else {
-                                    st.val("");
-                                    st.removeClass("text-info");
-                                    toastError.showToast();
-                                    saveBtn.prop("disabled", true);
-                              }
-                        }
                   } else {
-                        if (jnP.is(':checked')) {
-                              let jnPk = $('input[name="cek_pembayaran"]:checked').val();
-                              if (jnPk === "penyesuaian") {
-                                    st.val("Disesuaikan setelah disimpan !");
-                                    st.addClass("text-info");
-                                    saveBtn.prop("disabled", false);
-                              } else {
-                                    const getsaldo = tt.text();
-                                    const saldo = getsaldo.split(".").join("").split("Rp").join("");
-                                    const hasil = parseInt(saldo) - jf;
-                                    const currencyhasil = currencyIdr(hasil, 'Rp ');
-                                    st.val(currencyhasil);
-                                    st.removeClass("text-info");
-                                    saveBtn.prop("disabled", false);
+                        let getTotalTagihan = tt.html();
+                        let total = getTotalTagihan.split(".").join("").split("Rp").join("");
+                        let jumlah = getJumlah.split(".").join("").split("Rp").join("");
+                        let potongan = getPotongan.split(".").join("").split("Rp").join("");
+                        let jf = parseInt(jumlah) + parseInt(potongan);
+                        let tf = parseInt(total);
+                        if (jf === 0) {
+                              st.val("");
+                              st.removeClass("text-info");
+                              saveBtn.prop("disabled", true);
+                        } else if (jf > tf) {
+                              if (jnP.is(':checked')) {
+                                    let jnPk = $('input[name="cek_pembayaran"]:checked').val();
+                                    if (jnPk === "penyesuaian") {
+                                          st.val("Disesuaikan setelah disimpan !");
+                                          st.addClass("text-info");
+                                          saveBtn.prop("disabled", false);
+                                    } else {
+                                          st.val("");
+                                          st.removeClass("text-info");
+                                          toastError.showToast();
+                                          saveBtn.prop("disabled", true);
+                                    }
+                              }
+                        } else {
+                              if (jnP.is(':checked')) {
+                                    let jnPk = $('input[name="cek_pembayaran"]:checked').val();
+                                    if (jnPk === "penyesuaian") {
+                                          st.val("Disesuaikan setelah disimpan !");
+                                          st.addClass("text-info");
+                                          saveBtn.prop("disabled", false);
+                                    } else {
+                                          const getsaldo = tt.text();
+                                          const saldo = getsaldo.split(".").join("").split("Rp").join("");
+                                          const hasil = parseInt(saldo) - jf;
+                                          const currencyhasil = currencyIdr(hasil, 'Rp ');
+                                          st.val(currencyhasil);
+                                          st.removeClass("text-info");
+                                          saveBtn.prop("disabled", false);
+                                    }
                               }
                         }
                   }

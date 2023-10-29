@@ -195,6 +195,8 @@
                                             <th>Tanggal Bayar</th>
                                             <th>Keterangan</th>
                                             <th>Jumlah Bayar</th>
+                                            <th>Potongan Bendahara</th>
+                                            <th>Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -212,12 +214,20 @@
                                                     class="{{ $p->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : '' }}">
                                                     {{ $p->transaksi->tipe == 'kadaluwarsa' ? 'Kadaluwarsa' : buatrp($p->jumlah_pelunasan) }}
                                                 </td>
+                                                <td style="text-align:right"
+                                                    class="{{ $p->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : '' }}">
+                                                    {{ $p->transaksi->tipe == 'kadaluwarsa' ? 'Kadaluwarsa' : cek_uang($p->pot_bendahara) }}
+                                                </td>
+                                                <td style="text-align:right"
+                                                    class="{{ $p->transaksi->tipe == 'kadaluwarsa' ? 'text-danger' : '' }}">
+                                                    {{ $p->transaksi->tipe == 'kadaluwarsa' ? 'Kadaluwarsa' : cek_uang(($p->pot_bendahara ?? 0) + $p->jumlah_pelunasan) }}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="3" style="text-align: left;">
+                                            <td colspan="5" style="text-align: left;">
                                                 <h5 style="font-weight:bold">Total Bayar</h5>
                                             </td>
                                             <td style="text-align: right;">

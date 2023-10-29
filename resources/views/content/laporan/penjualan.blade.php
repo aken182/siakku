@@ -68,6 +68,107 @@
                     <h6 class="text-center text-uppercase">{{ $title3 }}</h6>
                 </div>
                 <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th style="text-align: center">No.</th>
+                                        <th>Jenis Barang</th>
+                                        <th>Penjualan</th>
+                                        <th>Harga Pokok</th>
+                                        <th>Laba/Rugi</th>
+                                    </tr>
+                                </thead>
+                                @php
+                                    $nl = 1;
+                                    $np = 1;
+                                    $nw = 1;
+                                @endphp
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="4"><b class="text-uppercase">I. Tpk Larantuka</b></td>
+                                    </tr>
+                                    @foreach ($penjualan['larantuka'] as $item)
+                                        <tr>
+                                            <td style="text-align: center">{{ $nl++ . '.' }}</td>
+                                            <td>{{ $item['nama'] }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['penjualan']) }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['hpp']) }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['laba_rugi']) }}</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td></td>
+                                        <td><b>Jumlah</b></td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['pnjLrtk']) }}</b>
+                                        </td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['hppLrtk']) }}</b>
+                                        </td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['lrLrtk']) }}</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="4"><b class="text-uppercase">II. Tpk Pasar Baru</b></td>
+                                    </tr>
+                                    @foreach ($penjualan['pasarBaru'] as $item)
+                                        <tr>
+                                            <td style="text-align: center">{{ $np++ . '.' }}</td>
+                                            <td>{{ $item['nama'] }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['penjualan']) }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['hpp']) }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['laba_rugi']) }}</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td></td>
+                                        <td><b>Jumlah</b></td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['pnjPsr']) }}</b>
+                                        </td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['hppPsr']) }}</b>
+                                        </td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['lrPsr']) }}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="4"><b class="text-uppercase">III. Tpk Waiwerang</b></td>
+                                    </tr>
+                                    @foreach ($penjualan['waiwerang'] as $item)
+                                        <tr>
+                                            <td style="text-align: center">{{ $nw++ . '.' }}</td>
+                                            <td>{{ $item['nama'] }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['penjualan']) }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['hpp']) }}</td>
+                                            <td style="text-align: right">{{ cekUangDecimal($item['laba_rugi']) }}</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td></td>
+                                        <td><b>Jumlah</b></td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['pnjWrg']) }}</b>
+                                        </td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['hppWrg']) }}</b>
+                                        </td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['lrWrg']) }}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><b>TOTAL I+II+III</b></td>
+                                        <td style="text-align: right">
+                                            <b>{{ cekUangDecimal($penjualan['totalPenjualan']) }}</b>
+                                        </td>
+                                        <td style="text-align: right"><b>{{ cekUangDecimal($penjualan['totalHpp']) }}</b>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <b>{{ cekUangDecimal($penjualan['totalLabaRugi']) }}</b>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

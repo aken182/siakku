@@ -141,7 +141,7 @@
                                             <x-form.create-pelunasan-belanja :tagihan="$tagihan" />
                                         @endif
                                         @if ($jenis === 'Pembayaran Piutang Penjualan' || $jenis === 'Pembayaran Hutang Belanja')
-                                            <x-form.field-pelunasan-lainnya />
+                                            <x-form.field-pelunasan-lainnya :jenis="$jenis" />
                                         @endif
                                         @if ($jenis === 'Pembayaran Pinjaman Anggota')
                                             <x-form.create-angsuran-pinjaman :tagihan="$tagihan" />
