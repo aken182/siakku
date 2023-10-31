@@ -9,7 +9,7 @@
                         <a href="/"><img src="{{ asset('assets/admin/') }}/images/logo/logo-kpri.png" alt="Logo"></a>
                     </div>
                     <h1 class="auth-title">Log in.</h1>
-                    <p class="auth-subtitle mb-5">Sistem Informasi & Keuangan</p>
+                    <p class="auth-subtitle mb-5">Sistem Informasi Akuntansi & Keuangan</p>
 
                     <form action="{{ route('login') }}" method="POST">
                         @csrf
@@ -49,8 +49,8 @@
                         <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Log in</button>
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
-                        <p class="text-gray-600">Back to Home? <a href="https://koperasiusahajaya.com"
-                                class="font-bold">Click</a>.</p>
+                        <p class="text-gray-600">Back to Home? <a href="{{ route('home') }}" class="font-bold">Click</a>.
+                        </p>
                     </div>
                 </div>
             </div>
