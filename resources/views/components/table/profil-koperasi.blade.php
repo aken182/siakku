@@ -1,4 +1,4 @@
-<table class="table table-hover">
+<table class="table table-hover table-borderless">
     <tr>
         <td>Koperasi</td>
         <td> : {{ $profil->nama }}</td>

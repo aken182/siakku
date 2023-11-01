@@ -8,8 +8,8 @@
     <title>@yield('title') | Siak - KPRI Usaha Jaya</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
+    @yield('pageStyle')
     @include('layouts.sections.styles.styles-landing')
-
     <!-- =======================================================
   * Template Name: SoftLand
   * Updated: Sep 18 2023 with Bootstrap v5.3.2

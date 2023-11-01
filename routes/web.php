@@ -29,6 +29,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/profil', [AboutController::class, 'index'])->name('profil');
 Route::get('/features', [FeaturesController::class, 'index'])->name('features');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+Route::get('/blog/show/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 
 /**

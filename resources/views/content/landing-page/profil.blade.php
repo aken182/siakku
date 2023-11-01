@@ -35,6 +35,25 @@
             </div>
 
         </section>
+        <section class="section pb-0">
+            <div class="container">
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-6 col-sm-12" data-aos="fade-right">
+                        <img class="mt-0" src="{{ asset('assets/admin/') }}/images/bg/bg-kpri.jpeg" alt="Image"
+                            class="img-fluid">
+                    </div>
+                    <div class="col-md-6 col-sm-12 me-auto" data-aos="fade-right">
+                        <h2 class="mb-4">Profil KPRI Usaha Jaya</h2>
+                        <div class="table-responsive">
+                            <x-table.profil-koperasi :profil="$profil" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        @include('content.landing-page.content-footer')
+
     </main>
 @endsection
 

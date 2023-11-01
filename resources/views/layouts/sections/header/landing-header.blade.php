@@ -15,7 +15,8 @@
                 <li><a class="{{ $route === 'home' ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
                 <li><a class="{{ $route === 'features' ? 'active' : '' }}" href="{{ route('features') }}">Features</a>
                 </li>
-                <li><a class="{{ $route === 'blog' ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a></li>
+                <li><a class="{{ $route === 'blog' || $route === 'blog.show' ? 'active' : '' }}"
+                        href="{{ route('blog') }}">Blog</a></li>
                 <li><a class="{{ $route === 'profil' ? 'active' : '' }}" href="{{ route('profil') }}">Profil</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>

@@ -21,6 +21,17 @@ class BeritaService
             return Berita::where('id_berita', $id)->first();
       }
 
+      public function getDataBeritaSlug($slug)
+      {
+            $id = Berita::where('slug_berita', $slug)->value('id_berita');
+            return Berita::where('id_berita', $id)->first();
+      }
+
+      public function getBerita()
+      {
+            return Berita::orderBy('tgl_berita', 'DESC')->paginate(6);
+      }
+
       public function addGambarBerita($request, $kode)
       {
             if ($request->file('file_gambar') != null) {

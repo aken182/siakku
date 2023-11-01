@@ -1,5 +1,8 @@
 @extends('layouts.landingMaster')
 @section('title', "$title")
+@section('pageStyle')
+
+@endsection
 @section('content')
     <main id="main">
 
@@ -38,123 +41,44 @@
 
         <section class="section">
             <div class="container">
-                <div class="row mb-5">
-                    <div class="col-md-4">
-                        <div class="post-entry">
-                            <a href="blog-single.html" class="d-block mb-4">
-                                <img src="{{ asset('assets/landing-page') }}/img/img_1.jpg" alt="Image"
-                                    class="img-fluid">
-                            </a>
-                            <div class="post-text">
-                                <span class="post-meta">December 13, 2019 &bullet; By <a href="#">Admin</a></span>
-                                <h3><a href="#">Chrome now alerts you when someone steals your password</a></h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-                                <p><a href="#" class="readmore">Read more</a></p>
+                <div class="row mb-5" data-aos="fade-right">
+                    @foreach ($blogs as $blog)
+                        <div class="col-md-4">
+                            <div class="post-entry">
+                                <a href="blog-single.html" class="d-block mb-4">
+                                    <img src="{{ asset('storage/berita/' . $blog->gambar_berita) }}" alt="Image"
+                                        class="img-fluid">
+                                </a>
+                                <div class="post-text">
+                                    @php
+                                        $bulan = bulan_indonesia(date('m', strtotime($blog->tgl_berita)));
+                                        $hari = date('d', strtotime($blog->tgl_berita));
+                                        $tahun = date('Y', strtotime($blog->tgl_berita));
+                                    @endphp
+                                    <span class="post-meta">{{ "$hari $bulan, $tahun" }} &bullet; By <a
+                                            href="#">{{ $blog->penulis }}</a></span>
+                                    <h3><a href="{{ route('blog.show', $blog->slug_berita) }}">{{ $blog->judul_berita }}</a>
+                                    </h3>
+                                    <p>{{ substr(strip_tags($blog->isi_berita), 0, 100) }}...</p>
+                                    <p><a href="{{ route('blog.show', $blog->slug_berita) }}" class="readmore">Baca
+                                            selengkapnya</a></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="post-entry">
-                            <a href="blog-single.html" class="d-block mb-4">
-                                <img src="{{ asset('assets/landing-page') }}/img/img_2.jpg" alt="Image"
-                                    class="img-fluid">
-                            </a>
-                            <div class="post-text">
-                                <span class="post-meta">December 13, 2019 &bullet; By <a href="#">Admin</a></span>
-                                <h3><a href="#">Chrome now alerts you when someone steals your password</a></h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-                                <p><a href="#" class="readmore">Read more</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="post-entry">
-                            <a href="blog-single.html" class="d-block mb-4">
-                                <img src="{{ asset('assets/landing-page') }}/img/img_3.jpg" alt="Image"
-                                    class="img-fluid">
-                            </a>
-                            <div class="post-text">
-                                <span class="post-meta">December 13, 2019 &bullet; By <a href="#">Admin</a></span>
-                                <h3><a href="#">Chrome now alerts you when someone steals your password</a></h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-                                <p><a href="#" class="readmore">Read more</a></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="post-entry">
-                            <a href="blog-single.html" class="d-block mb-4">
-                                <img src="{{ asset('assets/landing-page') }}/img/img_4.jpg" alt="Image"
-                                    class="img-fluid">
-                            </a>
-                            <div class="post-text">
-                                <span class="post-meta">December 13, 2019 &bullet; By <a href="#">Admin</a></span>
-                                <h3><a href="#">Chrome now alerts you when someone steals your password</a></h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-                                <p><a href="#" class="readmore">Read more</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="post-entry">
-                            <a href="blog-single.html" class="d-block mb-4">
-                                <img src="{{ asset('assets/landing-page') }}/img/img_3.jpg" alt="Image"
-                                    class="img-fluid">
-                            </a>
-                            <div class="post-text">
-                                <span class="post-meta">December 13, 2019 &bullet; By <a href="#">Admin</a></span>
-                                <h3><a href="#">Chrome now alerts you when someone steals your password</a></h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-                                <p><a href="#" class="readmore">Read more</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="post-entry">
-                            <a href="blog-single.html" class="d-block mb-4">
-                                <img src="{{ asset('assets/landing-page') }}/img/img_2.jpg" alt="Image"
-                                    class="img-fluid">
-                            </a>
-                            <div class="post-text">
-                                <span class="post-meta">December 13, 2019 &bullet; By <a href="#">Admin</a></span>
-                                <h3><a href="#">Chrome now alerts you when someone steals your password</a></h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-                                <p><a href="#" class="readmore">Read more</a></p>
-                            </div>
-                        </div>
-                    </div>
-
+                    @endforeach
                 </div>
 
                 <div class="row">
-                    <div class="col-12 text-center">
-                        <span class="p-3 active text-primary">1</span>
-                        <a href="#" class="p-3">2</a>
-                        <a href="#" class="p-3">3</a>
-                        <a href="#" class="p-3">4</a>
+                    <div class="col-12 d-flex justify-content-center">
+                        {{ $blogs->links() }}
                     </div>
                 </div>
             </div>
 
         </section>
 
-        <!-- ======= CTA Section ======= -->
-        <section class="section cta-section">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-6 me-auto text-center text-md-start mb-5 mb-md-0">
-                        <h2>Starts Publishing Your Apps</h2>
-                    </div>
-                    <div class="col-md-5 text-center text-md-end">
-                        <p><a href="#" class="btn d-inline-flex align-items-center"><i
-                                    class="bx bxl-apple"></i><span>App store</span></a> <a href="#"
-                                class="btn d-inline-flex align-items-center"><i class="bx bxl-play-store"></i><span>Google
-                                    play</span></a></p>
-                    </div>
-                </div>
-            </div>
-        </section><!-- End CTA Section -->
+        @include('content.landing-page.content-footer')
+
 
     </main><!-- End #main -->
 @endsection

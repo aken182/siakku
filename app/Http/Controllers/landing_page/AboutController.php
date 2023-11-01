@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\landing_page;
 
 use Illuminate\Http\Request;
-use App\Services\LandingWebService;
 use App\Http\Controllers\Controller;
+use App\Services\ProfilKpriService;
 use Illuminate\Support\Facades\Route;
 
 class AboutController extends Controller
 {
 
-    protected $servicesLanding;
+    protected $profilService;
     private $route;
     /**
      * Create a new controller instance.
@@ -19,7 +19,7 @@ class AboutController extends Controller
      */
     public function __construct()
     {
-        $this->servicesLanding = new LandingWebService;
+        $this->profilService = new ProfilKpriService;
         $this->route = Route::currentRouteName();
     }
 
@@ -31,7 +31,8 @@ class AboutController extends Controller
     public function index()
     {
         $data = [
-            'title' => 'Profil'
+            'title' => 'Profil',
+            'profil' => $this->profilService->getAllData(1)
         ];
         return view('content.landing-page.profil', $data);
     }
