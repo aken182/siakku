@@ -45,11 +45,14 @@ Route::middleware(['auth'])->group((function () {
 
       Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-      Route::get('/', [AdminDashboard::class, 'index'])->name('main-dashboard');
-      Route::controller(ProfilKpriController::class)->group(function () {
-            Route::get('/profil/koperasi', 'index')->name('profil-koperasi');
-            Route::get('profil/koperasi/edit/{id}', 'edit')->name('profil-koperasi.edit');
-            Route::patch('profil/koperasi/update/{id}', 'update')->name('profil-koperasi.update');
+      Route::get('/', [AdminDashboard::class, 'index'])->name('main-dashboard')->middleware('permission:main-dashboard');
+
+      Route::group(['middleware' => ['permission:profil-koperasi']], function () {
+            Route::controller(ProfilKpriController::class)->group(function () {
+                  Route::get('/profil/koperasi', 'index')->name('profil-koperasi');
+                  Route::get('profil/koperasi/edit/{id}', 'edit')->name('profil-koperasi.edit');
+                  Route::patch('profil/koperasi/update/{id}', 'update')->name('profil-koperasi.update');
+            });
       });
 
       //Content:
@@ -104,14 +107,15 @@ Route::middleware(['auth'])->group((function () {
       require __DIR__ . '/laporan_sp.php';
 
       // 10. Setting User
-      Route::get('/profil/pengguna', [AdminDashboard::class, 'index'])->name('profil-pengguna');
+      Route::get('/profil/pengguna', [AdminDashboard::class, 'index'])->name('profil-pengguna')->middleware('permission:profil-pengguna');
+
       Route::controller(UserSettingController::class)->group(function () {
-            Route::get('/pengaturan-user', 'userManager')->name('pengaturan-user');
-            Route::post('/store-user', 'storeUser')->name('pengaturan-user.storeUser');
-            Route::get('/otoritas', 'roleManager')->name('pengaturan-otoritas');
-            Route::post('/store-otoritas', 'storeRole')->name('pengaturan-otoritas.storeRole');
-            Route::get('/otorisasi', 'permissionManager')->name('pengaturan-otorisasi');
-            Route::post('/assign-permission', 'roleHasPermission')->name('pengaturan-otorisasi.assignPermission');
-            Route::get('/set-permission', [PermissionController::class, 'index']);
+            Route::get('/pengaturan-user', 'userManager')->name('pengaturan-user')->middleware('permission:pengaturan-user');
+            Route::post('/store-user', 'storeUser')->name('pengaturan-user.storeUser')->middleware('permission:pengaturan-user');
+            Route::get('/otoritas', 'roleManager')->name('pengaturan-otoritas')->middleware('permission:pengaturan-otoritas');
+            Route::post('/store-otoritas', 'storeRole')->name('pengaturan-otoritas.storeRole')->middleware('permission:pengaturan-otoritas');
+            Route::get('/otorisasi', 'permissionManager')->name('pengaturan-otorisasi')->middleware('permission:pengaturan-otorisasi');
+            Route::post('/assign-permission', 'roleHasPermission')->name('pengaturan-otorisasi.assignPermission')->middleware('permission:pengaturan-otorisasi');
+            Route::get('/set-permission', [PermissionController::class, 'index'])->name('set-permission');
       });
 }));

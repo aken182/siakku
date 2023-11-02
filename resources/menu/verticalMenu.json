@@ -71,31 +71,31 @@
                         {
                               "url": "/persediaan/unit-pertokoan",
                               "name": "Persediaan",
-                              "permission": "master-persediaan-toko-view",
+                              "permission": "master-persediaan-toko",
                               "slug": "mdt-persediaan"
                         },
                         {
                               "url": "/persediaan-eceran/unit-pertokoan",
                               "name": "Persediaan Eceran",
-                              "permission": "master-persediaan-eceran-toko-view",
+                              "permission": "master-persediaan-eceran-toko",
                               "slug": "mdt-persediaan-eceran"
                         },
                         {
                               "url": "/inventaris/unit-pertokoan",
                               "name": "Inventaris",
-                              "permission": "master-inventaris-toko-view",
+                              "permission": "master-inventaris-toko",
                               "slug": "mdt-inventaris"
                         },
                         {
                               "url": "/inventaris-eceran/unit-pertokoan",
                               "name": "Inventaris Eceran",
-                              "permission": "master-inventaris-eceran-toko-view",
+                              "permission": "master-inventaris-eceran-toko",
                               "slug": "mdt-inventaris-eceran"
                         },
                         {
                               "url": "/vendor/unit-pertokoan",
                               "name": "Vendor",
-                              "permission": "master-vendor-toko-view",
+                              "permission": "master-vendor-toko",
                               "slug": "mdt-vendor"
                         }
                   ]
@@ -130,7 +130,7 @@
                   "url": "/transfer-saldo-kas-bank/unit-pertokoan",
                   "name": "Kas & Bank",
                   "icon": "bi bi-credit-card",
-                  "permission": "kas-bank-unit-pertokoan-view",
+                  "permission": "kas-bank-unit-pertokoan",
                   "slug": "transfer-toko"
             },
             {
@@ -197,14 +197,14 @@
                   "url": "/penyusutan/unit-pertokoan",
                   "name": "Penyusutan",
                   "icon": "bi bi-reception-3",
-                  "permission": "penyusutan-unit-pertokoan-view",
+                  "permission": "penyusutan-unit-pertokoan",
                   "slug": "penyusutan-toko"
             },
             {
                   "url": "/shu/unit-pertokoan",
                   "name": "Sisa Hasil Usaha",
                   "icon": "bi bi-wallet",
-                  "permission": "shu-unit-pertokoan-view",
+                  "permission": "shu-unit-pertokoan",
                   "slug": "shu-unit-pertokoan"
             },
             {
@@ -288,25 +288,25 @@
                         {
                               "url": "/inventaris/unit-sp",
                               "name": "Inventaris",
-                              "permission": "master-inventaris-sp-view",
+                              "permission": "master-inventaris-sp",
                               "slug": "mds-inventaris"
                         },
                         {
                               "url": "/inventaris-eceran/unit-sp",
                               "name": "Inventaris Eceran",
-                              "permission": "master-inventaris-eceran-sp-view",
+                              "permission": "master-inventaris-eceran-sp",
                               "slug": "mds-inventaris-eceran"
                         },
                         {
                               "url": "/master-simpanan",
                               "name": "Master Simpanan",
-                              "permission": "master-simpanan-view",
+                              "permission": "master-simpanan",
                               "slug": "mds-simpanan"
                         },
                         {
                               "url": "/vendor/unit-sp",
                               "name": "Vendor",
-                              "permission": "master-vendor-sp-view",
+                              "permission": "master-vendor-sp",
                               "slug": "mds-vendor"
                         }
                   ]
@@ -335,7 +335,7 @@
                   "url": "/transfer-saldo-kas-bank/unit-sp",
                   "name": "Kas & Bank",
                   "icon": "bi bi-credit-card",
-                  "permission": "kas-bank-unit-sp-view",
+                  "permission": "kas-bank-unit-sp",
                   "slug": "transfer-sp"
             },
             {
@@ -408,21 +408,21 @@
                   "url": "/pendapatan/unit-sp",
                   "name": "Pendapatan",
                   "icon": "bi bi-wallet",
-                  "permission": "pendapatan-unit-sp-view",
+                  "permission": "pendapatan-unit-sp",
                   "slug": "pendapatan-unit-sp"
             },
             {
                   "url": "/penyusutan/unit-sp",
                   "name": "Penyusutan",
                   "icon": "bi bi-reception-3",
-                  "permission": "penyusutan-unit-sp-view",
+                  "permission": "penyusutan-unit-sp",
                   "slug": "penyusutan-sp"
             },
             {
                   "url": "/shu/unit-sp",
                   "name": "Sisa Hasil Usaha",
                   "icon": "bi bi-wallet",
-                  "permission": "shu-unit-sp-view",
+                  "permission": "shu-unit-sp",
                   "slug": "shu-unit-sp"
             },
             {

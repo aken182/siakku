@@ -27,68 +27,93 @@
                     <form class="row" style="text-transform: capitalize"
                         action="{{ route('pengaturan-otorisasi.assignPermission') }}" method="POST">
                         @csrf
+                        <div class="row mb-3">
+                            <div class="col-lg-4">
+                                <div class="mb-2">
+                                    <label class="form-label text-primary" for="role-data-list">Role</label>
 
-                        <div class="col-lg-4">
-                            <div class="mb-2">
-                                <label class="form-label" for="role-data-list">Pilih Role</label>
-
-                                <select class="form-select dselect-select-box @error('role_name') is-invalid @enderror"
-                                    id="role-data-list" name="role_name">
-                                    <option>Pilih Role</option>
-                                    @forelse ($roleData as $role)
-                                        <option value="{{ $role->name }}">{{ $role->name }}
-                                        </option>
-                                    @empty
-                                    @endforelse
-                                </select>
-                                @error('role_name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-lg-4" id="rumah">
-                            <h6 class="text-light fw-semibold">Rumah</h6>
-                            <div class="demo-inline-spacing mt-2">
-                                <div class="list-group">
-                                    <label class="list-group-item list-group-item-action">
-                                        <input class="form-check-input me-1" id="cb-all" type="checkbox"
-                                            value="">Pilih
-                                        Semua
-                                    </label>
-                                    @foreach ($permissionData as $permission)
-                                        @if ($permission->authority == 'rumah')
-                                            <label class="list-group-item list-group-item-action">
-                                                <input class="form-check-input me-1"
-                                                    name="permission_name{{ $permission->id }}" type="checkbox"
-                                                    value="{{ $permission->name }}">
-                                                {{ $permission->name }}
-                                            </label>
-                                        @endif
-                                    @endforeach
+                                    <select class="form-select choices @error('role_name') is-invalid @enderror"
+                                        id="role-data-list" name="role_name">
+                                        <option>Pilih Role</option>
+                                        @forelse ($roleData as $role)
+                                            <option value="{{ $role->name }}">{{ $role->name }}
+                                            </option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                    @error('role_name')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4" id="sekolah">
-                            <h6 class="text-light fw-semibold">Sekolah</h6>
-                            <div class="demo-inline-spacing mt-2">
-                                <div class="list-group">
-                                    <label class="list-group-item list-group-item-action">
-                                        <input class="form-check-input me-1" id="cb-all2" type="checkbox"
-                                            value="">Pilih
-                                        Semua
-                                    </label>
-                                    @foreach ($permissionData as $permission)
-                                        @if ($permission->authority == 'sekolah')
-                                            <label class="list-group-item list-group-item-action">
-                                                <input class="form-check-input me-1"
-                                                    name="permission_name{{ $permission->id }}" type="checkbox"
-                                                    value="{{ $permission->name }}">
-                                                {{ $permission->name }}
-                                            </label>
-                                        @endif
-                                    @endforeach
+                        <div class="row mb-3">
+                            <div class="col-lg-4" id="pertokoan">
+                                <label class="fw-semibold  text-primary">Unit Pertokoan</label>
+                                <div class="demo-inline-spacing mt-2">
+                                    <div class="list-group">
+                                        <label class="list-group-item list-group-item-action">
+                                            <input class="form-check-input me-1" id="cb-all" type="checkbox"
+                                                value="">Pilih
+                                            Semua
+                                        </label>
+                                        @foreach ($permissionData as $permission)
+                                            @if ($permission->authority === 'pertokoan')
+                                                <label class="list-group-item list-group-item-action">
+                                                    <input class="form-check-input me-1"
+                                                        name="permission_name{{ $permission->id }}" type="checkbox"
+                                                        value="{{ $permission->name }}">
+                                                    {{ $permission->name }}
+                                                </label>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" id="simpan-pinjam">
+                                <label class="fw-semibold text-primary">Unit Simpan Pinjam</label>
+                                <div class="demo-inline-spacing mt-2">
+                                    <div class="list-group">
+                                        <label class="list-group-item list-group-item-action">
+                                            <input class="form-check-input me-1" id="cb-all2" type="checkbox"
+                                                value="">Pilih
+                                            Semua
+                                        </label>
+                                        @foreach ($permissionData as $permission)
+                                            @if ($permission->authority === 'simpan-pinjam')
+                                                <label class="list-group-item list-group-item-action">
+                                                    <input class="form-check-input me-1"
+                                                        name="permission_name{{ $permission->id }}" type="checkbox"
+                                                        value="{{ $permission->name }}">
+                                                    {{ $permission->name }}
+                                                </label>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" id="super-admin">
+                                <label class="fw-semibold text-primary">Super Admin</label>
+                                <div class="demo-inline-spacing mt-2">
+                                    <div class="list-group">
+                                        <label class="list-group-item list-group-item-action">
+                                            <input class="form-check-input me-1" id="cb-all3" type="checkbox"
+                                                value="">Pilih
+                                            Semua
+                                        </label>
+                                        @foreach ($permissionData as $permission)
+                                            @if ($permission->authority === 'super-admin')
+                                                <label class="list-group-item list-group-item-action">
+                                                    <input class="form-check-input me-1"
+                                                        name="permission_name{{ $permission->id }}" type="checkbox"
+                                                        value="{{ $permission->name }}">
+                                                    {{ $permission->name }}
+                                                </label>
+                                            @endif
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -106,9 +131,11 @@
         </section>
     </div>
 
+@endsection
+@section('pageScript')
     <script>
         document.getElementById("cb-all").addEventListener("click", function() {
-            var checkboxes = document.querySelectorAll("#rumah input[type='checkbox']");
+            var checkboxes = document.querySelectorAll("#pertokoan input[type='checkbox']");
             for (var i = 0; i < checkboxes.length; i++) {
                 // var obj = {};
                 checkboxes[i].checked = this.checked;
@@ -116,7 +143,15 @@
             }
         });
         document.getElementById("cb-all2").addEventListener("click", function() {
-            var checkboxes = document.querySelectorAll("#sekolah input[type='checkbox']");
+            var checkboxes = document.querySelectorAll("#simpan-pinjam input[type='checkbox']");
+            for (var i = 0; i < checkboxes.length; i++) {
+                // var obj = {};
+                checkboxes[i].checked = this.checked;
+                // document.getElementById(i).value = obj["permission" + i];
+            }
+        });
+        document.getElementById("cb-all3").addEventListener("click", function() {
+            var checkboxes = document.querySelectorAll("#super-admin input[type='checkbox']");
             for (var i = 0; i < checkboxes.length; i++) {
                 // var obj = {};
                 checkboxes[i].checked = this.checked;

@@ -46,12 +46,16 @@ class LoginController extends Controller
     {
         return view('auth.login');
     }
+
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
             if (Auth::user()->hasRole('super-admin')) {
+                $request->session()->regenerate();
+                return redirect()->intended(route('main-dashboard'));
+            } else {
                 $request->session()->regenerate();
                 return redirect()->intended(route('main-dashboard'));
             }

@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Session\TokenMismatchException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -46,5 +48,21 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof TokenMismatchException && !$request->routeIs('login')) {
+            return redirect()->route('login');
+        }
+        if ($exception instanceof UnauthorizedException) {
+            $response = [
+                'responseMessage' => 'Halaman tidak tersedia.',
+                'responseStatus'  => 403,
+            ];
+
+            return response()->view('content.errors-page.hak-akses', $response);
+        }
+
+        return parent::render($request, $exception);
     }
 }
