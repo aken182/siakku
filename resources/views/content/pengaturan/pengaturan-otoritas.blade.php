@@ -27,35 +27,42 @@
                 <div class="card-header">
                     <ul class="nav nav-pills flex-column flex-md-row mb-3">
                         <li class="nav-item">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter"
-                                type="button">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                data-bs-target="#modalCenter" type="button">
                                 Tambah {{ $title }}
                             </button>
                         </li>
                     </ul>
                 </div>
                 <div class="card-body">
-                    <div class="row px-4">
-                        <div class="col px-4">
+                    <div class="row mb-3">
+                        <div class="col">
                             <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-primary">
+                                <table class="table table-hover table-bordered">
+                                    <thead class="table-success">
                                         <tr>
+                                            <th>No.</th>
                                             <th>Role</th>
-                                            <th>Tanggal Aktif</th>
-                                            <th>Aksi</th>
-
+                                            <th>Keterangan</th>
+                                            <th style="text-align: center">Tanggal Aktif</th>
+                                            <th style="text-align: center">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="table-border-bottom-0">
+                                    <tbody>
+                                        @php
+                                            $no = 1;
+                                        @endphp
                                         @foreach ($roleData as $field)
-                                            <tr data-href="{{ route('pengaturan-otoritas', $field->id) }}">
+                                            <tr>
+                                                <td>{{ $no++ . '.' }}</td>
                                                 <td>{{ $field->name }}</td>
-                                                <td>{{ $field->updated_at }}</td>
-                                                <td>
+                                                <td>{{ $field->description }}</td>
+                                                <td style="text-align: center"><span
+                                                        class="badge bg-info">{{ $field->updated_at }}</span></td>
+                                                <td style="text-align: center">
                                                     @php
-                                                        $routeDelete = '#';
-                                                        $routeEdit = '#';
+                                                        $routeDelete = route($routeDlt, $field->id);
+                                                        $routeEdit = route($routeEdt, $field->id);
                                                     @endphp
                                                     <x-table.action :routeedit="$routeEdit" :routedelete="$routeDelete" />
                                                 </td>
@@ -71,7 +78,7 @@
         </section>
     </div>
     <!-- Modal Form input create hak akses-->
-    <form class="modal-content" action="{{ route('pengaturan-otoritas.storeRole') }}" method="post">
+    <form class="modal-content" action="{{ route('pengaturan-otoritas.store') }}" method="post">
         @csrf
         <div class="modal fade" id="modalCenter" aria-hidden="true" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -109,8 +116,6 @@
                                 @enderror
                             </div>
                         </div>
-
-
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Cancel</button>

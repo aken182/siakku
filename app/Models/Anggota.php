@@ -37,4 +37,9 @@ class Anggota extends Model
     {
         return $this->hasMany(Jabatan::class, 'id_anggota');
     }
+
+    public function user()
+    {
+        return $this->hasMany(User::class, 'id_anggota');
+    }
 }

@@ -10,7 +10,7 @@
                 <div class="text-center">
                     <h3 class="error-title text-dark">Tidak Ditemukan !</h3>
                     <p class='fs-5 text-dark'>Oops! 😖 Anda tidak memiliki akses ke halaman ini.</p>
-                    <a href="{{ url('/') }}" class="btn btn-lg btn-outline-primary mt-3">Kembali</a>
+                    <a href="javascript:history.back()" class="btn btn-lg btn-outline-primary mt-3">Kembali</a>
                 </div>
                 <img class="img-error" style="width:69%" src="{{ asset('assets/admin') }}/images/samples/error-404.png"
                     alt="Not Found">

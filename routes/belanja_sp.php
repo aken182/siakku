@@ -9,10 +9,6 @@ Route::group(['middleware' => ['permission:belanja-barang-unit-sp-view']], funct
       Route::controller(BelanjaBarangController::class)->group(function () {
             Route::get('/belanja-barang/unit-sp', 'index')->name('bsp-belanja-barang');
             Route::get('/belanja-barang/unit-sp/list', 'dataTable')->name('bsp-belanja-barang.list');
-            Route::get('/belanja-barang/unit-sp/show/{id}', 'show')->name('bsp-belanja-barang.show');
-      });
-      Route::controller(PelunasanController::class)->group(function () {
-            Route::get('/belanja-barang/unit-sp/pelunasan/show/{id}', 'show')->name('bsp-belanja-barang.show-pelunasan');
       });
 });
 
@@ -36,10 +32,6 @@ Route::group(['middleware' => ['permission:belanja-lain-unit-sp-view']], functio
       Route::controller(BelanjaController::class)->group(function () {
             Route::get('/belanja-lain/unit-sp', 'index')->name('bsp-belanja-lain');
             Route::get('/belanja-lain/unit-sp/list', 'dataTable')->name('bsp-belanja-lain.list');
-            Route::get('/belanja-lain/unit-sp/show/{id}', 'show')->name('bsp-belanja-lain.show');
-      });
-      Route::controller(PelunasanController::class)->group(function () {
-            Route::get('/belanja-lain/unit-sp/pelunasan/show/{id}', 'show')->name('bsp-belanja-lain.show-pelunasan');
       });
 });
 

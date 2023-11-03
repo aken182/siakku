@@ -22,6 +22,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'nama',
+        'id_anggota',
         'username',
         'password',
         'status',
@@ -48,6 +49,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function anggota()
+    {
+        return $this->belongsTo(Anggota::class, 'id_anggota');
+    }
 
     // inisiasi flag login
     public function updateFirstLoginToday()

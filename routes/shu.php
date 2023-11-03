@@ -13,7 +13,6 @@ Route::group(['middleware' => ['permission:shu-unit-pertokoan']], function () {
       Route::controller(TransaksiShuController::class)->group(function () {
             Route::get('/shu/unit-pertokoan/transaksi', 'index')->name('shu-unit-pertokoan.transaksi');
             Route::get('/shu/unit-pertokoan/transaksi/list', 'list')->name('shu-unit-pertokoan.transaksi-list');
-            Route::get('/shu/unit-pertokoan/transaksi/show/{id}', 'show')->name('shu-unit-pertokoan.transaksi-show');
       });
 });
 
@@ -42,7 +41,6 @@ Route::group(['middleware' => ['permission:shu-unit-sp']], function () {
       Route::controller(TransaksiShuController::class)->group(function () {
             Route::get('/shu/unit-sp/transaksi', 'index')->name('shu-unit-sp.transaksi');
             Route::get('/shu/unit-sp/transaksi/list', 'list')->name('shu-unit-sp.transaksi-list');
-            Route::get('/shu/unit-sp/transaksi/show/{id}', 'show')->name('shu-unit-sp.transaksi-show');
       });
 });
 

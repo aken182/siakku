@@ -5,18 +5,32 @@ namespace App\Http\Controllers\user;
 use App\Models\User;
 use App\Models\Roles;
 use App\Models\Permission;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Models\ModelHasRoles;
+use App\Services\CrudService;
+use App\Services\ImageService;
+use App\Services\AnggotaService;
+use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RoleRequest;
+use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 use \Illuminate\Support\Facades\Validator;
 
 class UserSettingController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware(['role:super-admin']);
-    // }
+    protected $crudService;
+    protected $anggotaService;
+
+    public function __construct()
+    {
+        $this->crudService = new CrudService;
+        $this->anggotaService = new AnggotaService(new ImageService);
+    }
+
     public function index($request, $data)
     {
         return view('content.pengaturan.pengaturan-user', $data);
@@ -24,26 +38,132 @@ class UserSettingController extends Controller
 
     public function userManager(Request $request)
     {
-        $userData = User::all();
-        $roleData = Role::all();
         $data = [
             'title' => 'User',
-            'tableHeader' => getHeaders('users', ''),
-            'userData' => $userData,
-            'roles' => $roleData
+            'userData' => User::all(),
+            'userHasRoles' => ModelHasRoles::with(['roles'])->get(),
+            'routeCreate' => 'pengaturan-user.create',
+            'routeEdit' => 'pengaturan-user.edit',
+            'routeDestroy' => 'pengaturan-user.destroy',
         ];
+        $isi = $this->crudService->messageConfirmDelete('User');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.pengaturan.pengaturan-user', $data);
     }
+
+    public function createUser()
+    {
+        $data = [
+            'title' => 'Tambah User',
+            'roles' => Role::all(),
+            'anggota' => $this->anggotaService->getDataAnggotaToForm(),
+            'routeStore' => 'pengaturan-user.store',
+        ];
+        return view('content.pengaturan.create-user', $data);
+    }
+
+    public function storeUser(UserRequest $request)
+    {
+        $anggota = $this->anggotaService->getDataAnggota($request->input('id_anggota'));
+        $data = [
+            'nama' => $anggota->nama,
+            'id_anggota' => $request->input('id_anggota'),
+            'username' => $request->input('username'),
+            'password' => bcrypt($request->input('password')),
+        ];
+        User::create($data)->assignRole($request->input('role'));
+        Alert::success('Sukses', 'Berhasil menambah data user baru.');
+        return redirect()->route('pengaturan-user');
+    }
+
+    public function editUser($id)
+    {
+        $id_user = Crypt::decrypt($id);
+        $data = [
+            'user' => User::find($id_user),
+            'roles' => Roles::all(),
+            'userRole' => ModelHasRoles::with(['roles'])->where('model_id', $id_user)->first(),
+            'routeUpdate' => 'pengaturan-user.update',
+            'title' => 'Edit User',
+        ];
+        return view('content.pengaturan.edit-user', $data);
+    }
+
+    public function updateUser(UserRequest $request, $id)
+    {
+        $input = $request->all();
+
+        if (!empty($input['password'])) {
+
+            $input['password'] = bcrypt($input['password']);
+        } else {
+            $input = Arr::except($input, array('password'));
+        }
+
+        $user = User::find($id);
+        $user->update($input);
+
+        DB::table('model_has_roles')->where('model_id', $id)->delete();
+        $user->assignRole($request->input('role'));
+
+        Alert::success('Sukses', 'Berhasil mengubah data user.');
+        return redirect()->route('pengaturan-user');
+    }
+
+    public function destroyUser($id)
+    {
+        User::find($id)->delete();
+        Alert::success('Sukses', 'Berhasil menghapus data user.');
+        return redirect()->back();
+    }
+
     public function roleManager(Request $request)
     {
         $roleData = Roles::all();
         $data = [
             'title' => 'Otoritas',
-            'tableHeader' => getHeaders('roles', 'guard_name'),
-            'roleData' => $roleData
+            'roleData' => $roleData,
+            'routeEdt' => 'pengaturan-otoritas.edit',
+            'routeDlt' => 'pengaturan-otoritas.destroy',
         ];
+        $isi = $this->crudService->messageConfirmDelete('Role');
+        confirmDelete($isi['title'], $isi['text']);
         return view('content.pengaturan.pengaturan-otoritas', $data);
     }
+
+    public function storeRole(RoleRequest $request)
+    {
+        Roles::create($request->all());
+        Alert::success('Sukses', 'Berhasil menambah data user baru.');
+        return redirect()->back();
+    }
+
+    public function editRole($id)
+    {
+        $data = [
+            'title' => 'Edit Role',
+            'role' => Roles::find($id),
+            'routeUpdate' => 'pengaturan-otoritas.update',
+        ];
+        return view('content.pengaturan.edit-role', $data);
+    }
+
+    public function updateRole(RoleRequest $request, $id)
+    {
+        $input = $request->all();
+        $roles = Roles::find($id);
+        $roles->update($input);
+        Alert::success('Sukses', 'Berhasil mengubah data role.');
+        return redirect()->route('pengaturan-otoritas');
+    }
+
+    public function destroyRole($id)
+    {
+        Roles::find($id)->delete();
+        Alert::success('Sukses', 'Berhasil menghapus data role.');
+        return redirect()->back();
+    }
+
     public function permissionManager()
     {
         $permissionData = Permission::all();
@@ -56,72 +176,7 @@ class UserSettingController extends Controller
         ];
         return view('content.pengaturan.pengaturan-otorisasi', $data);
     }
-    public function storeUser(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'nama' => 'required',
-                'username' => 'required|unique:users,username',
-                'password' => 'required|min:6'
-            ],
-            [
-                'nama.required' => 'Nama Harus Diisi',
-                'username.required' => 'Username Harus diisi!',
-                'username.unique' => 'Username Sudah dipakai.',
-                'password.required' => 'Password Harus diisi',
-                // 'password.confirmed' => 'Password Tidak Sesuai',
-                'password.min' => 'Password Minimal 6 Karakter',
-            ],
 
-        );
-        if ($validator->fails()) {
-            Alert::error('Error', 'Data belum diisi dengan benar.');
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        } else {
-            $profil = $request->input('nama') . '-' . time() . '.' . $request->file('foto_profil')->extension();
-            $data = [
-                'nama' => $request->input('nama'),
-                'username' => $request->input('username'),
-                'password' => bcrypt($request->input('password')),
-                'foto' => $profil
-            ];
-            User::create($data)->assignRole($request->input('role'));
-            if ($request->hasFile('foto_profil')) {
-                $file = $request->file('foto_profil');
-                $fileName = $profil;
-                $file->storeAs('foto_profil_mini', $fileName, 'local');
-            }
-            Alert::success('Sukses', 'Berhasil menambah data user baru.');
-            return redirect()->back();
-        }
-    }
-
-    public function storeRole(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required',
-            ],
-            [
-                'name.required' => 'Nama Otoritas belum diisi Boss, diisi dulu ya..'
-            ],
-
-        );
-        if ($validator->fails()) {
-            Alert::error('Error', 'Data belum diisi dengan benar.');
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        } else {
-            Roles::create($request->all());
-            Alert::success('Sukses', 'Berhasil menambah data user baru.');
-            return redirect()->back();
-        }
-    }
     public function storePermission(Request $request)
     {
         $validator = Validator::make(
@@ -145,6 +200,7 @@ class UserSettingController extends Controller
             return redirect()->back();
         }
     }
+
     public function roleHasPermission(Request $request)
     {
         $permissions = Permission::all();

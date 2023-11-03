@@ -9,10 +9,6 @@ Route::group(['middleware' => ['permission:belanja-barang-unit-pertokoan-view']]
       Route::controller(BelanjaBarangController::class)->group(function () {
             Route::get('/belanja-barang/unit-pertokoan', 'index')->name('btk-belanja-barang');
             Route::get('/belanja-barang/unit-pertokoan/list', 'dataTable')->name('btk-belanja-barang.list');
-            Route::get('/belanja-barang/unit-pertokoan/show/{id}', 'show')->name('btk-belanja-barang.show');
-      });
-      Route::controller(PelunasanController::class)->group(function () {
-            Route::get('/belanja-barang/unit-pertokoan/pelunasan/show/{id}', 'show')->name('btk-belanja-barang.show-pelunasan');
       });
 });
 
@@ -36,10 +32,6 @@ Route::group(['middleware' => ['permission:belanja-lain-unit-pertokoan-view']], 
       Route::controller(BelanjaController::class)->group(function () {
             Route::get('/belanja-lain/unit-pertokoan', 'index')->name('btk-belanja-lain');
             Route::get('/belanja-lain/unit-pertokoan/list', 'dataTable')->name('btk-belanja-lain.list');
-            Route::get('/belanja-lain/unit-pertokoan/show/{id}', 'show')->name('btk-belanja-lain.show');
-      });
-      Route::controller(PelunasanController::class)->group(function () {
-            Route::get('/belanja-lain/unit-pertokoan/pelunasan/show/{id}', 'show')->name('btk-belanja-lain.show-pelunasan');
       });
 });
 

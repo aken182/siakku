@@ -7,7 +7,6 @@ Route::group(['middleware' => ['permission:pendapatan-unit-sp']], function () {
       Route::controller(PendapatanController::class)->group(function () {
             Route::get('/pendapatan/unit-sp', 'index')->name('pendapatan-unit-sp');
             Route::get('/pendapatan/unit-sp/list', 'dataTable')->name('pendapatan-unit-sp.list');
-            Route::get('/pendapatan/unit-sp/show /{id}', 'show')->name('pendapatan-unit-sp.show');
       });
 });
 

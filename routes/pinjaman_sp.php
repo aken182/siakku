@@ -8,7 +8,6 @@ Route::group(['middleware' => ['permission:pinjaman-unit-sp-view']], function ()
       Route::controller(PinjamanController::class)->group(function () {
             Route::get('/pinjaman/unit-sp/pinjaman-history', 'index')->name('pp-pinjaman');
             Route::get('/pinjaman/unit-sp/list', 'dataTable')->name('pp-pinjaman.list');
-            Route::get('/pinjaman/unit-sp/show/{id}', 'show')->name('pp-pinjaman.show');
       });
 });
 
@@ -30,7 +29,6 @@ Route::group(['middleware' => ['permission:pinjaman-unit-sp-angsuran-view']], fu
       Route::controller(PelunasanController::class)->group(function () {
             Route::get('/pinjaman/unit-sp/angsuran-history', 'index')->name('pp-angsuran');
             Route::get('/pinjaman/unit-sp/list-angsuran', 'dataTable')->name('pp-angsuran.list');
-            Route::get('/pinjaman/unit-sp/show-angsuran/{id}', 'show')->name('pp-angsuran.show-pelunasan');
       });
 });
 

@@ -8,7 +8,6 @@ Route::group(['middleware' => ['permission:simpanan-unit-pertokoan-view']], func
       Route::controller(SimpananController::class)->group(function () {
             Route::get('/simpanan/unit-pertokoan/setor-history', 'index')->name('stk-simpanan');
             Route::get('/simpanan/unit-pertokoan/list', 'dataTable')->name('stk-simpanan.list');
-            Route::get('/simpanan/unit-pertokoan/show/{id}', 'show')->name('stk-simpanan.show');
       });
 });
 
@@ -24,7 +23,6 @@ Route::group(['middleware' => ['permission:simpanan-unit-pertokoan-penarikan-vie
       Route::controller(PenarikanController::class)->group(function () {
             Route::get('/simpanan/unit-pertokoan/tarik-history', 'index')->name('stk-penarikan');
             Route::get('/simpanan/unit-pertokoan/list-tarik', 'dataTable')->name('stk-penarikan.list');
-            Route::get('/simpanan/unit-pertokoan/show-tarik/{id}', 'show')->name('stk-penarikan.show');
       });
 });
 

@@ -177,8 +177,8 @@
                     </div>
                     <div class="row">
                         <div class="col-12 d-flex justify-content-end">
-                            <a type="button" href="{{ route($routeMain) }}"
-                                class="btn btn-light-secondary me-1 mb-1">Keluar</a>
+                            <a type="button" href="javascript:history.back()"
+                                class="btn btn-light-secondary me-1 mb-1">Kembali</a>
                             <a type="button" href="#" class="btn btn-primary me-1 mb-1">Download</a>
                         </div>
                     </div>

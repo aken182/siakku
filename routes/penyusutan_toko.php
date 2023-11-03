@@ -7,7 +7,6 @@ Route::group(['middleware' => ['permission:penyusutan-unit-pertokoan']], functio
       Route::controller(PenyusutanController::class)->group(function () {
             Route::get('/penyusutan/unit-pertokoan', 'index')->name('penyusutan-toko');
             Route::get('/penyusutan/unit-pertokoan/list', 'list')->name('penyusutan-toko.list');
-            Route::get('/penyusutan/unit-pertokoan/show/{id}', 'show')->name('penyusutan-toko.show');
       });
 });
 

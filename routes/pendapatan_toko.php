@@ -9,11 +9,6 @@ Route::group(['middleware' => ['permission:penjualan-unit-pertokoan-view']], fun
       Route::controller(PenjualanController::class)->group(function () {
             Route::get('/penjualan/unit-pertokoan', 'index')->name('ptk-penjualan');
             Route::get('/penjualan/unit-pertokoan/list', 'dataTablePenjualan')->name('ptk-penjualan.list');
-            Route::get('/penjualan/unit-pertokoan/show/{id}', 'show')->name('ptk-penjualan.show');
-      });
-
-      Route::controller(PelunasanController::class)->group(function () {
-            Route::get('/penjualan/unit-pertokoan/pelunasan/show/{id}', 'show')->name('ptk-penjualan.show-pelunasan');
       });
 });
 
@@ -44,7 +39,6 @@ Route::group(['middleware' => ['permission:pendapatan-unit-pertokoan-view']], fu
       Route::controller(PendapatanController::class)->group(function () {
             Route::get('/pendapatan/unit-pertokoan', 'index')->name('ptk-pendapatan');
             Route::get('/pendapatan/unit-pertokoan/list', 'dataTable')->name('ptk-pendapatan.list');
-            Route::get('/pendapatan/unit-pertokoan/show/{id}', 'show')->name('ptk-pendapatan.show');
       });
 });
 

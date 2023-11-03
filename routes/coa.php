@@ -78,7 +78,6 @@ Route::group(['middleware' => ['permission:saldo-awal-coa-unit-sp-transaction|sa
 Route::group(['middleware' => ['permission:kas-bank-unit-pertokoan']], function () {
       Route::controller(TransferSaldoController::class)->group(function () {
             Route::get('/transfer-saldo-kas-bank/unit-pertokoan', 'index')->name('transfer-toko');
-            Route::get('/transfer-saldo-kas-bank/unit-pertokoan/show/{id}', 'show')->name('transfer-toko.show');
             Route::get('/transfer-saldo-kas-bank/unit-pertokoan/list', 'dataTable')->name('transfer-toko.list');
       });
 });
@@ -96,7 +95,6 @@ Route::group(['middleware' => ['permission:kas-bank-unit-sp']], function () {
       Route::controller(TransferSaldoController::class)->group(function () {
             Route::get('/transfer-saldo-kas-bank/unit-sp', 'index')->name('transfer-sp');
             Route::get('/transfer-saldo-kas-bank/unit-sp/list', 'dataTable')->name('transfer-sp.list');
-            Route::get('/transfer-saldo-kas-bank/unit-sp/show/{id}', 'show')->name('transfer-sp.show');
       });
 });
 

@@ -7,7 +7,6 @@ Route::group(['middleware' => ['permission:penyusutan-unit-sp']], function () {
       Route::controller(PenyusutanController::class)->group(function () {
             Route::get('/penyusutan/unit-sp', 'index')->name('penyusutan-sp');
             Route::get('/penyusutan/unit-sp/list', 'list')->name('penyusutan-sp.list');
-            Route::get('/penyusutan/unit-sp/show/{id}', 'show')->name('penyusutan-sp.show');
       });
 });
 

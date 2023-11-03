@@ -106,16 +106,39 @@ Route::middleware(['auth'])->group((function () {
       //9. laporan unit simpan pinjam
       require __DIR__ . '/laporan_sp.php';
 
-      // 10. Setting User
+      //10. lihat transaksi
+      require __DIR__ . '/lihat_transaksi.php';
+
+      // 11. Setting User
       Route::get('/profil/pengguna', [AdminDashboard::class, 'index'])->name('profil-pengguna')->middleware('permission:profil-pengguna');
 
-      Route::controller(UserSettingController::class)->group(function () {
-            Route::get('/pengaturan-user', 'userManager')->name('pengaturan-user')->middleware('permission:pengaturan-user');
-            Route::post('/store-user', 'storeUser')->name('pengaturan-user.storeUser')->middleware('permission:pengaturan-user');
-            Route::get('/otoritas', 'roleManager')->name('pengaturan-otoritas')->middleware('permission:pengaturan-otoritas');
-            Route::post('/store-otoritas', 'storeRole')->name('pengaturan-otoritas.storeRole')->middleware('permission:pengaturan-otoritas');
-            Route::get('/otorisasi', 'permissionManager')->name('pengaturan-otorisasi')->middleware('permission:pengaturan-otorisasi');
-            Route::post('/assign-permission', 'roleHasPermission')->name('pengaturan-otorisasi.assignPermission')->middleware('permission:pengaturan-otorisasi');
-            Route::get('/set-permission', [PermissionController::class, 'index'])->name('set-permission');
+      Route::group(['middleware' => ['permission:pengaturan-user']], function () {
+            Route::controller(UserSettingController::class)->group(function () {
+                  Route::get('/pengaturan-user', 'userManager')->name('pengaturan-user');
+                  Route::get('/pengaturan-user/create', 'createUser')->name('pengaturan-user.create');
+                  Route::post('/pengaturan-user/store', 'storeUser')->name('pengaturan-user.store');
+                  Route::get('/pengaturan-user/edit/{id}', 'editUser')->name('pengaturan-user.edit');
+                  Route::patch('/pengaturan-user/update/{id}', 'updateUser')->name('pengaturan-user.update');
+                  Route::delete('/pengaturan-user/destroy/{id}', 'destroyUser')->name('pengaturan-user.destroy');
+            });
       });
+
+      Route::group(['middleware' => ['permission:pengaturan-otoritas']], function () {
+            Route::controller(UserSettingController::class)->group(function () {
+                  Route::get('/otoritas', 'roleManager')->name('pengaturan-otoritas');
+                  Route::post('/otoritas/store', 'storeRole')->name('pengaturan-otoritas.store');
+                  Route::get('/otoritas/edit/{id}', 'editRole')->name('pengaturan-otoritas.edit');
+                  Route::patch('/otoritas/update/{id}', 'updateRole')->name('pengaturan-otoritas.update');
+                  Route::delete('/otoritas/destroy/{id}', 'destroyRole')->name('pengaturan-otoritas.destroy');
+            });
+      });
+
+      Route::group(['middleware' => ['permission:pengaturan-otorisasi']], function () {
+            Route::controller(UserSettingController::class)->group(function () {
+                  Route::get('/otorisasi', 'permissionManager')->name('pengaturan-otorisasi');
+                  Route::post('/assign-permission', 'roleHasPermission')->name('pengaturan-otorisasi.assignPermission');
+            });
+      });
+
+      Route::get('/set-permission', [PermissionController::class, 'index'])->name('set-permission');
 }));
