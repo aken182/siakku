@@ -42,14 +42,22 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4 me-auto">
-                        <h2 class="mb-4">Seamlessly Communicate</h2>
-                        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at reprehenderit
-                            optio, laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus
-                            impedit incidunt dolore mollitia esse natus beatae.</p>
-                        <p><a href="#">Read More</a></p>
+                        <h2 class="mb-4">Unit Simpan Pinjam</h2>
+                        <p class="mb-4  link-dark">Unit ini merupakan unit yang mengelola simpanan dan pinjaman anggota
+                            koperasi.
+                            Fitur - fitur besar dalam unit ini adalah sebagai berikut.</p>
+                        <ul class="link-dark">
+                            <li>Pengelolaan Simpanan</li>
+                            <li>Pengelolaan Simpanan Sukarela Berbunga</li>
+                            <li>Pengelolaan Pinjaman</li>
+                            <li>Pengelolaan Belanja</li>
+                            <li>Pengelolaan Pengelolaan Aktiva Tetap</li>
+                            <li>Pengelolaan Pendapatan</li>
+                            <li>Laporan Keuangan</li>
+                        </ul>
                     </div>
                     <div class="col-md-6" data-aos="fade-left">
-                        <img src="{{ asset('assets/landing-page') }}/img/undraw_svg_2.svg" alt="Image" class="img-fluid">
+                        <img src="{{ asset('assets/landing-page') }}/img/siakku_1.png" alt="Image" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -59,14 +67,22 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4 ms-auto order-2">
-                        <h2 class="mb-4">Gather Feedback</h2>
-                        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at reprehenderit
-                            optio, laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus
-                            impedit incidunt dolore mollitia esse natus beatae.</p>
-                        <p><a href="#">Read More</a></p>
+                        <h2 class="mb-4">Unit Pertokoan</h2>
+                        <p class="mb-4 link-dark">Unit ini merupakan unit yang mengelola penjualan persediaan pertokoan
+                            dan simpanan
+                            pertokoan.
+                            Fitur - fitur besar dalam unit ini adalah sebagai berikut.</p>
+                        <ul class="link-dark">
+                            <li>Pengelolaan Penjualan Toko</li>
+                            <li>Pengelolaan Persediaan Toko</li>
+                            <li>Pengelolaan Belanja Barang & Belanja Lainnya</li>
+                            <li>Pengelolaan Pendapatan</li>
+                            <li>Pengelolaan Pengelolaan Aktiva Tetap</li>
+                            <li>Laporan Keuangan</li>
+                        </ul>
                     </div>
                     <div class="col-md-6" data-aos="fade-right">
-                        <img src="{{ asset('assets/landing-page') }}/img/undraw_svg_3.svg" alt="Image" class="img-fluid">
+                        <img src="{{ asset('assets/landing-page') }}/img/siakku_2.png" alt="Image" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -76,14 +92,13 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4 me-auto">
-                        <h2 class="mb-4">Present Designs Inspiration</h2>
-                        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at reprehenderit
-                            optio, laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus
-                            impedit incidunt dolore mollitia esse natus beatae.</p>
-                        <p><a href="#">Read More</a></p>
+                        <h2 class="mb-4">Import, Export PDF dan Excel </h2>
+                        <p class="mb-4 link-dark">Menampilkan laporan dalam bentuk pdf, mengexport laporan dalam bentuk
+                            excel, serta
+                            mengimport laporan dalam bentuk excel ke dalam database.</p>
                     </div>
                     <div class="col-md-6" data-aos="fade-left">
-                        <img src="{{ asset('assets/landing-page') }}/img/undraw_svg_3.svg" alt="Image" class="img-fluid">
+                        <img src="{{ asset('assets/landing-page') }}/img/excelPdf.png" alt="Image" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -93,14 +108,18 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4 ms-auto order-2">
-                        <h2 class="mb-4">Powerful App Design </h2>
-                        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at reprehenderit
-                            optio, laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus
-                            impedit incidunt dolore mollitia esse natus beatae.</p>
-                        <p><a href="#">Read More</a></p>
+                        <h2 class="mb-4">Estimasi SHU </h2>
+                        <p class="mb-4 link-dark">Estimasi SHU merupakan perkiraan atau proyeksi terkait dengan seberapa
+                            besar
+                            Sisa Hasil Usaha yang mungkin akan diperoleh oleh koperasi dalam periode tertentu. Ini
+                            penting untuk perencanaan keuangan dan pengambilan keputusan strategis,
+                            karena membantu dalam menentukan sejauh mana kinerja perusahaan tersebut dan seberapa besar laba
+                            yang dapat diharapkan dalam waktu yang akan datang. Dengan kata lain, estimasi SHU adalah upaya
+                            untuk memprediksi potensi keuntungan yang akan koperasi berdasarkan analisis dan asumsi tertentu
+                        </p>
                     </div>
                     <div class="col-md-6" data-aos="fade-right">
-                        <img src="{{ asset('assets/landing-page') }}/img/undraw_svg_4.svg" alt="Image" class="img-fluid">
+                        <img src="{{ asset('assets/landing-page') }}/img/siakku_3.png" alt="Image" class="img-fluid">
                     </div>
                 </div>
             </div>

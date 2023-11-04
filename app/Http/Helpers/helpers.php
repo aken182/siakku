@@ -211,6 +211,20 @@ function bulan_indonesia($no_bulan)
       }
 }
 
+function singkatanBulan($no_bulan)
+{
+      if ($no_bulan) {
+            $nama_bulan = array(
+                  1 =>
+                  'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+            );
+            $bulan   = $nama_bulan[(int) $no_bulan];
+            return $bulan;
+      } else {
+            return null;
+      }
+}
+
 function tambah_nol_didepan($value, $threshold = null)
 {
       return sprintf("%0" . $threshold . "s", $value);

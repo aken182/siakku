@@ -932,11 +932,11 @@ section {
 .hero-section .iphone-wrap .phone-2,
 .hero-section .iphone-wrap .phone-1 {
   position: absolute;
-  top: -50%;
+  top: -25%;
   overflow: hidden;
-  left: 0;
+  left: -15px;
   box-shadow: 0 15px 50px 0 rgba(0, 0, 0, 0.3);
-  border-radius: 30px;
+  border-radius: 8px;
 }
 
 @media screen and (max-width: 992px) {
@@ -951,19 +951,19 @@ section {
 
 .hero-section .iphone-wrap .phone-2,
 .hero-section .iphone-wrap .phone-1 {
-  width: 250px;
+  width: 385px;
 }
 
 @media screen and (max-width: 992px) {
   .hero-section .iphone-wrap .phone-1 {
-    margin-left: -150px;
+    margin-left: 21px;
   }
 }
 
 .hero-section .iphone-wrap .phone-2 {
-  margin-top: 50px;
-  margin-left: 100px;
-  width: 250px;
+  margin-top: 97px;
+  margin-left: -35px;
+  width: 373px;
 }
 
 @media screen and (max-width: 992px) {
@@ -971,7 +971,7 @@ section {
     width: 250px;
     position: absolute;
     margin-top: 0px;
-    margin-left: 100px;
+    margin-left: 80px;
   }
 }
 

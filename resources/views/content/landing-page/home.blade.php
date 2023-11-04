@@ -31,9 +31,9 @@
                                     href="{{ route('login') }}" class="btn btn-outline-white">Login</a></p>
                         </div>
                         <div class="col-lg-4 iphone-wrap">
-                            <img src="{{ asset('assets/landing-page') }}/img/phone_1.png" alt="Image" class="phone-1"
+                            <img src="{{ asset('assets/landing-page') }}/img/siakku_1.png" alt="Image" class="phone-1"
                                 data-aos="fade-right">
-                            <img src="{{ asset('assets/landing-page') }}/img/phone_2.png" alt="Image" class="phone-2"
+                            <img src="{{ asset('assets/landing-page') }}/img/siakku_2.png" alt="Image" class="phone-2"
                                 data-aos="fade-right" data-aos-delay="200">
                         </div>
                     </div>
